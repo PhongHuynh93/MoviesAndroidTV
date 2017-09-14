@@ -3,17 +3,22 @@ package com.gabilheri.moviestmdb.ui.main;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.HeaderItem;
+import android.support.v17.leanback.widget.ListRow;
+import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
+import android.view.View;
+import android.widget.Toast;
 
 import com.gabilheri.moviestmdb.App;
-import com.gabilheri.moviestmdb.Config;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.movies.MoviePresenter;
+import com.gabilheri.moviestmdb.util.Config;
 
 import javax.inject.Inject;
 
@@ -50,22 +55,18 @@ public class MainFragment extends BrowseFragment {
         return fragment;
     }
 
+    /**
+     * info - Most of the code we will be adding is inside the createRows() and onActivityCreated() method, that is where we will setup the adapters for the fragment.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         App.instance().appComponent().inject(this);
 
-        // The background manager allows us to manage a dimmed background that does not interfere with the rows
-        // It is the preferred way to set the background of a fragment
-        mBackgroundManager = new GlideBackgroundManager(getActivity());
-
-        // The brand color will be used as the background for the Headers fragment
-        setBrandColor(ContextCompat.getColor(getActivity(), R.color.primary_transparent));
-        setHeadersState(HEADERS_ENABLED);
-        setHeadersTransitionOnBackEnabled(true);
-
-        // The TMDB logo on the right corner. It is necessary to show based on their API usage policy
-        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.powered_by));
+        prepareBackgroundManager();
+        setupUIElements();
+        setupEventListeners();
 
         createDataRows();
         createRows();
@@ -74,6 +75,38 @@ public class MainFragment extends BrowseFragment {
         fetchTopRatedMovies();
         fetchPopularMovies();
         fetchUpcomingMovies();
+    }
+
+    /**
+     * show the search icon
+     */
+    private void setupEventListeners() {
+        setOnSearchClickedListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+    }
+
+    private void prepareBackgroundManager() {
+        // The background manager allows us to manage a dimmed background that does not interfere with the rows
+        // It is the preferred way to set the background of a fragment
+        mBackgroundManager = new GlideBackgroundManager(getActivity());
+    }
+
+    private void setupUIElements() {
+        // The brand color will be used as the background for the Headers fragment
+        setBrandColor(ContextCompat.getColor(getActivity(), R.color.primary_transparent));
+        setHeadersState(HEADERS_ENABLED);
+        setHeadersTransitionOnBackEnabled(true);
+
+        // The TMDB logo on the right corner. It is necessary to show based on their API usage policy
+        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.powered_by));
+
+        // set search icon color
+        setSearchAffordanceColor(getResources().getColor(R.color.accent_color));
     }
 
     /**
@@ -109,10 +142,23 @@ public class MainFragment extends BrowseFragment {
     }
 
     /**
-     * Creates the rows and sets up the adapter of the fragment
+     * info - important code here - Creates the rows and sets up the adapter of the fragment
      */
     private void createRows() {
-
+        // Creates the RowsAdapter for the Fragment
+        // The ListRowPresenter tells to render ListRow objects
+        ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        for (int i = 0; i < mRows.size(); i++) {
+            MovieRow row = mRows.get(i);
+            // Adds a new ListRow to the adapter. Each row will contain a collection of Movies
+            // That will be rendered using the MoviePresenter
+            HeaderItem headerItem = new HeaderItem(row.getId(), row.getTitle());
+            ListRow listRow = new ListRow(headerItem, row.getAdapter());
+            rowsAdapter.add(listRow);
+        }
+        // Sets this fragments Adapter.
+        // The setAdapter method is defined in the BrowseFragment of the Leanback Library
+        setAdapter(rowsAdapter);
     }
 
     /**
