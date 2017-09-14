@@ -68,13 +68,19 @@ public class MainFragment extends BrowseFragment {
         setupUIElements();
         setupEventListeners();
 
-        createDataRows();
-        createRows();
+        loadRows();
+
         prepareEntranceTransition();
         fetchNowPlayingMovies();
         fetchTopRatedMovies();
         fetchPopularMovies();
         fetchUpcomingMovies();
+    }
+
+    private void loadRows() {
+        // FIXME: 9/14/2017 this is related to database, so put it in another file, not put in view
+        createDataRows();
+        createRows();
     }
 
     /**
@@ -111,6 +117,7 @@ public class MainFragment extends BrowseFragment {
 
     /**
      * Creates the data rows objects
+     * for each row includes 1 presenter + adapter
      */
     private void createDataRows() {
         mRows = new SparseArray<>();
@@ -228,11 +235,13 @@ public class MainFragment extends BrowseFragment {
      * @param id
      *      The ID / position of the row
      */
+    // TODO: 9/14/2017 miss endless loading
     private void bindMovieResponse(MovieResponse response, int id) {
         MovieRow row = mRows.get(id);
         row.setPage(row.getPage() + 1);
         for(Movie m : response.getResults()) {
             if (m.getPosterPath() != null) { // Avoid showing movie without posters
+                // info - get adapter of eachrow and add this poster
                 row.getAdapter().add(m);
             }
         }
