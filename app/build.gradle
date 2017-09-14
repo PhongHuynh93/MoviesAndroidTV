@@ -5,7 +5,8 @@ buildscript {
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.1.1'
+//        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.1.1'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3'
     }
 }
 
@@ -23,12 +24,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.gabilheri.moviestmdb"
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -76,7 +77,7 @@ tasks.whenTaskAdded { task ->
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    String supportLibVersion = "24.2.1"
+    String supportLibVersion = "26.+"
     String retrofitVersion = "2.1.0"
     String okHttpVersion = "3.4.1"
 
