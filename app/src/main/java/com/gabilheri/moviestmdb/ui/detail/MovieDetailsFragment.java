@@ -53,13 +53,13 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     private ArrayObjectAdapter mAdapter;
     private CustomMovieDetailPresenter mFullWidthMovieDetailsPresenter;
     private DetailsOverviewRow mDetailsOverviewRow;
-    private ClassPresenterSelector classPresenterSelector;
 
     /**
      * Creates a new instance of a MovieDetailsFragment
-     *
-     * @param movie The movie to be used by this fragment
-     * @return A newly created instance of MovieDetailsFragment
+     * @param movie
+     *      The movie to be used by this fragment
+     * @return
+     *      A newly created instance of MovieDetailsFragment
      */
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -82,20 +82,32 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         movie = getArguments().getParcelable(Movie.class.getSimpleName());
         setUpAdapter();
         setUpDetailsOverviewRow();
-        setupDetailsOverviewRowPresenter();
-
-        setupMovieListRowPresenter();
     }
 
     /**
      * Sets up the adapter for this Fragment
-     * info - FullWidthDetailsOverviewRowPresenter is composed of 2 parts
+     * info - FullWidthDetailsOverviewRowPresenter is composed of 2 parts:
+     * info - MovieDetailsDescriptionPresenter: Handles the presentation of the details of a movie.
      * info - DetailsOverviewLogoPresenter: Handles the presentation of the poster of a movie. The good part of using this is that along the FullWidthDetailsOverviewSharedElementHelper it will automatically handle the transition of the movie poster from the MainFragment into MovieDetailsFragment.
      */
     private void setUpAdapter() {
+        // Create the FullWidthPresenter
+        mFullWidthMovieDetailsPresenter = new CustomMovieDetailPresenter(new MovieDetailsDescriptionPresenter(),
+                new DetailsOverviewLogoPresenter());
+
+        // Handle the transition, the Helper is mainly used because the ActivityTransition is being passed from
+        // The Activity into the Fragment
+        FullWidthDetailsOverviewSharedElementHelper helper = new FullWidthDetailsOverviewSharedElementHelper();
+        helper.setSharedElementEnterTransition(getActivity(), TRANSITION_NAME); // the transition name is important
+        mFullWidthMovieDetailsPresenter.setListener(helper); // Attach the listener
+        // Define if this element is participating in the transition or not
+        mFullWidthMovieDetailsPresenter.setParticipatingEntranceTransition(false);
+
         // Class presenter selector allows the Adapter to render Rows and the details
         // It can be used in any of the Adapters by the Leanback library
-        classPresenterSelector = new ClassPresenterSelector();
+        ClassPresenterSelector classPresenterSelector = new ClassPresenterSelector();
+        classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, mFullWidthMovieDetailsPresenter);
+        classPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
         mAdapter = new ArrayObjectAdapter(classPresenterSelector);
         // Sets the adapter to the fragment
         setAdapter(mAdapter);
@@ -111,28 +123,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         fetchMovieDetails();
     }
 
-    private void setupDetailsOverviewRowPresenter() {
-        // Create the FullWidthPresenter
-        // info - CustomMovieDetailPresenter is the custom presenter with palette anable
-//        info - MovieDetailsDescriptionPresenter: Handles the presentation of the details of a movie.
-        mFullWidthMovieDetailsPresenter = new CustomMovieDetailPresenter(new MovieDetailsDescriptionPresenter(),
-                new DetailsOverviewLogoPresenter());
-
-        // Handle the transition, the Helper is mainly used because the ActivityTransition is being passed from
-        // The Activity into the Fragment
-        FullWidthDetailsOverviewSharedElementHelper helper = new FullWidthDetailsOverviewSharedElementHelper();
-        helper.setSharedElementEnterTransition(getActivity(), TRANSITION_NAME); // the transition name is important
-        mFullWidthMovieDetailsPresenter.setListener(helper); // Attach the listener
-        // Define if this element is participating in the transition or not
-        mFullWidthMovieDetailsPresenter.setParticipatingEntranceTransition(false);
-
-        classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, mFullWidthMovieDetailsPresenter);
-    }
-
-    private void setupMovieListRowPresenter() {
-        classPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
-    }
-
     private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
         @Override
         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -142,8 +132,8 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     /**
      * Loads the poster image into the DetailsOverviewRow
-     *
-     * @param url The poster URL
+     * @param url
+     *      The poster URL
      */
     private void loadImage(String url) {
         Glide.with(getActivity())
@@ -168,8 +158,8 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     /**
      * Generates a palette from a Bitmap
-     *
-     * @param bmp The bitmap from which we want to generate the palette
+     * @param bmp
+     *      The bitmap from which we want to generate the palette
      */
     private void changePalette(Bitmap bmp) {
         Palette.from(bmp).generate(this);
