@@ -70,6 +70,18 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
             int _8dp = (int) itemView.getResources().getDimension(R.dimen.half_padding);
             float corner = itemView.getResources().getDimension(R.dimen.genre_corner);
 
+            int primaryDarkColor = ContextCompat.getColor(itemView.getContext(), R.color.primary_dark);
+            if (movie.getPaletteColors() != null) {
+                movieTitleTV.setTextColor(movie.getPaletteColors().getTitleColor());
+                mOverviewLabelTV.setTextColor(movie.getPaletteColors().getTitleColor());
+                mTaglineTV.setTextColor(movie.getPaletteColors().getTextColor());
+                mRuntimeTV.setTextColor(movie.getPaletteColors().getTextColor());
+                movieYearTV.setTextColor(movie.getPaletteColors().getTextColor());
+                movieOverview.setTextColor(movie.getPaletteColors().getTextColor());
+                mDirectorTv.setTextColor(movie.getPaletteColors().getTextColor());
+                primaryDarkColor = movie.getPaletteColors().getStatusBarColor();
+            }
+
             // Adds each genre to the genre layout
             for (Genre g : movie.getGenres()) {
                 TextView tv = new TextView(itemView.getContext());
@@ -77,7 +89,8 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
                 GradientDrawable shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.RECTANGLE);
                 shape.setCornerRadius(corner);
-                shape.setColor(ContextCompat.getColor(itemView.getContext(), R.color.primary_dark));
+                shape.setColor(primaryDarkColor); // change this to use the palette color
+//                shape.setColor(ContextCompat.getColor(itemView.getContext(), R.color.primary_dark));
                 tv.setPadding(_8dp, _8dp, _8dp, _8dp);
                 tv.setBackground(shape);
 
