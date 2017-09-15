@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 /**
  * Created by CPU11112-local on 9/15/2017.
  */
-
+// INFO - VIEWHOLDER IS THE BINDER CLASS, bind the details to view
 public class MovieDetailsViewHolder extends Presenter.ViewHolder {
     @BindView(R.id.movie_title)
     TextView movieTitleTV;

@@ -12,6 +12,9 @@ import com.gabilheri.moviestmdb.data.models.MovieDetails;
  * Created by CPU11112-local on 9/15/2017.
  */
 
+/**
+ * info - has the custom layout for custom layout in detail fragment
+ */
 public class MovieDetailsDescriptionPresenter extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
