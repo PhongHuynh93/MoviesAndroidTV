@@ -1,11 +1,18 @@
 package com.gabilheri.moviestmdb.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
+import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.OnItemViewSelectedListener;
+import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.Row;
+import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.View;
@@ -13,10 +20,14 @@ import android.widget.Toast;
 
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
+import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
+import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
+import com.gabilheri.moviestmdb.ui.movies.MovieCardView;
 import com.gabilheri.moviestmdb.ui.movies.MoviePresenter;
 import com.gabilheri.moviestmdb.util.Config;
 
@@ -34,8 +45,9 @@ import timber.log.Timber;
  * @since 10/8/16.
  */
 
-public class MainFragment extends BrowseFragment {
+public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener {
 
+    private static final int BACKGROUND_UPDATE_DELAY = 300;
     @Inject
     TheMovieDbAPI mDbAPI;
 
@@ -57,6 +69,7 @@ public class MainFragment extends BrowseFragment {
 
     /**
      * info - Most of the code we will be adding is inside the createRows() and onActivityCreated() method, that is where we will setup the adapters for the fragment.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -94,6 +107,9 @@ public class MainFragment extends BrowseFragment {
                         .show();
             }
         });
+        // set the click listener
+        setOnItemViewClickedListener(this);
+        setOnItemViewSelectedListener(this);
     }
 
     private void prepareBackgroundManager() {
@@ -230,20 +246,52 @@ public class MainFragment extends BrowseFragment {
 
     /**
      * Binds a movie response to it's adapter
-     * @param response
-     *      The response from TMDB API
-     * @param id
-     *      The ID / position of the row
+     *
+     * @param response The response from TMDB API
+     * @param id       The ID / position of the row
      */
     // TODO: 9/14/2017 miss endless loading
     private void bindMovieResponse(MovieResponse response, int id) {
         MovieRow row = mRows.get(id);
         row.setPage(row.getPage() + 1);
-        for(Movie m : response.getResults()) {
+        for (Movie m : response.getResults()) {
             if (m.getPosterPath() != null) { // Avoid showing movie without posters
                 // info - get adapter of eachrow and add this poster
                 row.getAdapter().add(m);
             }
         }
+    }
+
+    // when clicked -> open another activity to load the picture
+    @Override
+    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            Intent i = new Intent(getActivity(), MovieDetailsActivity.class);
+            // Pass the movie to the activity
+            i.putExtra(Movie.class.getSimpleName(), movie);
+
+            if (itemViewHolder.view instanceof MovieCardView) {
+                // Pass the ImageView to allow a nice transition
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ((MovieCardView) itemViewHolder.view).getPosterIV(),
+                        MovieDetailsFragment.TRANSITION_NAME).toBundle();
+                getActivity().startActivity(i, bundle);
+            } else {
+                startActivity(i);
+            }
+        }
+    }
+
+    // when selected, load the image of that poster
+    @Override
+    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            // load the movie background
+            mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
+        }
+
     }
 }

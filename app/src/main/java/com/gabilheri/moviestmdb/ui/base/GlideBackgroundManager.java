@@ -22,6 +22,7 @@ import java.util.TimerTask;
  */
 
 /**
+ * info - useful base class to contains the default schedule
  * NOTE: >> DO NOT USE << images with transparency on then. The BackgroundManager freaks out and a really weird
  * stuff happens with the cards.
  */
