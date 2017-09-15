@@ -8,6 +8,7 @@ import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewLogoPresenter;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElementHelper;
+import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v7.graphics.Palette;
@@ -23,12 +24,16 @@ import com.bumptech.glide.request.target.Target;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
+import com.gabilheri.moviestmdb.data.models.CreditsResponse;
 import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieDetails;
+import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.data.models.PaletteColors;
+import com.gabilheri.moviestmdb.ui.movies.MoviePresenter;
 import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
 import com.gabilheri.moviestmdb.util.PaletteUtils;
+import com.gabilheri.moviestmdb.util.PersonPresenter;
 
 import javax.inject.Inject;
 
@@ -43,6 +48,10 @@ import timber.log.Timber;
 public class MovieDetailsFragment extends DetailsFragment implements Palette.PaletteAsyncListener {
 
     public static String TRANSITION_NAME = "poster_transition";
+
+    // Add the adapter and use the newly created Presenter to define how to render the objects
+    ArrayObjectAdapter mCastAdapter = new ArrayObjectAdapter(new PersonPresenter());
+    ArrayObjectAdapter mRecommendationsAdapter = new ArrayObjectAdapter(new MoviePresenter());
 
     // Injects the API using Dagger
     @Inject
@@ -82,6 +91,46 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         movie = getArguments().getParcelable(Movie.class.getSimpleName());
         setUpAdapter();
         setUpDetailsOverviewRow();
+
+        // Adds the adapter and fetches the data
+        setupCastMembers();
+        setupRecommendationsRow();
+    }
+
+    private void fetchCastMembers() {
+        mDbAPI.getCredits(movie.getId(), Config.API_KEY_URL)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::bindCastMembers, e -> {
+                    Timber.e(e, "Error fetching data: %s", e.getMessage());
+                });
+    }
+
+    private void setupCastMembers() {
+        mAdapter.add(new ListRow(new HeaderItem(0, "Cast"), mCastAdapter));
+        fetchCastMembers();
+    }
+
+    private void bindCastMembers(CreditsResponse response) {
+        mCastAdapter.addAll(0, response.getCast());
+    }
+
+    private void setupRecommendationsRow() {
+        mAdapter.add(new ListRow(new HeaderItem(2, "Recommendations"), mRecommendationsAdapter));
+        fetchRecommendations();
+    }
+
+    private void fetchRecommendations() {
+        mDbAPI.getRecommendations(movie.getId(), Config.API_KEY_URL)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::bindRecommendations, e -> {
+                    Timber.e(e, "Error fetching recommendations: %s", e.getMessage());
+                });
+    }
+
+    private void bindRecommendations(MovieResponse response) {
+        mRecommendationsAdapter.addAll(0, response.getResults());
     }
 
     /**
