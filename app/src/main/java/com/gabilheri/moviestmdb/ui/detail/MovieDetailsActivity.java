@@ -15,15 +15,21 @@ import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 
 public class MovieDetailsActivity extends BaseTvActivity {
     GlideBackgroundManager mBackgroundManager;
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Retrieve the movie through the intent
-        Movie movie = getIntent().getExtras().getParcelable(Movie.class.getSimpleName());
+        movie = getIntent().getExtras().getParcelable(Movie.class.getSimpleName());
         MovieDetailsFragment detailsFragment = MovieDetailsFragment.newInstance(movie);
         addFragment(detailsFragment); // Method from BaseTvActivity
+
+        prepareBackgroundManager();
+    }
+
+    private void prepareBackgroundManager() {
 
         // Sets the background of the activity to the backdrop of the movie
         mBackgroundManager = new GlideBackgroundManager(this);
@@ -32,5 +38,6 @@ public class MovieDetailsActivity extends BaseTvActivity {
         } else {
             mBackgroundManager.setBackground(ContextCompat.getDrawable(this, R.drawable.material_bg));
         }
+
     }
 }
