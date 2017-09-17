@@ -53,6 +53,7 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
         itemView = view;
     }
 
+    // info - new way with pallete depend on the color of a movie
     public void bind(MovieDetails movie) {
         if (movie != null && movie.getTitle() != null) {
             mRuntimeTV.setText(String.format(Locale.getDefault(), "%d minutes", movie.getRuntime()));
@@ -60,6 +61,7 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
             movieTitleTV.setText(movie.getTitle());
             movieYearTV.setText(String.format(Locale.getDefault(), "(%s)", movie.getReleaseDate().substring(0, 4)));
             movieOverview.setText(movie.getOverview());
+            // info - remove all old view
             mGenresLayout.removeAllViews();
 
             if (movie.getDirector() != null) {
@@ -70,6 +72,7 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
             int _8dp = (int) itemView.getResources().getDimension(R.dimen.half_padding);
             float corner = itemView.getResources().getDimension(R.dimen.genre_corner);
 
+            // info - set the color depend on palette color because might hard to see the text
             int primaryDarkColor = ContextCompat.getColor(itemView.getContext(), R.color.primary_dark);
             if (movie.getPaletteColors() != null) {
                 movieTitleTV.setTextColor(movie.getPaletteColors().getTitleColor());
@@ -82,7 +85,7 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
                 primaryDarkColor = movie.getPaletteColors().getStatusBarColor();
             }
 
-            // Adds each genre to the genre layout
+            // info - Adds each genre to the genre layout, it's just GradientDrawable
             for (Genre g : movie.getGenres()) {
                 TextView tv = new TextView(itemView.getContext());
                 tv.setText(g.getName());
@@ -105,4 +108,45 @@ public class MovieDetailsViewHolder extends Presenter.ViewHolder {
         }
 
     }
+
+    // info - old way not use pallete
+//    public void bind(MovieDetails movie) {
+//        if (movie != null && movie.getTitle() != null) {
+//            mRuntimeTV.setText(String.format(Locale.getDefault(), "%d minutes", movie.getRuntime()));
+//            mTaglineTV.setText(movie.getTagline());
+//            movieTitleTV.setText(movie.getTitle());
+//            movieYearTV.setText(String.format(Locale.getDefault(), "(%s)", movie.getReleaseDate().substring(0, 4)));
+//            movieOverview.setText(movie.getOverview());
+//            mGenresLayout.removeAllViews();
+//
+//            if (movie.getDirector() != null) {
+//                mDirectorTv.setText(String.format(Locale.getDefault(), "Director: %s", movie.getDirector()));
+//            }
+//
+//            int _16dp = (int) itemView.getResources().getDimension(R.dimen.full_padding);
+//            int _8dp = (int) itemView.getResources().getDimension(R.dimen.half_padding);
+//            float corner = itemView.getResources().getDimension(R.dimen.genre_corner);
+//
+//            // Adds each genre to the genre layout
+//            for (Genre g : movie.getGenres()) {
+//                TextView tv = new TextView(itemView.getContext());
+//                tv.setText(g.getName());
+//                GradientDrawable shape = new GradientDrawable();
+//                shape.setShape(GradientDrawable.RECTANGLE);
+//                shape.setCornerRadius(corner);
+//                shape.setColor(ContextCompat.getColor(itemView.getContext(), R.color.primary_dark));
+//                tv.setPadding(_8dp, _8dp, _8dp, _8dp);
+//                tv.setBackground(shape);
+//
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT));
+//                params.setMargins(0, 0, _16dp, 0);
+//                tv.setLayoutParams(params);
+//
+//                mGenresLayout.addView(tv);
+//            }
+//        }
+//
+//    }
 }

@@ -50,6 +50,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     public static String TRANSITION_NAME = "poster_transition";
 
     // Add the adapter and use the newly created Presenter to define how to render the objects
+    // TODO: 9/16/2017 remember adapter + presenter to know about the how to show and bind datas.
     ArrayObjectAdapter mCastAdapter = new ArrayObjectAdapter(new PersonPresenter());
     ArrayObjectAdapter mRecommendationsAdapter = new ArrayObjectAdapter(new MoviePresenter());
 
@@ -97,6 +98,12 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         setupRecommendationsRow();
     }
 
+
+    private void setupCastMembers() {
+        mAdapter.add(new ListRow(new HeaderItem(0, "Cast"), mCastAdapter));
+        fetchCastMembers();
+    }
+
     private void fetchCastMembers() {
         mDbAPI.getCredits(movie.getId(), Config.API_KEY_URL)
                 .subscribeOn(Schedulers.io())
@@ -106,10 +113,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
                 });
     }
 
-    private void setupCastMembers() {
-        mAdapter.add(new ListRow(new HeaderItem(0, "Cast"), mCastAdapter));
-        fetchCastMembers();
-    }
 
     private void bindCastMembers(CreditsResponse response) {
         mCastAdapter.addAll(0, response.getCast());
@@ -144,6 +147,8 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         mFullWidthMovieDetailsPresenter = new CustomMovieDetailPresenter(new MovieDetailsDescriptionPresenter(),
                 new DetailsOverviewLogoPresenter());
 
+        // info - FullWidthMovieDetailsPresenter has the method to change the background but happen in compile time not at runtime
+
         // Handle the transition, the Helper is mainly used because the ActivityTransition is being passed from
         // The Activity into the Fragment
         FullWidthDetailsOverviewSharedElementHelper helper = new FullWidthDetailsOverviewSharedElementHelper();
@@ -152,11 +157,14 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         // Define if this element is participating in the transition or not
         mFullWidthMovieDetailsPresenter.setParticipatingEntranceTransition(false);
 
+        // info - the big adapter need the big presenter with 2 screen
+        // info - why we have ClassPresenterSelector, because in this screen, we have 2 levels of screen, not like in MovieFragment
         // Class presenter selector allows the Adapter to render Rows and the details
         // It can be used in any of the Adapters by the Leanback library
         ClassPresenterSelector classPresenterSelector = new ClassPresenterSelector();
         classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, mFullWidthMovieDetailsPresenter);
         classPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+        // info - the big adapter for screen
         mAdapter = new ArrayObjectAdapter(classPresenterSelector);
         // Sets the adapter to the fragment
         setAdapter(mAdapter);
@@ -181,8 +189,10 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     /**
      * Loads the poster image into the DetailsOverviewRow
+     * info - after getting the bitmap, set the palette color to the fullwidth
      * @param url
      *      The poster URL
+     *
      */
     private void loadImage(String url) {
         Glide.with(getActivity())
@@ -227,6 +237,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
                 });
     }
 
+    // info - this item can be on the constructor or in the set method
     private void bindMovieDetails(MovieDetails movieDetails) {
         this.movieDetails = movieDetails;
         // Bind the details to the row
@@ -235,6 +246,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     @Override
     public void onGenerated(Palette palette) {
+        // info - set the background color of the detail view
         PaletteColors colors = PaletteUtils.getPaletteColors(palette);
         mFullWidthMovieDetailsPresenter.setActionsBackgroundColor(colors.getStatusBarColor());
         mFullWidthMovieDetailsPresenter.setBackgroundColor(colors.getToolbarBackgroundColor());
@@ -251,6 +263,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         notifyDetailsChanged();
     }
 
+    // info - remember it is jsut adapter, so need to notify the color again
     private void notifyDetailsChanged() {
         mDetailsOverviewRow.setItem(this.movieDetails);
         int index = mAdapter.indexOf(mDetailsOverviewRow);

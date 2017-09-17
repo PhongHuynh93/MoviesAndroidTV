@@ -27,6 +27,7 @@ public class PersonPresenter extends Presenter {
             // Example: Try using the constructor: ImageCardView(context, style)
             // It is deprecated right? This is because that constructor creates a new ContextThemeWrapper every time a
             // ImageCardView is allocated.
+            // info - change the size of card
             mContext = new ContextThemeWrapper(parent.getContext(), R.style.PersonCardTheme);
         }
 
@@ -35,6 +36,7 @@ public class PersonPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        // info - use this ImageCardView in leanback, so we dont need another viewholder
         ImageCardView view = (ImageCardView) viewHolder.view;
         CastMember member = (CastMember) item;
 

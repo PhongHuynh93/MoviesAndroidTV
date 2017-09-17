@@ -5,6 +5,7 @@
     </style>
 
 
+    <!--info The first step is to define how big each ImageCardView should be through a Theme. Open styles.xml and add the following:-->
     <style name="PersonCardTheme" parent="Theme.Leanback">
         <item name="imageCardViewImageStyle">@style/PersonCardViewStyle</item>
     </style>

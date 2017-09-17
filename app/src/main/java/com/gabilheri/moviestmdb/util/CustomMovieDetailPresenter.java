@@ -32,6 +32,7 @@ public class CustomMovieDetailPresenter extends FullWidthDetailsOverviewRowPrese
                 .setBackgroundColor(getActionsBackgroundColor());
     }
 
+//    info - make the logo go smooth by using the transition
     @Override
     protected void onLayoutLogo(ViewHolder viewHolder, int oldState, boolean logoChanged) {
         View v = viewHolder.getLogoViewHolder().view;
