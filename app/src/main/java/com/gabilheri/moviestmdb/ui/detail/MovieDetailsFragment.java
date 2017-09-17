@@ -29,7 +29,7 @@ import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieDetails;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.data.models.PaletteColors;
-import com.gabilheri.moviestmdb.ui.movies.MoviePresenter;
+import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
 import com.gabilheri.moviestmdb.util.PaletteUtils;

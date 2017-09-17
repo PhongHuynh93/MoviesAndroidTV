@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.ui.movies;
+package com.gabilheri.moviestmdb.ui.widget;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -36,7 +36,7 @@ public class MovieCardView extends BindableCardView<Movie> {
     }
 
     @Override
-    protected void bind(Movie data) {
+    public void bind(Movie data) {
         Glide.with(getContext())
                 .load(HttpClientModule.POSTER_URL + data.getPosterPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -49,7 +49,7 @@ public class MovieCardView extends BindableCardView<Movie> {
     }
 
     @Override
-    protected int getLayoutResource() {
+    public int getLayoutResource() {
         return R.layout.card_movie;
     }
 }

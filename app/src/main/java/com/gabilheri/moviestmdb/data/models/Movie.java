@@ -16,7 +16,6 @@ import java.util.List;
  */
 
 public class Movie implements Parcelable {
-
     private String id;
 
     @Json(name = "poster_path")

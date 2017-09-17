@@ -21,4 +21,6 @@
     <string name="message_try_again">Try again?</string>
     <string name="message_check_again">Check again?</string>
     <string name="text_close">Close</string>
+    <string name="error_message_loading_more_posts">Sorry, there was an error loading more posts
+    </string>
 </resources>

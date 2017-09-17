@@ -25,11 +25,11 @@ import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
+import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
-import com.gabilheri.moviestmdb.ui.movies.MovieCardView;
-import com.gabilheri.moviestmdb.ui.movies.MoviePresenter;
+import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 import com.gabilheri.moviestmdb.util.Config;
 
 import javax.inject.Inject;
@@ -88,17 +88,20 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         loadRows();
 
         prepareEntranceTransition();
-        fetchNowPlayingMovies();
-        fetchTopRatedMovies();
-        fetchPopularMovies();
-        fetchUpcomingMovies();
+//        fetchNowPlayingMovies();
+//        fetchTopRatedMovies();
+//        fetchPopularMovies();
+//        fetchUpcomingMovies();
     }
 
     private void loadRows() {
         // FIXME: 9/14/2017 this is related to database, so put it in another file, not put in view
         createDataRows();
-        createRows();
+        // Creates the RowsAdapter for the Fragment
+        // The ListRowPresenter tells to render ListRow objects
+        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         createTabLayout();
+        createRows();
     }
 
     /**
@@ -150,30 +153,32 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
      */
     private void createDataRows() {
         mRows = new SparseArray<>();
-        MoviePresenter moviePresenter = new MoviePresenter();
+
+        // info - not need movie presenter because postadapter handle all small presenter inside
+//        MoviePresenter moviePresenter = new MoviePresenter();
         mRows.put(NOW_PLAYING, new MovieRow()
-                .setId(NOW_PLAYING)
-                .setAdapter(new ArrayObjectAdapter(moviePresenter))
+                        .setId(NOW_PLAYING)
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
 //                .setTitle("Now Playing")
-                .setPage(1)
+                        .setPage(1)
         );
         mRows.put(TOP_RATED, new MovieRow()
-                .setId(TOP_RATED)
-                .setAdapter(new ArrayObjectAdapter(moviePresenter))
+                        .setId(TOP_RATED)
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
 //                .setTitle("Top Rated")
-                .setPage(1)
+                        .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
-                .setId(POPULAR)
-                .setAdapter(new ArrayObjectAdapter(moviePresenter))
+                        .setId(POPULAR)
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
 //                .setTitle("Popular")
-                .setPage(1)
+                        .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
-                .setId(UPCOMING)
-                .setAdapter(new ArrayObjectAdapter(moviePresenter))
+                        .setId(UPCOMING)
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
 //                .setTitle("Upcoming")
-                .setPage(1)
+                        .setPage(1)
         );
     }
 
@@ -181,9 +186,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
      * info - important code here - Creates the rows and sets up the adapter of the fragment
      */
     private void createRows() {
-        // Creates the RowsAdapter for the Fragment
-        // The ListRowPresenter tells to render ListRow objects
-        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         String[] categories = getResources().getStringArray(R.array.categories);
 
         for (int i = 0; i < mRows.size(); i++) {
@@ -193,12 +195,14 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             HeaderItem headerItem = new HeaderItem(row.getId(), categories[i]);
             ListRow listRow = new ListRow(headerItem, row.getAdapter());
             rowsAdapter.add(listRow);
+            loadData(row.getId(), (PostAdapter) row.getAdapter());
         }
 
         // Sets this fragments Adapter.
         // The setAdapter method is defined in the BrowseFragment of the Leanback Library
         setAdapter(rowsAdapter);
     }
+
 
     private void createTabLayout() {
         HeaderItem gridHeader = new HeaderItem(SETTING, getString(R.string.browser_header_5));
@@ -210,66 +214,37 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         gridRowAdapter.add(getString(R.string.music));
         gridRowAdapter.add(getString(R.string.comedy));
         rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
-
     }
 
-    /**
-     * Fetches now playing movies from TMDB
-     */
-    private void fetchNowPlayingMovies() {
-        mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, mRows.get(NOW_PLAYING).getPage())
+    private void loadData(int tag, PostAdapter adapter) {
+        if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
+
+        mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, mRows.get(tag).getPage())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    bindMovieResponse(response, NOW_PLAYING);
+                    adapter.removeLoadingIndicator();
+                    if (adapter.size() == 0 && response.getResults().isEmpty()) {
+                        adapter.showReloadCard();
+                    } else {
+                        adapter.setNextPage(adapter.getNextPage() + 1);
+                        adapter.addAllItems(response.getResults());
+                    }
+
+                    bindMovieResponse(response, tag);
                     startEntranceTransition();
                 }, e -> {
+                    adapter.removeLoadingIndicator();
+                    if (adapter.size() == 0) {
+                        adapter.showTryAgainCard();
+                    } else {
+                        Toast.makeText(
+                                getActivity(),
+                                getString(R.string.error_message_loading_more_posts),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
                     Timber.e(e, "Error fetching now playing movies: %s", e.getMessage());
-                });
-    }
-
-    /**
-     * Fetches the popular movies from TMDB
-     */
-    private void fetchPopularMovies() {
-        mDbAPI.getPopularMovies(Config.API_KEY_URL, mRows.get(POPULAR).getPage())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    bindMovieResponse(response, POPULAR);
-                    startEntranceTransition();
-                }, e -> {
-                    Timber.e(e, "Error fetching popular movies: %s", e.getMessage());
-                });
-    }
-
-    /**
-     * Fetches the upcoming movies from TMDB
-     */
-    private void fetchUpcomingMovies() {
-        mDbAPI.getUpcomingMovies(Config.API_KEY_URL, mRows.get(UPCOMING).getPage())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    bindMovieResponse(response, UPCOMING);
-                    startEntranceTransition();
-                }, e -> {
-                    Timber.e(e, "Error fetching upcoming movies: %s", e.getMessage());
-                });
-    }
-
-    /**
-     * Fetches the top rated movies from TMDB
-     */
-    private void fetchTopRatedMovies() {
-        mDbAPI.getTopRatedMovies(Config.API_KEY_URL, mRows.get(TOP_RATED).getPage())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    bindMovieResponse(response, TOP_RATED);
-                    startEntranceTransition();
-                }, e -> {
-                    Timber.e(e, "Error fetching top rated movies: %s", e.getMessage());
                 });
     }
 

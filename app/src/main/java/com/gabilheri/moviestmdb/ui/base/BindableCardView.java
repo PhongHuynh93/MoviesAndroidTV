@@ -38,6 +38,6 @@ public abstract class BindableCardView<T> extends BaseCardView {
         inflater.inflate(getLayoutResource(), this);
     }
 
-    protected abstract void bind(T data);
-    protected abstract @LayoutRes int getLayoutResource();
+    public abstract void bind(T data);
+    public abstract @LayoutRes int getLayoutResource();
 }

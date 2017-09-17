@@ -64,6 +64,10 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
         mNextPage = page;
     }
 
+    public int getNextPage() {
+        return mNextPage;
+    }
+
     public void setPresenterSelector() {
         setPresenterSelector(new PresenterSelector() {
             @Override

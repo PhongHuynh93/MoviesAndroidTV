@@ -1,9 +1,11 @@
-package com.gabilheri.moviestmdb.ui.movies;
+package com.gabilheri.moviestmdb.ui.presenter;
 
+import android.content.Context;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 
 import com.gabilheri.moviestmdb.data.models.Movie;
+import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 
 
 /**
@@ -15,8 +17,13 @@ import com.gabilheri.moviestmdb.data.models.Movie;
  */
 
 public class MoviePresenter extends Presenter {
+    private Context mContext;
 
     public MoviePresenter() {
+    }
+
+    public MoviePresenter(Context context) {
+        mContext = context;
     }
 
     @Override
