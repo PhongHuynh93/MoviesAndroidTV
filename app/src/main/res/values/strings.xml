@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MoviesTMDB</string>
+
+    <!--tab layout like youtube-->
+    <string name="recommended">Recommended</string>
+    <string name="trending">Trending</string>
+    <string name="music">Music</string>
+    <string name="comedy">Comedy</string>
+
+    <string name="browser_header_1">Now Playing</string>
+    <string name="browser_header_2">Top Rated</string>
+    <string name="browser_header_3">Popular</string>
+    <string name="browser_header_4">Upcoming</string>
+    <string name="browser_header_5">Setting</string>
+
+    <string name="header_text_options">Options</string>
 </resources>

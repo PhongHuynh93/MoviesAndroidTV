@@ -10,6 +10,7 @@ import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
+import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -57,8 +58,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     private static final int TOP_RATED = 1;
     private static final int POPULAR = 2;
     private static final int UPCOMING = 3;
+    private static final int SETTING = 4;
 
     SparseArray<MovieRow> mRows;
+    // big adapter
+    private ArrayObjectAdapter rowsAdapter;
 
     public static MainFragment newInstance() {
         Bundle args = new Bundle();
@@ -94,6 +98,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         // FIXME: 9/14/2017 this is related to database, so put it in another file, not put in view
         createDataRows();
         createRows();
+        createTabLayout();
     }
 
     /**
@@ -129,6 +134,14 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
         // set search icon color
         setSearchAffordanceColor(getResources().getColor(R.color.accent_color));
+
+        // set icon with header
+        setHeaderPresenterSelector(new PresenterSelector() {
+            @Override
+            public Presenter getPresenter(Object o) {
+                return new IconHeaderItemPresenter();
+            }
+        });
     }
 
     /**
@@ -141,25 +154,25 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         mRows.put(NOW_PLAYING, new MovieRow()
                 .setId(NOW_PLAYING)
                 .setAdapter(new ArrayObjectAdapter(moviePresenter))
-                .setTitle("Now Playing")
+//                .setTitle("Now Playing")
                 .setPage(1)
         );
         mRows.put(TOP_RATED, new MovieRow()
                 .setId(TOP_RATED)
                 .setAdapter(new ArrayObjectAdapter(moviePresenter))
-                .setTitle("Top Rated")
+//                .setTitle("Top Rated")
                 .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
                 .setId(POPULAR)
                 .setAdapter(new ArrayObjectAdapter(moviePresenter))
-                .setTitle("Popular")
+//                .setTitle("Popular")
                 .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
                 .setId(UPCOMING)
                 .setAdapter(new ArrayObjectAdapter(moviePresenter))
-                .setTitle("Upcoming")
+//                .setTitle("Upcoming")
                 .setPage(1)
         );
     }
@@ -170,18 +183,34 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     private void createRows() {
         // Creates the RowsAdapter for the Fragment
         // The ListRowPresenter tells to render ListRow objects
-        ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        String[] categories = getResources().getStringArray(R.array.categories);
+
         for (int i = 0; i < mRows.size(); i++) {
             MovieRow row = mRows.get(i);
             // Adds a new ListRow to the adapter. Each row will contain a collection of Movies
             // That will be rendered using the MoviePresenter
-            HeaderItem headerItem = new HeaderItem(row.getId(), row.getTitle());
+            HeaderItem headerItem = new HeaderItem(row.getId(), categories[i]);
             ListRow listRow = new ListRow(headerItem, row.getAdapter());
             rowsAdapter.add(listRow);
         }
+
         // Sets this fragments Adapter.
         // The setAdapter method is defined in the BrowseFragment of the Leanback Library
         setAdapter(rowsAdapter);
+    }
+
+    private void createTabLayout() {
+        HeaderItem gridHeader = new HeaderItem(SETTING, getString(R.string.browser_header_5));
+
+        GridItemPresenter mGridPresenter = new GridItemPresenter();
+        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
+        gridRowAdapter.add(getString(R.string.recommended));
+        gridRowAdapter.add(getString(R.string.trending));
+        gridRowAdapter.add(getString(R.string.music));
+        gridRowAdapter.add(getString(R.string.comedy));
+        rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+
     }
 
     /**

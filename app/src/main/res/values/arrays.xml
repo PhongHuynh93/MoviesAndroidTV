@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item>@string/browser_header_1</item>
+        <item>@string/browser_header_2</item>
+        <item>@string/browser_header_3</item>
+        <item>@string/browser_header_4</item>
+        <item>@string/browser_header_5</item>
+    </string-array>
+
+    <string-array name="icons">
+        <item>@drawable/ic_football</item>
+        <item>@drawable/ic_marker</item>
+        <item>@drawable/ic_music</item>
+        <item>@drawable/ic_neutral</item>
+        <item>@drawable/ic_neutral</item>
+    </string-array>
+</resources>

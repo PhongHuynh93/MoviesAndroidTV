@@ -15,7 +15,7 @@ public class MovieRow {
     private int page;
     private int id;
     private ArrayObjectAdapter adapter;
-    private String title;
+//    private String title;
 
     public MovieRow() {
     }
@@ -47,12 +47,12 @@ public class MovieRow {
         return this;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public MovieRow setTitle(String title) {
-        this.title = title;
-        return this;
-    }
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public MovieRow setTitle(String title) {
+//        this.title = title;
+//        return this;
+//    }
 }
