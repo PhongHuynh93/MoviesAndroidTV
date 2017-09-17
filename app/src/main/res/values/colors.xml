@@ -8,4 +8,6 @@
     <color name="yellow">#ffeb3b</color>
 
     <color name="card_background">@color/accent_color</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_87pc">#DDFFFFFF</color>
 </resources>

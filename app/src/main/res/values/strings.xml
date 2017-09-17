@@ -14,4 +14,11 @@
     <string name="browser_header_5">Setting</string>
 
     <string name="header_text_options">Options</string>
+
+    <!--error-->
+    <string name="title_oops">Oops</string>
+    <string name="title_no_videos">No videos</string>
+    <string name="message_try_again">Try again?</string>
+    <string name="message_check_again">Check again?</string>
+    <string name="text_close">Close</string>
 </resources>
