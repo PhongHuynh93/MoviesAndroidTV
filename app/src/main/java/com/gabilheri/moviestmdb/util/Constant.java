@@ -19,6 +19,6 @@ public class Constant {
     public static final int SETTING = 4;
 
     // action in detailsfragment
-    public static final int ACTION_WATCH_TRAILER = 1;
+    public static final long ACTION_WATCH_TRAILER = 1;
 
 }
