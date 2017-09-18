@@ -32,6 +32,7 @@ public class MainActivity extends BaseTvActivity {
         } else {
             mBrowseFragment = buildErrorFragment();
         }
+        addFragment(mBrowseFragment);
     }
 
     private ErrorFragment buildErrorFragment() {

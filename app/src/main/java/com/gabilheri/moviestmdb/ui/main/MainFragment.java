@@ -31,12 +31,20 @@ import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 import com.gabilheri.moviestmdb.util.Config;
+import com.gabilheri.moviestmdb.util.Constant;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static com.gabilheri.moviestmdb.util.Constant.NOW_PLAYING;
+import static com.gabilheri.moviestmdb.util.Constant.POPULAR;
+import static com.gabilheri.moviestmdb.util.Constant.SETTING;
+import static com.gabilheri.moviestmdb.util.Constant.TOP_RATED;
+import static com.gabilheri.moviestmdb.util.Constant.UPCOMING;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -53,12 +61,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     TheMovieDbAPI mDbAPI;
 
     private GlideBackgroundManager mBackgroundManager;
-
-    private static final int NOW_PLAYING = 0;
-    private static final int TOP_RATED = 1;
-    private static final int POPULAR = 2;
-    private static final int UPCOMING = 3;
-    private static final int SETTING = 4;
 
     SparseArray<MovieRow> mRows;
     // big adapter
@@ -88,10 +90,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         loadRows();
 
         prepareEntranceTransition();
-//        fetchNowPlayingMovies();
-//        fetchTopRatedMovies();
-//        fetchPopularMovies();
-//        fetchUpcomingMovies();
     }
 
     private void loadRows() {
@@ -164,19 +162,19 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         );
         mRows.put(TOP_RATED, new MovieRow()
                         .setId(TOP_RATED)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(TOP_RATED)))
 //                .setTitle("Top Rated")
                         .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
                         .setId(POPULAR)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(POPULAR)))
 //                .setTitle("Popular")
                         .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
                         .setId(UPCOMING)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
+                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(UPCOMING)))
 //                .setTitle("Upcoming")
                         .setPage(1)
         );
@@ -216,10 +214,28 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
 
-    private void loadData(int tag, PostAdapter adapter) {
+    private void loadData(@Constant.TypeMovieMode int tag, PostAdapter adapter) {
         if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
-
-        mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, mRows.get(tag).getPage())
+        Observable<MovieResponse> movieResponseObservable;
+        switch (tag) {
+            case Constant.NOW_PLAYING:
+                movieResponseObservable = mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                break;
+            case Constant.POPULAR:
+                movieResponseObservable = mDbAPI.getPopularMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                break;
+            case Constant.TOP_RATED:
+                movieResponseObservable = mDbAPI.getTopRatedMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                break;
+            case Constant.UPCOMING:
+                movieResponseObservable = mDbAPI.getUpcomingMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                break;
+            case Constant.SETTING:
+            default:
+                throw new IllegalArgumentException("Not have this argument");
+        }
+        // depend on tag, load the suitable movie
+        movieResponseObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
