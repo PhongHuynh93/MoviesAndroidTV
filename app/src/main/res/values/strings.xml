@@ -23,4 +23,8 @@
     <string name="text_close">Close</string>
     <string name="error_message_loading_more_posts">Sorry, there was an error loading more posts
     </string>
+
+    <string name="text_error_oops_title">Oops</string>
+    <string name="error_message_network_needed_app">Oops, you need a network connection to use Vineyard!</string>
+
 </resources>
