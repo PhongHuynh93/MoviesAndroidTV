@@ -29,3 +29,6 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// Load dependencies
+apply from: 'buildsystem/dependencies.gradle'
