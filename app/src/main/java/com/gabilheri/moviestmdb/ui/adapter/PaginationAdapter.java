@@ -29,7 +29,6 @@ import java.util.Map;
  * If there are no cards currently loaded and there are no results returned, then a “Check Again” card will be displayed so the user can make the request to check again.
  */
 public abstract class PaginationAdapter extends ArrayObjectAdapter {
-
     public static final String KEY_TAG = "tag";
     public static final String KEY_ANCHOR = "anchor";
     public static final String KEY_NEXT_PAGE = "next_page";
@@ -43,7 +42,6 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
     private String mRowTag;
     private String mAnchor;
     private int mLoadingIndicatorPosition;
-
 
     public PaginationAdapter(Context context, Presenter presenter, String tag) {
         mContext = context;

@@ -25,25 +25,25 @@ public interface TheMovieDbAPI {
     @GET(HttpClientModule.NOW_PLAYING)
     Observable<MovieResponse> getNowPlayingMovies(
             @Query("api_key") String apiKey,
-            @Query("page") int page
+            @Query("page") String page
     );
 
     @GET(HttpClientModule.TOP_RATED)
     Observable<MovieResponse> getTopRatedMovies(
             @Query("api_key") String apiKey,
-            @Query("page") int page
+            @Query("page") String page
     );
 
     @GET(HttpClientModule.UPCOMING)
     Observable<MovieResponse> getUpcomingMovies(
             @Query("api_key") String apiKey,
-            @Query("page") int page
+            @Query("page") String page
     );
 
     @GET(HttpClientModule.POPULAR)
     Observable<MovieResponse> getPopularMovies(
             @Query("api_key") String apiKey,
-            @Query("page") int page
+            @Query("page") String page
     );
 
     @GET(HttpClientModule.MOVIE + "{id}/similar")

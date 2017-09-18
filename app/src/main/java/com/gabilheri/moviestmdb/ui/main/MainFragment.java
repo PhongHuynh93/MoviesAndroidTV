@@ -25,6 +25,7 @@ import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
+import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
@@ -33,6 +34,8 @@ import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.Constant;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -40,6 +43,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter.KEY_TAG;
 import static com.gabilheri.moviestmdb.util.Constant.NOW_PLAYING;
 import static com.gabilheri.moviestmdb.util.Constant.POPULAR;
 import static com.gabilheri.moviestmdb.util.Constant.SETTING;
@@ -55,8 +59,6 @@ import static com.gabilheri.moviestmdb.util.Constant.UPCOMING;
  */
 
 public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener {
-
-    private static final int BACKGROUND_UPDATE_DELAY = 300;
     @Inject
     TheMovieDbAPI mDbAPI;
 
@@ -216,19 +218,23 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
     private void loadData(@Constant.TypeMovieMode int tag, PostAdapter adapter) {
         if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
+
+        Map<String, String> options = adapter.getAdapterOptions();
+        String nextPage = options.get(PaginationAdapter.KEY_NEXT_PAGE);
+
         Observable<MovieResponse> movieResponseObservable;
         switch (tag) {
             case Constant.NOW_PLAYING:
-                movieResponseObservable = mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                movieResponseObservable = mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, nextPage);
                 break;
             case Constant.POPULAR:
-                movieResponseObservable = mDbAPI.getPopularMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                movieResponseObservable = mDbAPI.getPopularMovies(Config.API_KEY_URL, nextPage);
                 break;
             case Constant.TOP_RATED:
-                movieResponseObservable = mDbAPI.getTopRatedMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                movieResponseObservable = mDbAPI.getTopRatedMovies(Config.API_KEY_URL, nextPage);
                 break;
             case Constant.UPCOMING:
-                movieResponseObservable = mDbAPI.getUpcomingMovies(Config.API_KEY_URL, mRows.get(tag).getPage());
+                movieResponseObservable = mDbAPI.getUpcomingMovies(Config.API_KEY_URL, nextPage);
                 break;
             case Constant.SETTING:
             default:
@@ -311,6 +317,15 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             Movie movie = (Movie) item;
             // load the movie background
             mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
+            // info - add the load more
+            int index = rowsAdapter.indexOf(row);
+            // get the adapter for the suitable row
+            PostAdapter adapter =
+                    ((PostAdapter) ((ListRow) rowsAdapter.get(index)).getAdapter());
+
+            if (adapter.get(adapter.size() - 1).equals(item) && adapter.shouldLoadNextPage()) {
+                loadData(Integer.valueOf(adapter.getAdapterOptions().get(KEY_TAG)), adapter);
+            }
         }
 
     }
