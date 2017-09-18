@@ -14,6 +14,9 @@ import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
  */
 
 public class MovieDetailsActivity extends BaseTvActivity {
+    public static final String SHARED_ELEMENT_NAME = "hero";
+    public static final String MOVIE = "Movie";
+
     GlideBackgroundManager mBackgroundManager;
     private Movie movie;
 

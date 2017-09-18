@@ -40,6 +40,7 @@
         </activity>
 
         <activity android:name=".ui.detail.MovieDetailsActivity"/>
+        <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
     </application>
 
 </manifest>

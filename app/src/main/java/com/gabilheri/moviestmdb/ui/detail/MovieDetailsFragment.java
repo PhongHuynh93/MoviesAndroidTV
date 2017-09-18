@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.ui.detail;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v17.leanback.app.DetailsFragment;
@@ -12,6 +13,7 @@ import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElement
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
+import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v7.graphics.Palette;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +33,7 @@ import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.data.models.MovieDetails;
 import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.data.models.PaletteColors;
+import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
@@ -172,6 +175,18 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         mAdapter = new ArrayObjectAdapter(classPresenterSelector);
         // Sets the adapter to the fragment
         setAdapter(mAdapter);
+
+        mFullWidthMovieDetailsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
+            @Override
+            public void onActionClicked(Action action) {
+                long id = action.getId();
+                if (id == ACTION_WATCH_TRAILER) {
+                    Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
+                    intent.putExtra(MovieDetailsActivity.MOVIE, movie);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     /**
