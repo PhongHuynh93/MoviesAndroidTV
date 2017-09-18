@@ -3,7 +3,6 @@ package com.gabilheri.moviestmdb.data.Api;
 import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.models.CreditsResponse;
 import com.gabilheri.moviestmdb.data.models.MovieDetails;
-import com.gabilheri.moviestmdb.data.models.MovieResponse;
 import com.gabilheri.moviestmdb.data.models.Person;
 import com.gabilheri.moviestmdb.data.models.VideoResponse;
 

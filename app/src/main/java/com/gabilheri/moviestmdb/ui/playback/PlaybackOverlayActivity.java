@@ -10,7 +10,6 @@ import android.view.KeyEvent;
 import android.widget.VideoView;
 
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.data.models.Movie;
 
 /**
  * Created by CPU11112-local on 9/18/2017.

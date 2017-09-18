@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.data.models;
+package com.example.myapplication;
 
 import android.os.Parcel;
 import android.os.Parcelable;

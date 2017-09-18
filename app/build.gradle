@@ -75,48 +75,47 @@ tasks.whenTaskAdded { task ->
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    String supportLibVersion = "26.+"
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     String retrofitVersion = "2.1.0"
     String okHttpVersion = "3.4.1"
-
     // Google Support Libraries
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:cardview-v7:${supportLibVersion}"
-    compile "com.android.support:support-annotations:${supportLibVersion}"
-    compile "com.android.support:support-v13:${supportLibVersion}"
-    compile "com.android.support:support-v4:${supportLibVersion}"
-    compile "com.android.support:palette-v7:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
-    compile "com.android.support:customtabs:${supportLibVersion}"
-    compile "com.android.support:leanback-v17:${supportLibVersion}"
-
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.cardView
+    implementation supportDependencies.supportAnnotation
+    implementation supportDependencies.palette
+    implementation supportDependencies.design
+    implementation supportDependencies.recyclerView
+    implementation supportDependencies.customtabs
+    implementation supportDependencies.leanback
+//    compile "com.android.support:support-v13:${supportDependencies.appCompat}"
+//    compile "com.android.support:support-v4:${supportDependencies.appCompat}"
+//    compile "com.android.support:palette-v7:${supportDependencies.appCompat}"
+//    compile "com.android.support:design:${supportDependencies.appCompat}"
+//    compile "com.android.support:recyclerview-v7:${supportDependencies.appCompat}"
+//    compile "com.android.support:customtabs:${supportDependencies.appCompat}"
+//    compile "com.android.support:leanback-v17:${supportDependencies.appCompat}"
     // Base stuff
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
-
+//    compile 'io.reactivex:rxandroid:1.2.1'
+//    compile 'io.reactivex:rxjava:1.1.6'
+//    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
     // Network
-    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    compile "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
-    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+//    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+//    compile "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
+//    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
     compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     compile "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
     // Logging
     compile 'com.jakewharton.timber:timber:4.3.0'
-
     // Dependency Injection
-    annotationProcessor  'com.google.dagger:dagger-compiler:2.4'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     compile 'com.google.dagger:dagger:2.4'
     provided 'javax.annotation:jsr250-api:1.0'
-
     compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor  'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile('com.mikepenz:aboutlibraries:5.9.7@aar') {
         transitive = true
     }
+    implementation project(':data')
+    implementation project(':domain')
 }

@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.example.myapplication"
+//        applicationId "com.example.myapplication"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -27,7 +27,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.0.2'
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.retrofitmoshi
+    implementation supportDependencies.rxAndroid
+    implementation supportDependencies.rxJava
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'

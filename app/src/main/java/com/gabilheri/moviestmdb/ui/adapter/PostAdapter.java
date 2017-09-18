@@ -2,7 +2,6 @@ package com.gabilheri.moviestmdb.ui.adapter;
 
 import android.content.Context;
 
-import com.gabilheri.moviestmdb.data.models.Movie;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 
 import java.util.ArrayList;
