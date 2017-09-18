@@ -1,11 +1,13 @@
 package com.gabilheri.moviestmdb.ui.main;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v17.leanback.app.ErrorFragment;
 import android.view.View;
 
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
+import com.gabilheri.moviestmdb.util.NetworkUtil;
 
 
 /**
@@ -17,12 +19,19 @@ import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
  */
 
 public class MainActivity extends BaseTvActivity {
+    private Fragment mBrowseFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        addFragment(MainFragment.newInstance());
-        addFragment(buildErrorFragment());
+//        addFragment(buildErrorFragment());
+
+        if (NetworkUtil.isNetworkConnected(this)) {
+            mBrowseFragment = MainFragment.newInstance();
+        } else {
+            mBrowseFragment = buildErrorFragment();
+        }
     }
 
     private ErrorFragment buildErrorFragment() {
