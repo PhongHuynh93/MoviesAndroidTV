@@ -3,6 +3,7 @@ package com.gabilheri.moviestmdb.ui.detail;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v17.leanback.app.DetailsFragment;
+import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewLogoPresenter;
@@ -22,6 +23,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.gabilheri.moviestmdb.App;
+import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.data.models.CreditsResponse;
@@ -40,6 +42,8 @@ import javax.inject.Inject;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static com.gabilheri.moviestmdb.util.Constant.ACTION_WATCH_TRAILER;
 
 /**
  * Created by CPU11112-local on 9/15/2017.
@@ -178,6 +182,8 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         mAdapter.add(mDetailsOverviewRow);
         loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
         fetchMovieDetails();
+        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
+                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
     }
 
     private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
