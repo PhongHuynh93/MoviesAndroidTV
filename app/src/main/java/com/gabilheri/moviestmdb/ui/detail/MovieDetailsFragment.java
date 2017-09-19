@@ -24,11 +24,13 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.example.myapplication.Movie;
 import com.example.myapplication.MovieResponse;
 import com.example.myapplication.data.local.TheMovieDbAPI;
 import com.example.myapplication.data.models.CreditsResponse;
 import com.example.myapplication.data.models.MovieDetails;
 import com.example.myapplication.data.models.PaletteColors;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
@@ -37,6 +39,8 @@ import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
 import com.gabilheri.moviestmdb.util.PaletteUtils;
 import com.gabilheri.moviestmdb.util.PersonPresenter;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 

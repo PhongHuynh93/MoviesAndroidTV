@@ -5,6 +5,8 @@ import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.dagger.AppScope;
 import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
+import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+import com.gabilheri.moviestmdb.dagger.modules.RepositionModule;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.main.MainFragment;
 
@@ -24,8 +26,10 @@ import dagger.Component;
 @Component(modules = {
         ApplicationModule.class,
         HttpClientModule.class,
+        RepositionModule.class
 })
 public interface ApplicationComponent {
+    FragmentComponent newSubFragmentComponent(FragmentModule fragmentModule);
 
     void inject(App app);
     void inject(MainFragment mainFragment);

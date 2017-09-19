@@ -115,6 +115,9 @@ dependencies {
     implementation supportDependencies.dagger
     provided supportDependencies.javaxAnnotation
 
+    provided supportDependencies.rxAndroid
+    provided supportDependencies.rxJava
+
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile('com.mikepenz:aboutlibraries:5.9.7@aar') {

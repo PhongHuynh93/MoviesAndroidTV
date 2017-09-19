@@ -11,7 +11,9 @@ public class Constant {
     public static final int GRID_ITEM_HEIGHT = 200;
 
     @IntDef({NOW_PLAYING, TOP_RATED, POPULAR, UPCOMING, SETTING})
-    public @interface TypeMovieMode {}
+    public @interface TypeMovieMode {
+    }
+
     public static final int NOW_PLAYING = 0;
     public static final int TOP_RATED = 1;
     public static final int POPULAR = 2;
@@ -20,5 +22,10 @@ public class Constant {
 
     // action in detailsfragment
     public static final long ACTION_WATCH_TRAILER = 1;
+
+    // movie reposition
+    public static final String MOVIE_REPOSITION = "MOVIE_REPOSITION";
+    public static final String MOVIE_LOCAL = "MOVIE_LOCAL";
+    public static final String MOVIE_REMOTE = "MOVIE_REMOTE";
 
 }

@@ -3,6 +3,8 @@ package com.gabilheri.moviestmdb.ui.detail;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
+import com.example.myapplication.Movie;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;

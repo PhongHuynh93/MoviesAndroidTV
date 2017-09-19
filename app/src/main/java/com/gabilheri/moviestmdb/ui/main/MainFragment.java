@@ -1,6 +1,7 @@
 package com.gabilheri.moviestmdb.ui.main;
 
 import android.content.Intent;
+import android.database.Observable;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -20,8 +21,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.myapplication.MovieResponse;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+import com.gabilheri.moviestmdb.presenter.ListMoviePresenter;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
@@ -35,9 +39,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter.KEY_TAG;
@@ -57,7 +58,7 @@ import static com.gabilheri.moviestmdb.util.Constant.UPCOMING;
 
 public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener {
     @Inject
-    TheMovieDbAPI mDbAPI;
+    ListMoviePresenter mListMoviePresenter;
 
     private GlideBackgroundManager mBackgroundManager;
 
@@ -80,6 +81,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // inject dagger
+        App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
         App.instance().appComponent().inject(this);
 
         prepareBackgroundManager();

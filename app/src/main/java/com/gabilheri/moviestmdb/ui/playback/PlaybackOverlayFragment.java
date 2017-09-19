@@ -21,6 +21,7 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.myapplication.Movie;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.presenter.DescriptionPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;

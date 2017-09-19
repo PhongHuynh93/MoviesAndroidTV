@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.widget.VideoView;
 
+import com.example.myapplication.Movie;
 import com.gabilheri.moviestmdb.R;
 
 /**

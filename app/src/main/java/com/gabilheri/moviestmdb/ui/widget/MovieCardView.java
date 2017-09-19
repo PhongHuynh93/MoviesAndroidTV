@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.myapplication.Movie;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BindableCardView;
 

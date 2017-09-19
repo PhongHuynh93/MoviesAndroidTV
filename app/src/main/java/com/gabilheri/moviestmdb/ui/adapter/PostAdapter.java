@@ -2,6 +2,7 @@ package com.gabilheri.moviestmdb.ui.adapter;
 
 import android.content.Context;
 
+import com.example.myapplication.Movie;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 
 import java.util.ArrayList;
