@@ -3,6 +3,7 @@ package com.example.myapplication.module;
 import android.app.Application;
 
 import com.example.myapplication.data.local.TheMovieDbAPI;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,6 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
@@ -60,7 +60,8 @@ public class HttpClientModule {
         return new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .client(okHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(moshiConverterFactory)
                 .build();
     }

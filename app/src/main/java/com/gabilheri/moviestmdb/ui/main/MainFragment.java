@@ -81,8 +81,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         super.onActivityCreated(savedInstanceState);
         // inject dagger
         App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
-        App.instance().appComponent().inject(this);
-
+        mListMoviePresenter.attachView(this);
         prepareBackgroundManager();
         setupUIElements();
         setupEventListeners();
@@ -90,6 +89,12 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         loadRows();
 
         prepareEntranceTransition();
+    }
+
+    @Override
+    public void onDestroy() {
+        mListMoviePresenter.detachView();
+        super.onDestroy();
     }
 
     private void loadRows() {

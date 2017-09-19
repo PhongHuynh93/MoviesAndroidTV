@@ -7,7 +7,10 @@ import android.preference.PreferenceManager;
 import com.example.myapplication.data.MovieReposition;
 import com.example.myapplication.data.local.TheMovieDbAPI;
 import com.example.myapplication.data.remote.MovieRemoteDataSource;
+import com.example.myapplication.interactor.GetCastMembers;
+import com.example.myapplication.interactor.GetMovieDetail;
 import com.example.myapplication.interactor.GetMovieList;
+import com.example.myapplication.interactor.GetRecommendations;
 import com.example.myapplication.reposition.MovieDataSource;
 import com.gabilheri.moviestmdb.util.Constant;
 
@@ -39,6 +42,24 @@ public class RepositionModule {
     @Singleton
     GetMovieList usecaseGetMovie(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
         return new GetMovieList(movieDataSource);
+    }
+
+    @Provides
+    @Singleton
+    GetCastMembers usecaseGetCastMembers(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
+        return new GetCastMembers(movieDataSource);
+    }
+
+    @Provides
+    @Singleton
+    GetMovieDetail usecaseGetMovieDetail(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
+        return new GetMovieDetail(movieDataSource);
+    }
+
+    @Provides
+    @Singleton
+    GetRecommendations usecaseGetRecommendations(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
+        return new GetRecommendations(movieDataSource);
     }
 //
 //    @Provides

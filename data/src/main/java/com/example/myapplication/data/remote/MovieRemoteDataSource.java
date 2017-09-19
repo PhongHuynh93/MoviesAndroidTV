@@ -2,6 +2,8 @@ package com.example.myapplication.data.remote;
 
 import com.example.myapplication.MovieResponse;
 import com.example.myapplication.data.local.TheMovieDbAPI;
+import com.example.myapplication.data.models.CreditsResponse;
+import com.example.myapplication.data.models.MovieDetails;
 import com.example.myapplication.reposition.MovieDataSource;
 import com.example.myapplication.util.Constant;
 
@@ -42,8 +44,18 @@ public class MovieRemoteDataSource implements MovieDataSource {
         return movieResponseObservable;
     }
 
-//    @Override
-//    public Observable<DiscoverMovieResponse> getRemoteDatas(String sortBy, Integer page) {
-//        return mMovieRetrofitEndpoint.discoverMovies(sortBy, page);
-//    }
+    @Override
+    public Observable<CreditsResponse> fetchCastMembers(String id) {
+        return mDbAPI.getCredits(id, Constant.API_KEY_URL);
+    }
+
+    @Override
+    public Observable<MovieResponse> fetchRecommendations(String id) {
+        return mDbAPI.getRecommendations(id, Constant.API_KEY_URL);
+    }
+
+    @Override
+    public Observable<MovieDetails> fetchMovieDetails(String id) {
+        return mDbAPI.getMovieDetails(id, Constant.API_KEY_URL);
+    }
 }

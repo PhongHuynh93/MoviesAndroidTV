@@ -3,6 +3,7 @@ package com.gabilheri.moviestmdb.ui.detail;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -33,6 +34,8 @@ import com.example.myapplication.data.models.PaletteColors;
 import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+import com.gabilheri.moviestmdb.presenter.DetailMoviePresenter;
 import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
@@ -41,16 +44,15 @@ import com.gabilheri.moviestmdb.util.PersonPresenter;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
-
 import static com.gabilheri.moviestmdb.util.Constant.ACTION_WATCH_TRAILER;
 
 /**
  * Created by CPU11112-local on 9/15/2017.
  */
 
-public class MovieDetailsFragment extends DetailsFragment implements Palette.PaletteAsyncListener {
+public class MovieDetailsFragment extends DetailsFragment implements Palette.PaletteAsyncListener, MovieDetailView {
+    @Inject
+    DetailMoviePresenter mDetailMoviePresenter;
 
     public static String TRANSITION_NAME = "poster_transition";
 
@@ -71,10 +73,9 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     /**
      * Creates a new instance of a MovieDetailsFragment
-     * @param movie
-     *      The movie to be used by this fragment
-     * @return
-     *      A newly created instance of MovieDetailsFragment
+     *
+     * @param movie The movie to be used by this fragment
+     * @return A newly created instance of MovieDetailsFragment
      */
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -85,10 +86,12 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         // Injects this into the main component. Necessary for Dagger 2
-        App.instance().appComponent().inject(this);
+        App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
+        mDetailMoviePresenter.attachView(this);
+
         if (getArguments() == null || !getArguments().containsKey(Movie.class.getSimpleName())) {
             throw new RuntimeException("An movie is necessary for MovieDetailsFragment");
         }
@@ -104,41 +107,50 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     }
 
 
+    @Override
+    public void onDestroy() {
+        mDetailMoviePresenter.detachView();
+        super.onDestroy();
+    }
+
     private void setupCastMembers() {
         mAdapter.add(new ListRow(new HeaderItem(0, "Cast"), mCastAdapter));
-        fetchCastMembers();
+        mDetailMoviePresenter.fetchCastMembers(movie.getId());
     }
 
-    private void fetchCastMembers() {
-        mDbAPI.getCredits(movie.getId(), Config.API_KEY_URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::bindCastMembers, e -> {
-                    Timber.e(e, "Error fetching data: %s", e.getMessage());
-                });
-    }
-
-
-    private void bindCastMembers(CreditsResponse response) {
-        mCastAdapter.addAll(0, response.getCast());
+    /**
+     * Sets up the details overview rows
+     */
+    private void setUpDetailsOverviewRow() {
+        mDetailsOverviewRow = new DetailsOverviewRow(new MovieDetails());
+        mAdapter.add(mDetailsOverviewRow);
+        loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
+        mDetailMoviePresenter.fetchMovieDetails(movie.getId());
+        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
+                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
     }
 
     private void setupRecommendationsRow() {
         mAdapter.add(new ListRow(new HeaderItem(2, "Recommendations"), mRecommendationsAdapter));
-        fetchRecommendations();
+        mDetailMoviePresenter.fetchRecommendations(movie.getId());
     }
 
-    private void fetchRecommendations() {
-        mDbAPI.getRecommendations(movie.getId(), Config.API_KEY_URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::bindRecommendations, e -> {
-                    Timber.e(e, "Error fetching recommendations: %s", e.getMessage());
-                });
+    @Override
+    public void bindCastMembers(CreditsResponse response) {
+        mCastAdapter.addAll(0, response.getCast());
     }
 
-    private void bindRecommendations(MovieResponse response) {
+    @Override
+    public void bindRecommendations(MovieResponse response) {
         mRecommendationsAdapter.addAll(0, response.getResults());
+    }
+
+    // info - this item can be on the constructor or in the set method
+    @Override
+    public void bindMovieDetails(MovieDetails movieDetails) {
+        this.movieDetails = movieDetails;
+        // Bind the details to the row
+        mDetailsOverviewRow.setItem(this.movieDetails);
     }
 
     /**
@@ -187,17 +199,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         });
     }
 
-    /**
-     * Sets up the details overview rows
-     */
-    private void setUpDetailsOverviewRow() {
-        mDetailsOverviewRow = new DetailsOverviewRow(new MovieDetails());
-        mAdapter.add(mDetailsOverviewRow);
-        loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
-        fetchMovieDetails();
-        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
-                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
-    }
 
     private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
         @Override
@@ -209,9 +210,8 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     /**
      * Loads the poster image into the DetailsOverviewRow
      * info - after getting the bitmap, set the palette color to the fullwidth
-     * @param url
-     *      The poster URL
      *
+     * @param url The poster URL
      */
     private void loadImage(String url) {
         Glide.with(getActivity())
@@ -236,31 +236,11 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
 
     /**
      * Generates a palette from a Bitmap
-     * @param bmp
-     *      The bitmap from which we want to generate the palette
+     *
+     * @param bmp The bitmap from which we want to generate the palette
      */
     private void changePalette(Bitmap bmp) {
         Palette.from(bmp).generate(this);
-    }
-
-
-    /**
-     * Fetches the movie details for a specific Movie.
-     */
-    private void fetchMovieDetails() {
-        mDbAPI.getMovieDetails(movie.getId(), Config.API_KEY_URL)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::bindMovieDetails, e -> {
-                    Timber.e(e, "Error fetching data: %s", e.getMessage());
-                });
-    }
-
-    // info - this item can be on the constructor or in the set method
-    private void bindMovieDetails(MovieDetails movieDetails) {
-        this.movieDetails = movieDetails;
-        // Bind the details to the row
-        mDetailsOverviewRow.setItem(this.movieDetails);
     }
 
     @Override

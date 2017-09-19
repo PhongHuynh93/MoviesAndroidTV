@@ -1,6 +1,8 @@
 package com.example.myapplication.data;
 
 import com.example.myapplication.MovieResponse;
+import com.example.myapplication.data.models.CreditsResponse;
+import com.example.myapplication.data.models.MovieDetails;
 import com.example.myapplication.reposition.MovieDataSource;
 
 import io.reactivex.Observable;
@@ -18,6 +20,21 @@ public class MovieReposition implements MovieDataSource {
     @Override
     public Observable<MovieResponse> getListMovies(int tag, String page) {
         return mRemoteMovieDataSource.getListMovies(tag, page);
+    }
+
+    @Override
+    public Observable<CreditsResponse> fetchCastMembers(String id) {
+        return mRemoteMovieDataSource.fetchCastMembers(id);
+    }
+
+    @Override
+    public Observable<MovieResponse> fetchRecommendations(String id) {
+        return mRemoteMovieDataSource.fetchRecommendations(id);
+    }
+
+    @Override
+    public Observable<MovieDetails> fetchMovieDetails(String id) {
+        return mRemoteMovieDataSource.fetchMovieDetails(id);
     }
 
     // TODO: 9/12/2017 apply rx here to get from local data when there is no network

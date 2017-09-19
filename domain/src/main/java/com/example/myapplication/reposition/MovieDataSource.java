@@ -2,6 +2,8 @@ package com.example.myapplication.reposition;
 
 
 import com.example.myapplication.MovieResponse;
+import com.example.myapplication.data.models.CreditsResponse;
+import com.example.myapplication.data.models.MovieDetails;
 
 import io.reactivex.Observable;
 
@@ -11,4 +13,10 @@ import io.reactivex.Observable;
 
 public interface MovieDataSource {
     Observable<MovieResponse> getListMovies(int tag, String page);
+
+    Observable<CreditsResponse> fetchCastMembers(String id);
+
+    Observable<MovieResponse> fetchRecommendations(String id);
+
+    Observable<MovieDetails> fetchMovieDetails(String id);
 }
