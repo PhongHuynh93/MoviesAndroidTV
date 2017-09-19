@@ -3,7 +3,7 @@ package com.gabilheri.moviestmdb.util;
 import android.graphics.Color;
 import android.support.v7.graphics.Palette;
 
-import com.gabilheri.moviestmdb.data.models.PaletteColors;
+import com.example.myapplication.data.models.PaletteColors;
 
 /**
  * Created by CPU11112-local on 9/15/2017.

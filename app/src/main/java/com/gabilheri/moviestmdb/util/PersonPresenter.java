@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
-import com.gabilheri.moviestmdb.data.models.CastMember;
+import com.example.myapplication.data.models.CastMember;
 
 /**
  * Created by user on 9/15/2017.

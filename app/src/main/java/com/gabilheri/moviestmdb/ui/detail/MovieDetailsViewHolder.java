@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.data.models.Genre;
-import com.gabilheri.moviestmdb.data.models.MovieDetails;
+import com.example.myapplication.data.models.Genre;
+import com.example.myapplication.data.models.MovieDetails;
 
 import java.util.Locale;
 

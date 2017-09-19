@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.data.models;
+package com.example.myapplication.data.models;
 
 import java.util.List;
 

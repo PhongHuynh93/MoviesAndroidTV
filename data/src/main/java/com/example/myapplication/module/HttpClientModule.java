@@ -1,9 +1,8 @@
-package com.gabilheri.moviestmdb.dagger.modules;
+package com.example.myapplication.module;
 
 import android.app.Application;
 
-import com.gabilheri.moviestmdb.dagger.AppScope;
-import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
+import com.example.myapplication.data.local.TheMovieDbAPI;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -19,11 +18,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
- * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 9/4/16.
+ * Created by CPU11112-local on 9/19/2017.
  */
 @Module
 public class HttpClientModule {
@@ -45,7 +40,6 @@ public class HttpClientModule {
     public static final String TV = "tv/";
 
     @Provides
-    @AppScope
     public OkHttpClient provideOkHttpClient(Application app) {
         File cacheDir = new File(app.getCacheDir(), "http");
         return new OkHttpClient.Builder()
@@ -58,7 +52,6 @@ public class HttpClientModule {
 
     @Provides
     @Named("movieDB") // Name is used in case a second Retrofit api is provided.
-    @AppScope
     public Retrofit provideFithubRestAdapter(MoshiConverterFactory moshiConverterFactory, OkHttpClient okHttpClient) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -79,7 +72,6 @@ public class HttpClientModule {
     }
 
     @Provides
-    @AppScope
     public MoshiConverterFactory provideMoshiConverterFactory() {
         return MoshiConverterFactory.create();
     }

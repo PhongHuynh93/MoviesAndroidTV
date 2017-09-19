@@ -5,7 +5,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.content.ContextCompat;
 import android.view.ViewGroup;
 
-import com.gabilheri.moviestmdb.data.models.Option;
+import com.example.myapplication.data.models.Option;
 import com.gabilheri.moviestmdb.ui.widget.IconCardView;
 
 /**

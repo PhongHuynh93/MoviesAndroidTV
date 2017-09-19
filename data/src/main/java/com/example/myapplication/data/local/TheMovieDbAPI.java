@@ -1,22 +1,19 @@
-package com.gabilheri.moviestmdb.data.Api;
+package com.example.myapplication.data.local;
 
-import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
-import com.gabilheri.moviestmdb.data.models.CreditsResponse;
-import com.gabilheri.moviestmdb.data.models.MovieDetails;
-import com.gabilheri.moviestmdb.data.models.Person;
-import com.gabilheri.moviestmdb.data.models.VideoResponse;
+import com.example.myapplication.MovieResponse;
+import com.example.myapplication.data.models.CreditsResponse;
+import com.example.myapplication.data.models.MovieDetails;
+import com.example.myapplication.data.models.Person;
+import com.example.myapplication.data.models.VideoResponse;
+import com.example.myapplication.module.HttpClientModule;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
- * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 10/8/16.
+ * Created by CPU11112-local on 9/19/2017.
  */
 
 public interface TheMovieDbAPI {
@@ -94,3 +91,4 @@ public interface TheMovieDbAPI {
     );
 
 }
+

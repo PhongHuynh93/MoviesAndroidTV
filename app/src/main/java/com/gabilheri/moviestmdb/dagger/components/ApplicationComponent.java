@@ -1,10 +1,10 @@
 package com.gabilheri.moviestmdb.dagger.components;
 
 
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.dagger.AppScope;
 import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
-import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.main.MainFragment;
 

@@ -7,7 +7,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.data.models.Option;
+import com.example.myapplication.data.models.Option;
 import com.gabilheri.moviestmdb.ui.presenter.IconItemPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.LoadingPresenter;
 import com.gabilheri.moviestmdb.ui.widget.LoadingCardView;

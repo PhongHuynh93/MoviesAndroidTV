@@ -2,10 +2,10 @@ package com.gabilheri.moviestmdb;
 
 import android.app.Application;
 
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.dagger.components.ApplicationComponent;
 import com.gabilheri.moviestmdb.dagger.components.DaggerApplicationComponent;
 import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
-import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
 
 import timber.log.Timber;
 

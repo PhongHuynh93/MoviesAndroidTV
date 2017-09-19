@@ -27,6 +27,19 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation supportDependencies.appCompat
+    implementation supportDependencies.retrofit
+    implementation supportDependencies.okhttp
+    implementation supportDependencies.okhttpLog
+    implementation supportDependencies.retrofitmoshi
+    implementation supportDependencies.retrofitrx
+    implementation supportDependencies.palette
+
+    implementation supportDependencies.rxAndroid
+    implementation supportDependencies.rxJava
+
+    annotationProcessor supportDependencies.daggercompiler
+    implementation supportDependencies.dagger
+    provided supportDependencies.javaxAnnotation
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {

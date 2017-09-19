@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.data.models;
+package com.example.myapplication.data.models;
 
 /**
  * Created by user on 9/17/2017.

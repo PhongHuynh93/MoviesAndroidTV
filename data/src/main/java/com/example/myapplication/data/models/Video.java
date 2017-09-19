@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.data.models;
+package com.example.myapplication.data.models;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>

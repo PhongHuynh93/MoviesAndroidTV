@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.example.myapplication.MovieResponse;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.dagger.modules.HttpClientModule;
-import com.gabilheri.moviestmdb.data.Api.TheMovieDbAPI;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;

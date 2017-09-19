@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.data.models.MovieDetails;
+import com.example.myapplication.data.models.MovieDetails;
 
 /**
  * Created by CPU11112-local on 9/15/2017.
