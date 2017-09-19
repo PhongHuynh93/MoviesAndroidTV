@@ -6,6 +6,7 @@ import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.dagger.components.ApplicationComponent;
 import com.gabilheri.moviestmdb.dagger.components.DaggerApplicationComponent;
 import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
+import com.gabilheri.moviestmdb.dagger.modules.RepositionModule;
 
 import timber.log.Timber;
 
@@ -35,6 +36,7 @@ public class App extends Application {
         mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .httpClientModule(new HttpClientModule())
+                .repositionModule(new RepositionModule())
                 .build();
 
         mApplicationComponent.inject(this);

@@ -1,17 +1,23 @@
 package com.example.myapplication.data;
 
+import com.example.myapplication.MovieResponse;
 import com.example.myapplication.reposition.MovieDataSource;
+
+import io.reactivex.Observable;
 
 /**
  * Created by CPU11112-local on 9/12/2017.
  */
 public class MovieReposition implements MovieDataSource {
-    private final MovieDataSource mLocalMovieDataSource;
     private final MovieDataSource mRemoteMovieDataSource;
 
-    public MovieReposition(MovieDataSource localmovie, MovieDataSource remotemovie) {
-        mLocalMovieDataSource = localmovie;
+    public MovieReposition(MovieDataSource remotemovie) {
         mRemoteMovieDataSource = remotemovie;
+    }
+
+    @Override
+    public Observable<MovieResponse> getListMovies(int tag, String page) {
+        return mRemoteMovieDataSource.getListMovies(tag, page);
     }
 
     // TODO: 9/12/2017 apply rx here to get from local data when there is no network

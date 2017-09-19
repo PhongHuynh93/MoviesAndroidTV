@@ -12,7 +12,6 @@ import javax.inject.Named;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
@@ -51,13 +50,13 @@ public class HttpClientModule {
     }
 
     @Provides
+    public MoshiConverterFactory provideMoshiConverterFactory() {
+        return MoshiConverterFactory.create();
+    }
+
+    @Provides
     @Named("movieDB") // Name is used in case a second Retrofit api is provided.
     public Retrofit provideFithubRestAdapter(MoshiConverterFactory moshiConverterFactory, OkHttpClient okHttpClient) {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okHttpClient = okHttpClient.newBuilder()
-                .addInterceptor(interceptor)
-                .build();
         return new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .client(okHttpClient)
@@ -69,10 +68,5 @@ public class HttpClientModule {
     @Provides
     public TheMovieDbAPI provideFithubApi(@Named("movieDB") Retrofit restAdapter) {
         return restAdapter.create(TheMovieDbAPI.class);
-    }
-
-    @Provides
-    public MoshiConverterFactory provideMoshiConverterFactory() {
-        return MoshiConverterFactory.create();
     }
 }

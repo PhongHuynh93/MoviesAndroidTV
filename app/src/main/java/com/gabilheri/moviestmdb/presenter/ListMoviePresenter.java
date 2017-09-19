@@ -23,21 +23,28 @@ public class ListMoviePresenter extends BasePresenter<ListMovieView> {
     }
 
 
-    public void getDataFromServer(String sortBy, int page) {
-        mGetMovieList.execute(new MovieListObserver(), new GetMovieList.RequestValues(sortBy, page));
+    public void getDataFromServer(int tag, String page) {
+        getMvpView().showLoadingIndicator(tag);
+        mGetMovieList.execute(new MovieListObserver(tag), new GetMovieList.RequestValues(tag, page));
     }
 
     private final class MovieListObserver extends DisposableObserver<GetMovieList.ResponseValue> {
+        private final int id;
+
+        public MovieListObserver(int id) {
+            this.id = id;
+        }
+
         @Override
         public void onNext(@io.reactivex.annotations.NonNull GetMovieList.ResponseValue responseValue) {
-//            getMvpView().setThePullToRefreshDissappear();
-//            getMvpView().showListMovie(responseValue.getDiscoverMovieResponse());
+            getMvpView().hideLoadingIndicator(id);
+            getMvpView().showData(id, responseValue.getMovieResponse());
         }
 
         @Override
         public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-//            getMvpView().setThePullToRefreshDissappear();
-//            e.printStackTrace();
+            getMvpView().hideLoadingIndicator(id);
+            e.printStackTrace();
         }
 
         @Override

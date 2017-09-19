@@ -1,7 +1,6 @@
 package com.gabilheri.moviestmdb.ui.main;
 
 import android.content.Intent;
-import android.database.Observable;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -20,6 +19,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.myapplication.Movie;
 import com.example.myapplication.MovieResponse;
 import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
@@ -32,8 +32,6 @@ import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
-import com.gabilheri.moviestmdb.util.Config;
-import com.gabilheri.moviestmdb.util.Constant;
 
 import java.util.Map;
 
@@ -41,12 +39,12 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static com.example.myapplication.util.Constant.NOW_PLAYING;
+import static com.example.myapplication.util.Constant.POPULAR;
+import static com.example.myapplication.util.Constant.SETTING;
+import static com.example.myapplication.util.Constant.TOP_RATED;
+import static com.example.myapplication.util.Constant.UPCOMING;
 import static com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter.KEY_TAG;
-import static com.gabilheri.moviestmdb.util.Constant.NOW_PLAYING;
-import static com.gabilheri.moviestmdb.util.Constant.POPULAR;
-import static com.gabilheri.moviestmdb.util.Constant.SETTING;
-import static com.gabilheri.moviestmdb.util.Constant.TOP_RATED;
-import static com.gabilheri.moviestmdb.util.Constant.UPCOMING;
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -56,7 +54,7 @@ import static com.gabilheri.moviestmdb.util.Constant.UPCOMING;
  * @since 10/8/16.
  */
 
-public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener {
+public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener, ListMovieView {
     @Inject
     ListMoviePresenter mListMoviePresenter;
 
@@ -155,30 +153,25 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         mRows = new SparseArray<>();
 
         // info - not need movie presenter because postadapter handle all small presenter inside
-//        MoviePresenter moviePresenter = new MoviePresenter();
         mRows.put(NOW_PLAYING, new MovieRow()
-                        .setId(NOW_PLAYING)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
-//                .setTitle("Now Playing")
-                        .setPage(1)
+                .setId(NOW_PLAYING)
+                .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
+                .setPage(1)
         );
         mRows.put(TOP_RATED, new MovieRow()
-                        .setId(TOP_RATED)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(TOP_RATED)))
-//                .setTitle("Top Rated")
-                        .setPage(1)
+                .setId(TOP_RATED)
+                .setAdapter(new PostAdapter(getActivity(), String.valueOf(TOP_RATED)))
+                .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
-                        .setId(POPULAR)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(POPULAR)))
-//                .setTitle("Popular")
-                        .setPage(1)
+                .setId(POPULAR)
+                .setAdapter(new PostAdapter(getActivity(), String.valueOf(POPULAR)))
+                .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
-                        .setId(UPCOMING)
-                        .setAdapter(new PostAdapter(getActivity(), String.valueOf(UPCOMING)))
-//                .setTitle("Upcoming")
-                        .setPage(1)
+                .setId(UPCOMING)
+                .setAdapter(new PostAdapter(getActivity(), String.valueOf(UPCOMING)))
+                .setPage(1)
         );
     }
 
@@ -216,58 +209,50 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
     }
 
-    private void loadData(@Constant.TypeMovieMode int tag, PostAdapter adapter) {
-        if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
-
+    private void loadData(int tag, PostAdapter adapter) {
         Map<String, String> options = adapter.getAdapterOptions();
         String nextPage = options.get(PaginationAdapter.KEY_NEXT_PAGE);
+        mListMoviePresenter.getDataFromServer(tag, nextPage);
+    }
 
-        Observable<MovieResponse> movieResponseObservable;
-        switch (tag) {
-            case Constant.NOW_PLAYING:
-                movieResponseObservable = mDbAPI.getNowPlayingMovies(Config.API_KEY_URL, nextPage);
-                break;
-            case Constant.POPULAR:
-                movieResponseObservable = mDbAPI.getPopularMovies(Config.API_KEY_URL, nextPage);
-                break;
-            case Constant.TOP_RATED:
-                movieResponseObservable = mDbAPI.getTopRatedMovies(Config.API_KEY_URL, nextPage);
-                break;
-            case Constant.UPCOMING:
-                movieResponseObservable = mDbAPI.getUpcomingMovies(Config.API_KEY_URL, nextPage);
-                break;
-            case Constant.SETTING:
-            default:
-                throw new IllegalArgumentException("Not have this argument");
+    @Override
+    public void showData(int tag, MovieResponse response) {
+        MovieRow row = mRows.get(tag);
+        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        if (adapter.size() == 0 && response.getResults().isEmpty()) {
+            adapter.showReloadCard();
+        } else {
+            adapter.setNextPage(adapter.getNextPage() + 1);
+            adapter.addAllItems(response.getResults());
         }
-        // depend on tag, load the suitable movie
-        movieResponseObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    adapter.removeLoadingIndicator();
-                    if (adapter.size() == 0 && response.getResults().isEmpty()) {
-                        adapter.showReloadCard();
-                    } else {
-                        adapter.setNextPage(adapter.getNextPage() + 1);
-                        adapter.addAllItems(response.getResults());
-                    }
 
-                    bindMovieResponse(response, tag);
-                    startEntranceTransition();
-                }, e -> {
-                    adapter.removeLoadingIndicator();
-                    if (adapter.size() == 0) {
-                        adapter.showTryAgainCard();
-                    } else {
-                        Toast.makeText(
-                                getActivity(),
-                                getString(R.string.error_message_loading_more_posts),
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                    Timber.e(e, "Error fetching now playing movies: %s", e.getMessage());
-                });
+        bindMovieResponse(response, tag);
+        startEntranceTransition();
+    }
+
+    @Override
+    public void showLoadingIndicator(int tag) {
+        MovieRow row = mRows.get(tag);
+        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
+    }
+
+    @Override
+    public void hideLoadingIndicator(int tag) {
+        MovieRow row = mRows.get(tag);
+        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        adapter.removeLoadingIndicator();
+
+        if (adapter.size() == 0) {
+            adapter.showTryAgainCard();
+        } else {
+            Toast.makeText(
+                    getActivity(),
+                    getString(R.string.error_message_loading_more_posts),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+        Timber.e("Error fetching now playing movies");
     }
 
     /**
@@ -276,7 +261,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
      * @param response The response from TMDB API
      * @param id       The ID / position of the row
      */
-    // TODO: 9/14/2017 miss endless loading
     private void bindMovieResponse(MovieResponse response, int id) {
         MovieRow row = mRows.get(id);
         row.setPage(row.getPage() + 1);

@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.ui.main;
 
+import com.example.myapplication.MovieResponse;
 import com.gabilheri.moviestmdb.ui.MvpView;
 
 /**
@@ -7,6 +8,9 @@ import com.gabilheri.moviestmdb.ui.MvpView;
  */
 
 public interface ListMovieView extends MvpView {
-//    void showListMovie(DiscoverMovieResponse discoverMovieResponse);
-//    void setThePullToRefreshDissappear();
+    void showData(int id, MovieResponse movieResponse);
+
+    void showLoadingIndicator(int tag);
+
+    void hideLoadingIndicator(int tag);
 }

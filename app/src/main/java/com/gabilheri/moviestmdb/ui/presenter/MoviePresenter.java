@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 
+import com.example.myapplication.Movie;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 
 

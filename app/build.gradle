@@ -118,6 +118,12 @@ dependencies {
     provided supportDependencies.rxAndroid
     provided supportDependencies.rxJava
 
+    implementation supportDependencies.retrofit
+    implementation supportDependencies.okhttp
+    implementation supportDependencies.okhttpLog
+    implementation supportDependencies.retrofitmoshi
+    implementation supportDependencies.retrofitrx
+
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile('com.mikepenz:aboutlibraries:5.9.7@aar') {

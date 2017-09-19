@@ -12,7 +12,7 @@ import java.util.List;
  * Created by user on 9/17/2017.
  */
 
-public class PostAdapter  extends PaginationAdapter {
+public class PostAdapter  extends PaginationAdapter implements BrowserAdapterListener {
     public PostAdapter(Context context, String tag) {
         super(context, new MoviePresenter(context), tag);
     }

@@ -1,8 +1,10 @@
 package com.example.myapplication.interactor;
 
+import com.example.myapplication.MovieResponse;
 import com.example.myapplication.reposition.MovieDataSource;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 
 /**
  * Created by CPU11112-local on 9/11/2017.
@@ -18,26 +20,42 @@ public class GetMovieList extends UseCase<GetMovieList.RequestValues, GetMovieLi
 
     @Override
     protected Observable<ResponseValue> buildUseCaseObservable(RequestValues requestValues) {
-//        return movieReposition.getRemoteDatas(requestValues.getSortBy(), requestValues.getPage())
-//                .map(ResponseValue::new);
-        return null;
+        return movieReposition.getListMovies(requestValues.getTag(), requestValues.getPage())
+                .map(new Function<MovieResponse, ResponseValue>() {
+                    @Override
+                    public ResponseValue apply(MovieResponse movieResponse) throws Exception {
+                        return new ResponseValue(movieResponse);
+                    }
+                });
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
-        private final String sortBy;
-        private final int page;
+        private final String page;
+        private final int tag;
 
-        public RequestValues(String sortBy, int page) {
-            this.sortBy = sortBy;
+        public RequestValues(int tag, String page) {
+            this.tag = tag;
             this.page = page;
+        }
+
+        public String getPage() {
+            return page;
+        }
+
+        public int getTag() {
+            return tag;
         }
     }
 
     public static final class ResponseValue implements UseCase.ResponseValue {
-//        private final DiscoverMovieResponse discoverMovieResponse;
-//
-//        public ResponseValue(@NonNull DiscoverMovieResponse discoverMovieResponse) {
-//            this.discoverMovieResponse = discoverMovieResponse;
-//        }
+        private final MovieResponse movieResponse;
+
+        public ResponseValue(MovieResponse movieResponse) {
+            this.movieResponse = movieResponse;
+        }
+
+        public MovieResponse getMovieResponse() {
+            return movieResponse;
+        }
     }
 }

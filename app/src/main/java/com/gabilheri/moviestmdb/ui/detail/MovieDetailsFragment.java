@@ -35,13 +35,13 @@ import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
-import com.gabilheri.moviestmdb.util.Config;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
 import com.gabilheri.moviestmdb.util.PaletteUtils;
 import com.gabilheri.moviestmdb.util.PersonPresenter;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import static com.gabilheri.moviestmdb.util.Constant.ACTION_WATCH_TRAILER;
