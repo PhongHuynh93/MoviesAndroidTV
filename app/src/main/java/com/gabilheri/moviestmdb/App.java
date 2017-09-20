@@ -1,6 +1,6 @@
 package com.gabilheri.moviestmdb;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.dagger.components.ApplicationComponent;
@@ -18,7 +18,7 @@ import timber.log.Timber;
  * @since 10/11/16.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static App instance;
     private ApplicationComponent mApplicationComponent;

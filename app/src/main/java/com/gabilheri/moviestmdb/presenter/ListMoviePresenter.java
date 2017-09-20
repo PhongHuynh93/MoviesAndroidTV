@@ -44,6 +44,7 @@ public class ListMoviePresenter extends BasePresenter<ListMovieView> {
         @Override
         public void onError(@io.reactivex.annotations.NonNull Throwable e) {
             getMvpView().hideLoadingIndicator(id);
+            getMvpView().showTryAgainLayout(id);
             e.printStackTrace();
         }
 

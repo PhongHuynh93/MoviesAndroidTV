@@ -31,6 +31,7 @@ import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
+import com.gabilheri.moviestmdb.ui.search.SearchActivity;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 
 import java.util.Map;
@@ -114,8 +115,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         setOnSearchClickedListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
-                        .show();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
         // set the click listener
@@ -222,8 +223,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
     @Override
     public void showData(int tag, MovieResponse response) {
-        MovieRow row = mRows.get(tag);
-        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        PostAdapter adapter = getAdapterDependOnId(tag);
+
         if (adapter.size() == 0 && response.getResults().isEmpty()) {
             adapter.showReloadCard();
         } else {
@@ -237,17 +238,19 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
     @Override
     public void showLoadingIndicator(int tag) {
-        MovieRow row = mRows.get(tag);
-        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        PostAdapter adapter = getAdapterDependOnId(tag);
         if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
     }
 
     @Override
     public void hideLoadingIndicator(int tag) {
-        MovieRow row = mRows.get(tag);
-        PostAdapter adapter = (PostAdapter) row.getAdapter();
+        PostAdapter adapter = getAdapterDependOnId(tag);
         adapter.removeLoadingIndicator();
+    }
 
+    @Override
+    public void showTryAgainLayout(int tag) {
+        PostAdapter adapter = getAdapterDependOnId(tag);
         if (adapter.size() == 0) {
             adapter.showTryAgainCard();
         } else {
@@ -258,6 +261,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             ).show();
         }
         Timber.e("Error fetching now playing movies");
+    }
+
+    private PostAdapter getAdapterDependOnId(int tag) {
+        MovieRow row = mRows.get(tag);
+        return (PostAdapter) row.getAdapter();
     }
 
     /**

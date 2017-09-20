@@ -13,4 +13,6 @@ public interface ListMovieView extends MvpView {
     void showLoadingIndicator(int tag);
 
     void hideLoadingIndicator(int tag);
+
+    void showTryAgainLayout(int tag);
 }
