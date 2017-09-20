@@ -2,9 +2,8 @@ package com.gabilheri.moviestmdb.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.example.myapplication.interactor.GetMovieList;
 import com.example.myapplication.interactor.SearchMovieUsecase;
-import com.gabilheri.moviestmdb.ui.main.ListMovieView;
+import com.gabilheri.moviestmdb.ui.search.SearchView;
 
 import javax.inject.Inject;
 
@@ -14,7 +13,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by CPU11112-local on 9/11/2017.
  */
 
-public class SearchMoviePresenter extends BasePresenter<ListMovieView> {
+public class SearchMoviePresenter extends BasePresenter<SearchView> {
     private final SearchMovieUsecase mSearchMovieUsecase;
 
     @Inject

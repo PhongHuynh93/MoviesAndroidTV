@@ -5,6 +5,7 @@ import com.gabilheri.moviestmdb.dagger.PerFragment;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.main.MainFragment;
+import com.gabilheri.moviestmdb.ui.search.SearchFragment;
 
 import dagger.Subcomponent;
 
@@ -17,4 +18,5 @@ import dagger.Subcomponent;
 public interface FragmentComponent {
     void inject(MainFragment fragment);
     void inject(MovieDetailsFragment fragment);
+    void inject(SearchFragment fragment);
 }

@@ -37,6 +37,11 @@ public class MovieReposition implements MovieDataSource {
         return mRemoteMovieDataSource.fetchMovieDetails(id);
     }
 
+    @Override
+    public Observable<MovieResponse> searchMovie(String query) {
+        return mRemoteMovieDataSource.searchMovie(query);
+    }
+
     // TODO: 9/12/2017 apply rx here to get from local data when there is no network
 //    @Override
 //    public Observable<DiscoverMovieResponse> getRemoteDatas(String sortBy, Integer page) {

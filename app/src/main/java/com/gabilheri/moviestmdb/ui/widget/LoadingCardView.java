@@ -6,12 +6,15 @@ import android.widget.ProgressBar;
 
 import com.gabilheri.moviestmdb.R;
 
+import butterknife.BindView;
+
 /**
  * Created by user on 9/17/2017.
  */
 
 public class LoadingCardView extends BaseCustomCardView {
-    private ProgressBar mProgressBar;
+    @BindView(R.id.progress_indicator)
+    ProgressBar mProgressBar;
 
     public LoadingCardView(Context context) {
         super(context, null);

@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.ui.detail;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
@@ -24,12 +25,14 @@ public class MovieDetailsActivity extends BaseTvActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        prepareBackgroundManager();
+    }
+
+    @Override
+    public Fragment getFragment() {
         // Retrieve the movie through the intent
         movie = getIntent().getExtras().getParcelable(Movie.class.getSimpleName());
-        MovieDetailsFragment detailsFragment = MovieDetailsFragment.newInstance(movie);
-        addFragment(detailsFragment); // Method from BaseTvActivity
-
-        prepareBackgroundManager();
+        return MovieDetailsFragment.newInstance(movie);
     }
 
     private void prepareBackgroundManager() {

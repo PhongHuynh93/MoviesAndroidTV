@@ -23,6 +23,7 @@
     <string name="text_close">Close</string>
     <string name="error_message_loading_more_posts">Sorry, there was an error loading more posts
     </string>
+    <string name="error_message_network_needed">Oops, you need a network connection to do that!</string>
     <string name="video_error_media_load_timeout">Media loading timed out</string>
     <string name="video_error_server_inaccessible">Media server was not reachable</string>
     <string name="video_error_unknown_error">Failed to load video</string>
@@ -37,4 +38,9 @@
     <string name="watch_trailer_1">Watch trailer</string>
     <string name="watch_trailer_2">FREE</string>
     <string name="related_movies">Related Videos</string>
+
+    <!--search-->
+    <string name="text_search_results">Search results</string>
+    <string name="text_no_results">No results</string>
+
 </resources>

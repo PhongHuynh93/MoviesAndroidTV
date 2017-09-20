@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.HeaderItem;
+import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -17,11 +19,23 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
+import android.text.TextUtils;
 
+import com.example.myapplication.MovieResponse;
+import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+import com.gabilheri.moviestmdb.presenter.SearchMoviePresenter;
+import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.TagAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
+import com.gabilheri.moviestmdb.util.NetworkUtil;
+import com.gabilheri.moviestmdb.util.ToastFactory;
+
+import java.util.Map;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -39,11 +53,20 @@ import timber.log.Timber;
    step - onQueryTextChange – event listener which is called when user changes search query text.
    step - onQueryTextSubmit – event listener which is called when user submitted search query text.
  */
-public class SearchFragment extends android.support.v17.leanback.app.SearchFragment implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, OnItemViewSelectedListener, OnItemViewClickedListener {
+public class SearchFragment extends android.support.v17.leanback.app.SearchFragment implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, OnItemViewSelectedListener,
+        OnItemViewClickedListener,
+        SearchView {
+    @Inject
+    SearchMoviePresenter mPresenter;
+
     private static final int REQUEST_SPEECH = 0x00000010;
 
     private ArrayObjectAdapter mRowsAdapter;
     private TagAdapter mSearchResultsAdapter;
+    private HeaderItem mResultsHeader;
+
+    // the text which we use to search
+    private String mSearchQuery;
 
     // set it to true when we have result
     private boolean mResultsFound = false;
@@ -59,7 +82,9 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+// inject dagger
+        App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
+        mPresenter.attachView(this);
         // this is adapter to show the search results
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mSearchResultsAdapter = new TagAdapter(getActivity(), "");
@@ -69,6 +94,12 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 
         prepareBackgroundManager();
         setupEventListeners();
+    }
+
+    @Override
+    public void onDestroy() {
+        mPresenter.detachView();
+        super.onDestroy();
     }
 
     private void setupEventListeners() {
@@ -134,9 +165,54 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         return true;
     }
 
-//    info search for movie by query key
-    private void loadQuery(String newQuery) {
+    //    info search for movie by query key
+    private void loadQuery(String query) {
+        // only query if not empty and not the same as the previous query
+        if ((mSearchQuery != null && !mSearchQuery.equals(query))
+                && query.trim().length() > 0
+                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
+            if (NetworkUtil.isNetworkConnected(getActivity())) {
+                mSearchQuery = query;
+                searchTaggedPosts(query);
+            } else {
+                ToastFactory.createWifiErrorToast(getActivity()).show();
+            }
+        }
+    }
 
+    private void searchTaggedPosts(String tag) {
+        mSearchResultsAdapter.setTag(tag);
+        // remove the old search
+        mRowsAdapter.clear();
+        // add list of tags with header
+        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results));
+        ListRow listRow = new ListRow(mResultsHeader, mSearchResultsAdapter);
+        Timber.e(listRow.getId() + "");
+        mRowsAdapter.add(listRow);
+        performSearch(mSearchResultsAdapter);
+    }
+
+    private void performSearch(final PaginationAdapter adapter) {
+        adapter.clear();
+        Map<String, String> options = adapter.getAdapterOptions();
+        String tag = options.get(PaginationAdapter.KEY_TAG);
+        mPresenter.searchMovie(tag);
+    }
+
+    // todo - implement this from server
+    @Override
+    public void showData(MovieResponse movieResponse) {
+        if (movieResponse.getResults().isEmpty()) {
+            mRowsAdapter.clear();
+            mResultsHeader = new HeaderItem(0, getString(R.string.text_no_results));
+            mRowsAdapter.add(new ListRow(mResultsHeader, mSearchResultsAdapter));
+//            mTagSearchAnchor = "";
+//            mUserSearchAnchor = "";
+        } else {
+            mSearchResultsAdapter.addAllItems(movieResponse.getResults());
+//            mTagSearchAnchor = dualResponse.tagSearchAnchor;
+//            mUserSearchAnchor = dualResponse.userSearchAnchor;
+        }
     }
 
     public boolean hasResults() {
