@@ -1,10 +1,9 @@
 package com.gabilheri.moviestmdb.ui.search;
 
+import android.app.Fragment;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.KeyEvent;
 
-import com.gabilheri.moviestmdb.R;
 
 /**
  * Created by CPU11112-local on 9/20/2017.
@@ -13,14 +12,10 @@ import com.gabilheri.moviestmdb.R;
 public class SearchActivity extends LeanbackActivity {
     private SearchFragment mFragment;
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
-        mFragment = (SearchFragment) getFragmentManager().findFragmentById(R.id.search_fragment);
+    public Fragment getFragment() {
+        mFragment = SearchFragment.newInstance();
+        return mFragment;
     }
 
     // info - Overriding onSearchRequeseted to activate in-app search

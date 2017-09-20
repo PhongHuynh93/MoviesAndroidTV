@@ -6,11 +6,13 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ObjectAdapter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
+import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 
 /**
  * Created by CPU11112-local on 9/20/2017.
@@ -26,10 +28,17 @@ import com.gabilheri.moviestmdb.R;
    step - onQueryTextChange – event listener which is called when user changes search query text.
    step - onQueryTextSubmit – event listener which is called when user submitted search query text.
  */
-public class SearchFragment extends android.support.v17.leanback.app.SearchFragment implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider {
+public class SearchFragment extends android.support.v17.leanback.app.SearchFragment implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, OnItemViewSelectedListener, OnItemViewClickedListener {
     private ArrayObjectAdapter mRowsAdapter;
     // set it to true when we have result
     private boolean mResultsFound = false;
+
+    public static SearchFragment newInstance() {
+        Bundle args = new Bundle();
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -41,8 +50,10 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         // info - We need to register this SearchResultProvider by using setSearchResultProvider method,  minimum implementation is like this,
         setSearchResultProvider(this);
 
-        // when click a movie
-        setOnItemViewClickedListener(new ItemViewClickedListener());
+        // when click a movie,
+        setOnItemViewClickedListener(this);
+        // when select a movie, change the background
+        setOnItemViewSelectedListener(this);
     }
 
     @Override
@@ -70,24 +81,14 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 
 
     // todo - open detail movie with share element
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
+    @Override
+    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        ((BaseTvActivity) getActivity()).goToDetailMovie(itemViewHolder, item);
+    }
 
-//            if (item instanceof Video) {
-//                Video video = (Video) item;
-//                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-//                intent.putExtra(VideoDetailsActivity.VIDEO, video);
-//
-//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                        getActivity(),
-//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-//                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-//                getActivity().startActivity(intent, bundle);
-//            } else {
-//                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT).show();
-//            }
-        }
+    // when select, change the background
+    @Override
+    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+
     }
 }

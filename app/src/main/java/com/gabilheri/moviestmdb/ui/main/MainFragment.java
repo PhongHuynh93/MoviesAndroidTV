@@ -13,7 +13,6 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.View;
@@ -28,11 +27,9 @@ import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.presenter.ListMoviePresenter;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
+import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
-import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
-import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.search.SearchActivity;
-import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 
 import java.util.Map;
 
@@ -288,23 +285,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     // when clicked -> open another activity to load the picture
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-        if (item instanceof Movie) {
-            Movie movie = (Movie) item;
-            Intent i = new Intent(getActivity(), MovieDetailsActivity.class);
-            // Pass the movie to the activity
-            i.putExtra(Movie.class.getSimpleName(), movie);
-
-            if (itemViewHolder.view instanceof MovieCardView) {
-                // Pass the ImageView to allow a nice transition
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((MovieCardView) itemViewHolder.view).getPosterIV(),
-                        MovieDetailsFragment.TRANSITION_NAME).toBundle();
-                getActivity().startActivity(i, bundle);
-            } else {
-                startActivity(i);
-            }
-        }
+        ((BaseTvActivity) getActivity()).goToDetailMovie(itemViewHolder, item);
     }
 
     // when selected, load the image of that poster
