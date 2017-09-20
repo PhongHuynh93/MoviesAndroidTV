@@ -19,7 +19,6 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
-import android.text.TextUtils;
 
 import com.example.myapplication.MovieResponse;
 import com.gabilheri.moviestmdb.App;
@@ -168,16 +167,16 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     //    info search for movie by query key
     private void loadQuery(String query) {
         // only query if not empty and not the same as the previous query
-        if ((mSearchQuery != null && !mSearchQuery.equals(query))
-                && query.trim().length() > 0
-                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
+//        if ((mSearchQuery != null && !mSearchQuery.equals(query))
+//                && query.trim().length() > 0
+//                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
             if (NetworkUtil.isNetworkConnected(getActivity())) {
                 mSearchQuery = query;
                 searchTaggedPosts(query);
             } else {
                 ToastFactory.createWifiErrorToast(getActivity()).show();
             }
-        }
+//        }
     }
 
     private void searchTaggedPosts(String tag) {
