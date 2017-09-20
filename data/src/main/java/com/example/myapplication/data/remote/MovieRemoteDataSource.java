@@ -58,4 +58,9 @@ public class MovieRemoteDataSource implements MovieDataSource {
     public Observable<MovieDetails> fetchMovieDetails(String id) {
         return mDbAPI.getMovieDetails(id, Constant.API_KEY_URL);
     }
+
+    @Override
+    public Observable<MovieResponse> searchMovie(String query) {
+        return mDbAPI.searchMovies(query, Constant.API_KEY_URL);
+    }
 }

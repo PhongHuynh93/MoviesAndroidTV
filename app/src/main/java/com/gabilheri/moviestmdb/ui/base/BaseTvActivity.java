@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 
 import com.example.myapplication.Movie;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
@@ -80,6 +81,14 @@ public abstract class BaseTvActivity extends Activity {
             } else {
                 startActivity(i);
             }
+        }
+    }
+
+    public void changeBackground(GlideBackgroundManager mBackgroundManager, Object item) {
+        if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            // load the movie background
+            mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
         }
     }
 

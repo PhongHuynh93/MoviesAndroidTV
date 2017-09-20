@@ -89,9 +89,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         prepareEntranceTransition();
     }
 
+
     @Override
     public void onDestroy() {
         mListMoviePresenter.detachView();
+        mBackgroundManager = null;
         super.onDestroy();
     }
 
@@ -295,7 +297,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             Movie movie = (Movie) item;
             // load the movie background
             mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
-            // info - add the load more
+            // info - listen load more
             int index = rowsAdapter.indexOf(row);
             // get the adapter for the suitable row
             PostAdapter adapter =

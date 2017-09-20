@@ -19,4 +19,6 @@ public interface MovieDataSource {
     Observable<MovieResponse> fetchRecommendations(String id);
 
     Observable<MovieDetails> fetchMovieDetails(String id);
+
+    Observable<MovieResponse> searchMovie(String id);
 }

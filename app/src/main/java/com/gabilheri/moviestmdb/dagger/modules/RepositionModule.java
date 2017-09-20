@@ -11,6 +11,7 @@ import com.example.myapplication.interactor.GetCastMembers;
 import com.example.myapplication.interactor.GetMovieDetail;
 import com.example.myapplication.interactor.GetMovieList;
 import com.example.myapplication.interactor.GetRecommendations;
+import com.example.myapplication.interactor.SearchMovieUsecase;
 import com.example.myapplication.reposition.MovieDataSource;
 import com.gabilheri.moviestmdb.util.Constant;
 
@@ -60,6 +61,12 @@ public class RepositionModule {
     @Singleton
     GetRecommendations usecaseGetRecommendations(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
         return new GetRecommendations(movieDataSource);
+    }
+
+    @Provides
+    @Singleton
+    SearchMovieUsecase usecaseGetSearch(@Named(Constant.MOVIE_REPOSITION) MovieDataSource movieDataSource) {
+        return new SearchMovieUsecase(movieDataSource);
     }
 //
 //    @Provides

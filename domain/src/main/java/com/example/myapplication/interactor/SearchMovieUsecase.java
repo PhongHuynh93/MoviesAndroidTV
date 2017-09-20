@@ -9,17 +9,17 @@ import io.reactivex.functions.Function;
 /**
  * Created by CPU11112-local on 9/11/2017.
  */
-public class GetRecommendations extends UseCase<GetRecommendations.RequestValues, GetRecommendations.ResponseValue>{
+public class SearchMovieUsecase extends UseCase<SearchMovieUsecase.RequestValues, SearchMovieUsecase.ResponseValue>{
     private final MovieDataSource movieReposition;
 
-    public GetRecommendations(MovieDataSource movieReposition) {
+    public SearchMovieUsecase(MovieDataSource movieReposition) {
         super();
         this.movieReposition = movieReposition;
     }
 
     @Override
     protected Observable<ResponseValue> buildUseCaseObservable(RequestValues requestValues) {
-        return movieReposition.fetchRecommendations(requestValues.getId())
+        return movieReposition.searchMovie(requestValues.getQuery())
                 .map(new Function<MovieResponse, ResponseValue>() {
                     @Override
                     public ResponseValue apply(MovieResponse movieResponse) throws Exception {
@@ -29,14 +29,14 @@ public class GetRecommendations extends UseCase<GetRecommendations.RequestValues
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
-        private String mId;
+        private String mQuery;
 
-        public RequestValues(String id) {
-            this.mId = id;
+        public RequestValues(String query) {
+            this.mQuery = query;
         }
 
-        public String getId() {
-            return mId;
+        public String getQuery() {
+            return mQuery;
         }
     }
 
