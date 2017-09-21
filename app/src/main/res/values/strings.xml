@@ -41,6 +41,7 @@
 
     <!--search-->
     <string name="text_search_results">Search results</string>
+    <string name="text_search_tags">Tag</string>
     <string name="text_no_results">No results</string>
 
 </resources>

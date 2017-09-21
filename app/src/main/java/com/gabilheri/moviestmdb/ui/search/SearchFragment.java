@@ -95,6 +95,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mTagAdapter = new TagAdapter(getActivity(), "");
         mPostAdapter = new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING));
+
         // info - We need to register this SearchResultProvider by using setSearchResultProvider method,  minimum implementation is like this,
         setSearchResultProvider(this);
 
@@ -172,6 +173,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     }
 
     //    info search for movie by query key
+    // TODO: 9/21/2017 not show query if it empty -> sever will return 422 if string is empty
     private void loadQuery(String query) {
         // only query if not empty and not the same as the previous query
 //        if ((mSearchQuery != null && !mSearchQuery.equals(query))
@@ -186,9 +188,10 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 //        }
     }
 
-    private void loadRows() {
+    // info - show the tag
+    private void showSearching() {
         // add list of tags with header
-        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results));
+        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_tags));
         ListRow listRow = new ListRow(mResultsHeader, mTagAdapter);
         mRowsAdapter.add(listRow);
 
@@ -200,15 +203,16 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 
     private void searchTaggedPosts(String tag) {
         mTagAdapter.setTag(tag);
-        // remove the all tag and results movie
         mRowsAdapter.clear();
 
+        showSearching();
         performSearch();
     }
 
+    // info- remember to remove old move datas
     private void performSearch() {
 //        mTagAdapter.clear();
-//        mPostAdapter.clear();
+        mPostAdapter.clear();
 
         // the query key we saved in tag
         Map<String, String> options = mTagAdapter.getAdapterOptions();
@@ -219,14 +223,18 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     // todo - implement this from server
     @Override
     public void showData(MovieResponse movieResponse) {
+        // remove the all tag and results movie
+//        mRowsAdapter.clear();
+
         if (movieResponse.getResults().isEmpty()) {
-//            mRowsAdapter.clear();
+            // clear the old header
+            mRowsAdapter.clear();
+            // add the new header
             mResultsHeader = new HeaderItem(0, getString(R.string.text_no_results));
             mRowsAdapter.add(new ListRow(mResultsHeader, mTagAdapter));
 //            mTagSearchAnchor = "";
 //            mUserSearchAnchor = "";
         } else {
-            loadRows();
             mPostAdapter.addAllItems(movieResponse.getResults());
 //            mTagAdapter.addAllItems(movieResponse.getResults());
 //            mTagSearchAnchor = dualResponse.tagSearchAnchor;
