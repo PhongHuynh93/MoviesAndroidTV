@@ -17,6 +17,7 @@ public class PostAdapter  extends PaginationAdapter implements BrowserAdapterLis
         super(context, new MoviePresenter(context), tag);
     }
 
+    // only add movies we didnt' see
     @Override
     public void addAllItems(List<?> items) {
         List<Movie> currentPosts = getAllItems();

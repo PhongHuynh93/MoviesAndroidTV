@@ -26,6 +26,7 @@ import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.presenter.SearchMoviePresenter;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
+import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.TagAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
@@ -37,6 +38,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static com.example.myapplication.util.Constant.NOW_PLAYING;
 
 /**
  * Created by CPU11112-local on 9/20/2017.
@@ -60,9 +63,13 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 
     private static final int REQUEST_SPEECH = 0x00000010;
 
+    // big adapter
     private ArrayObjectAdapter mRowsAdapter;
-    private TagAdapter mSearchResultsAdapter;
+    // tag adapter
+    private TagAdapter mTagAdapter;
     private HeaderItem mResultsHeader;
+    // post adapter
+    private PostAdapter mPostAdapter;
 
     // the text which we use to search
     private String mSearchQuery;
@@ -86,8 +93,8 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         mPresenter.attachView(this);
         // this is adapter to show the search results
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        mSearchResultsAdapter = new TagAdapter(getActivity(), "");
-
+        mTagAdapter = new TagAdapter(getActivity(), "");
+        mPostAdapter = new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING));
         // info - We need to register this SearchResultProvider by using setSearchResultProvider method,  minimum implementation is like this,
         setSearchResultProvider(this);
 
@@ -179,21 +186,32 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 //        }
     }
 
-    private void searchTaggedPosts(String tag) {
-        mSearchResultsAdapter.setTag(tag);
-        // remove the old search
-        mRowsAdapter.clear();
+    private void loadRows() {
         // add list of tags with header
         mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results));
-        ListRow listRow = new ListRow(mResultsHeader, mSearchResultsAdapter);
-        Timber.e(listRow.getId() + "");
+        ListRow listRow = new ListRow(mResultsHeader, mTagAdapter);
         mRowsAdapter.add(listRow);
-        performSearch(mSearchResultsAdapter);
+
+        // add list of result
+        HeaderItem mSearchMovieHeader = new HeaderItem(0, getString(R.string.text_search_results));
+        ListRow searchMovieRow = new ListRow(mSearchMovieHeader, mPostAdapter);
+        mRowsAdapter.add(searchMovieRow);
     }
 
-    private void performSearch(final PaginationAdapter adapter) {
-        adapter.clear();
-        Map<String, String> options = adapter.getAdapterOptions();
+    private void searchTaggedPosts(String tag) {
+        mTagAdapter.setTag(tag);
+        // remove the all tag and results movie
+        mRowsAdapter.clear();
+
+        performSearch();
+    }
+
+    private void performSearch() {
+//        mTagAdapter.clear();
+//        mPostAdapter.clear();
+
+        // the query key we saved in tag
+        Map<String, String> options = mTagAdapter.getAdapterOptions();
         String tag = options.get(PaginationAdapter.KEY_TAG);
         mPresenter.searchMovie(tag);
     }
@@ -202,13 +220,15 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     @Override
     public void showData(MovieResponse movieResponse) {
         if (movieResponse.getResults().isEmpty()) {
-            mRowsAdapter.clear();
+//            mRowsAdapter.clear();
             mResultsHeader = new HeaderItem(0, getString(R.string.text_no_results));
-            mRowsAdapter.add(new ListRow(mResultsHeader, mSearchResultsAdapter));
+            mRowsAdapter.add(new ListRow(mResultsHeader, mTagAdapter));
 //            mTagSearchAnchor = "";
 //            mUserSearchAnchor = "";
         } else {
-            mSearchResultsAdapter.addAllItems(movieResponse.getResults());
+            loadRows();
+            mPostAdapter.addAllItems(movieResponse.getResults());
+//            mTagAdapter.addAllItems(movieResponse.getResults());
 //            mTagSearchAnchor = dualResponse.tagSearchAnchor;
 //            mUserSearchAnchor = dualResponse.userSearchAnchor;
         }
