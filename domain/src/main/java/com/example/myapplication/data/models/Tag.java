@@ -9,6 +9,12 @@ public class Tag implements Comparable<Tag>, Parcelable {
     public String tag;
     public long postCount;
 
+    public Tag(long tagId, String tag, long postCount) {
+        this.tagId = tagId;
+        this.tag = tag;
+        this.postCount = postCount;
+    }
+
     @Override
     public int compareTo(@NonNull Tag another) {
         return (int) (postCount - another.postCount);

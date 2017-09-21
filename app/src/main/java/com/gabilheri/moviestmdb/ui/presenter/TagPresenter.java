@@ -20,7 +20,7 @@ public class TagPresenter extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         sDefaultBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.primary);
-        sSelectedBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.primary_dark);
+        sSelectedBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.card_background);
 
         TagCardView cardView = new TagCardView(parent.getContext()) {
             @Override

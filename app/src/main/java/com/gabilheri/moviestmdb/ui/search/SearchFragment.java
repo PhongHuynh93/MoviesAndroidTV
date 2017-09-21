@@ -31,6 +31,7 @@ import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.TagAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
+import com.gabilheri.moviestmdb.util.Constant;
 import com.gabilheri.moviestmdb.util.NetworkUtil;
 import com.gabilheri.moviestmdb.util.ToastFactory;
 
@@ -213,7 +214,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 
     // info- remember to remove old move datas
     private void performSearch() {
-//        mTagAdapter.clear();
+        mTagAdapter.clear();
         mPostAdapter.clear();
 
         // the query key we saved in tag
@@ -237,6 +238,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
 //            mTagSearchAnchor = "";
 //            mUserSearchAnchor = "";
         } else {
+            mTagAdapter.addAllItems(Constant.setupTags());
             mPostAdapter.addAllItems(movieResponse.getResults());
 //            mTagAdapter.addAllItems(movieResponse.getResults());
 //            mTagSearchAnchor = dualResponse.tagSearchAnchor;
