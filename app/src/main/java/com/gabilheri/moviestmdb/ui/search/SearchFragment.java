@@ -19,6 +19,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SpeechRecognitionCallback;
+import android.text.TextUtils;
 
 import com.example.myapplication.MovieResponse;
 import com.gabilheri.moviestmdb.App;
@@ -176,16 +177,17 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     // TODO: 9/21/2017 not show query if it empty -> sever will return 422 if string is empty
     private void loadQuery(String query) {
         // only query if not empty and not the same as the previous query
-//        if ((mSearchQuery != null && !mSearchQuery.equals(query))
-//                && query.trim().length() > 0
-//                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
+        if ((mSearchQuery != null && !mSearchQuery.equals(query))
+                && query.trim().length() > 0
+                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
             if (NetworkUtil.isNetworkConnected(getActivity())) {
+                // detech if the query is the same as the old
                 mSearchQuery = query;
                 searchTaggedPosts(query);
             } else {
                 ToastFactory.createWifiErrorToast(getActivity()).show();
             }
-//        }
+        }
     }
 
     // info - show the tag
