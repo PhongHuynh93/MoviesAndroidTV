@@ -199,7 +199,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         mRowsAdapter.add(listRow);
 
         // add list of result
-        HeaderItem mSearchMovieHeader = new HeaderItem(0, getString(R.string.text_search_results));
+        HeaderItem mSearchMovieHeader = new HeaderItem(1, getString(R.string.text_search_results));
         ListRow searchMovieRow = new ListRow(mSearchMovieHeader, mPostAdapter);
         mRowsAdapter.add(searchMovieRow);
     }

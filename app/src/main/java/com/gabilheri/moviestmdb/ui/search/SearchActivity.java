@@ -2,7 +2,6 @@ package com.gabilheri.moviestmdb.ui.search;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.view.KeyEvent;
 
 
 /**
@@ -32,12 +31,12 @@ public class SearchActivity extends LeanbackActivity {
     }
 
     // focus in the search bar
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // If there are no results found, press the left key to reselect the microphone
-        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !mFragment.hasResults()) {
-            mFragment.focusOnSearch();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        // If there are no results found, press the left key to reselect the microphone
+//        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !mFragment.hasResults()) {
+//            mFragment.focusOnSearch();
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }
