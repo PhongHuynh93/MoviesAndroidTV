@@ -58,7 +58,8 @@ public abstract class UseCase<Q extends UseCase.RequestValues, P extends UseCase
      */
     public void dispose() {
         if (!disposables.isDisposed()) {
-            disposables.dispose();
+//            info - use clear, not dispose, to remove the old subcription
+            disposables.clear();
         }
     }
 

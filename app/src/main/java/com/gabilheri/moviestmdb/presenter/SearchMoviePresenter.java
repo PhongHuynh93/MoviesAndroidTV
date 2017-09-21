@@ -22,8 +22,12 @@ public class SearchMoviePresenter extends BasePresenter<SearchView> {
         this.mSearchMovieUsecase = searchMovieUsecase;
     }
 
+    public void clearSubscription() {
+        mSearchMovieUsecase.dispose();
+    }
 
     public void searchMovie(String query) {
+        clearSubscription();
         mSearchMovieUsecase.execute(new MovieListObserver(), new SearchMovieUsecase.RequestValues(query));
     }
 

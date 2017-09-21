@@ -263,6 +263,6 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
     @Override
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
         // info - only if the post model, change to background
-
+        ((BaseTvActivity) getActivity()).changeBackground(mBackgroundManager, item);
     }
 }
