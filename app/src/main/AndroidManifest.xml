@@ -42,6 +42,11 @@
         <activity android:name=".ui.detail.MovieDetailsActivity"/>
         <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>
+        <activity
+            android:name=".ui.onboard.OnboardingActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:theme="@style/Theme.Leanback.Onboarding"/>
     </application>
 
 </manifest>

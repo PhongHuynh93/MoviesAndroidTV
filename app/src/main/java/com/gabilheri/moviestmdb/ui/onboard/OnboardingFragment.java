@@ -1,15 +1,25 @@
 package com.gabilheri.moviestmdb.ui.onboard;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Created by CPU11112-local on 9/28/2017.
@@ -19,9 +29,11 @@ import com.gabilheri.moviestmdb.R;
  * 2. Page enter animation
  * 3. Page change animation
  */
-public class OnboardingFragment extends android.support.v17.leanback.app.OnboardingFragment{
-    private static final String COMPLETED_ONBOARDING = "completed_onboarding";
+public class OnboardingFragment extends android.support.v17.leanback.app.OnboardingFragment {
+    @Inject
+    SharedPreferences mSharedPreferences;
 
+    public static final String COMPLETED_ONBOARDING = "completed_onboarding";
 
     private static final int[] pageTitles = {
             R.string.onboarding_title_welcome,
@@ -37,16 +49,31 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
             R.string.onboarding_description_project
     };
 
+    private final int[] pageImages = {
+            R.drawable.tv_animation_a,
+            R.drawable.tv_animation_b,
+            R.drawable.tv_animation_c,
+            R.drawable.tv_animation_d
+    };
 
+    private static final long ANIMATION_DURATION = 500;
+    private ImageView mContentView;
+    private Animator mContentAnimator;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
+    }
 
     // step - 1. Logo Splash Animation: THE LOGO ANIMATION CAN NOT APPEARED IF WE DIDN'T SUPPLY setLogoResourceId OR onCreateLogoAnimation
+
     /**
      * In most cases, the logo animation needs to be customized because the logo images of applications are different from each other, or some applications may want to show their own animations.
      * The logo animation can be customized in two ways:
-
-     The simplest way is to provide the logo image by calling setLogoResourceId(int) to show the default logo animation. This method should be called in onCreateView(LayoutInflater, ViewGroup, Bundle).
-     If the logo animation is complex, then override onCreateLogoAnimation() and return the Animator object to run.
+     * <p>
+     * The simplest way is to provide the logo image by calling setLogoResourceId(int) to show the default logo animation. This method should be called in onCreateView(LayoutInflater, ViewGroup, Bundle).
+     * If the logo animation is complex, then override onCreateLogoAnimation() and return the Animator object to run.
      */
     @Nullable
     @Override
@@ -64,8 +91,9 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     /**
      * step 2. Page enter animation
      * DEFAULT: After logo animation finishes, page enter animation starts, which causes the header section - title and description views to fade and slide in.
-     *
+     * <p>
      * Users can override the default fade + slide animation by overriding onCreateTitleAnimator() & onCreateDescriptionAnimator().
+     *
      * @return
      */
     @Override
@@ -82,22 +110,53 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     protected Animator onCreateEnterAnimation() {
-        return super.onCreateEnterAnimation();
+        mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
+        ((AnimationDrawable) mContentView.getDrawable()).start();
+        mContentAnimator = createFadeInAnimator(mContentView);
+        return mContentAnimator;
     }
 
     /**
      * step 3 - Page change animation
      * When the page changes, the default animations of the title and description are played. The inherited class can override onPageChanged(int, int) to start the custom animations.
+     *
      * @param newPage
      * @param previousPage
      */
     @Override
     protected void onPageChanged(int newPage, int previousPage) {
-        super.onPageChanged(newPage, previousPage);
+        if (mContentAnimator != null) {
+            mContentAnimator.end();
+        }
+        ArrayList<Animator> animators = new ArrayList<>();
+        Animator fadeOut = createFadeOutAnimator(mContentView);
+
+        fadeOut.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mContentView.setImageDrawable(getResources().getDrawable(pageImages[newPage]));
+                ((AnimationDrawable) mContentView.getDrawable()).start();
+            }
+        });
+        animators.add(fadeOut);
+        animators.add(createFadeInAnimator(mContentView));
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(animators);
+        set.start();
+        mContentAnimator = set;
+    }
+
+    private Animator createFadeInAnimator(View view) {
+        return ObjectAnimator.ofFloat(view, View.ALPHA, 0.0f, 1.0f).setDuration(ANIMATION_DURATION);
+    }
+
+    private Animator createFadeOutAnimator(View view) {
+        return ObjectAnimator.ofFloat(view, View.ALPHA, 1.0f, 0.0f).setDuration(ANIMATION_DURATION);
     }
 
     /**
      * provide the number of pages.
+     *
      * @return
      */
     @Override
@@ -107,6 +166,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     /**
      * provide the title of the page.
+     *
      * @param pageIndex
      * @return
      */
@@ -117,6 +177,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     /**
      * provide the description of the page.
+     *
      * @param pageIndex
      * @return
      */
@@ -138,11 +199,15 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container) {
-        return null;
+        mContentView = new ImageView(getActivity());
+        mContentView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        mContentView.setPadding(0, 32, 0, 32);
+        return mContentView;
     }
 
     /**
      * to provide the foreground view. Foreground view has the same size as the screen and the highest z-order
+     *
      * @param inflater
      * @param container
      * @return
@@ -155,17 +220,15 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     /**
      * step - If the user finishes the onboarding screen after navigating all the pages, onFinishFragment() is called.
-     *
+     * <p>
      * The inherited class can override this method to show another fragment or activity, or just remove this fragment.
-     *
      */
     @Override
     protected void onFinishFragment() {
         super.onFinishFragment();
         // Our onboarding is done
         // Update the shared preferences
-        SharedPreferences.Editor sharedPreferencesEditor =
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
         sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
         sharedPreferencesEditor.apply();
         // Let's go back to the MainActivity

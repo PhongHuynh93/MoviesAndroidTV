@@ -1,8 +1,17 @@
 package com.gabilheri.moviestmdb.ui.main;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 
+import com.gabilheri.moviestmdb.App;
+import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
+import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
+import com.gabilheri.moviestmdb.ui.onboard.OnboardingFragment;
+
+import javax.inject.Inject;
 
 
 /**
@@ -14,6 +23,28 @@ import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
  */
 
 public class MainActivity extends BaseTvActivity {
+    @Inject
+    SharedPreferences mSharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((App) getApplication()).appComponent().inject(this);
+        setContentView(R.layout.activity_base);
+//
+        if(!mSharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
+            // This is the first time running the app, let's go to onboarding
+            startActivity(new Intent(this, OnboardingActivity.class));
+        } else {
+            addFrag();
+        }
+    }
+
+    @Override
+    protected boolean canAddFragment() {
+        return false;
+    }
+
     @Override
     public Fragment getFragment() {
         return MainFragment.newInstance();

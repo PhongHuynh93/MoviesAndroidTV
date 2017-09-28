@@ -1,6 +1,7 @@
 package com.gabilheri.moviestmdb.dagger.modules;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -27,5 +28,11 @@ public class ApplicationModule {
     @Provides
     Application providesApplication() {
         return mApplication;
+    }
+
+    @Singleton
+    @Provides
+    Context providesApplicationContext() {
+        return mApplication.getApplicationContext();
     }
 }

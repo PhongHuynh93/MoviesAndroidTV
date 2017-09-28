@@ -34,13 +34,24 @@ public abstract class BaseTvActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        Fragment mBrowseFragment;
-        if (NetworkUtil.isNetworkConnected(this)) {
-            mBrowseFragment = getFragment();
-        } else {
-            mBrowseFragment = buildErrorFragment();
+        if (canAddFragment()) {
+            addFrag();
         }
-        addFragment(mBrowseFragment);
+
+    }
+
+    protected void addFrag() {
+        Fragment fragment;
+        if (NetworkUtil.isNetworkConnected(this)) {
+            fragment = getFragment();
+        } else {
+            fragment = buildErrorFragment();
+        }
+        addFragment(fragment);
+    }
+
+    protected boolean canAddFragment() {
+        return true;
     }
 
     public void addFragment(Fragment fragment) {
