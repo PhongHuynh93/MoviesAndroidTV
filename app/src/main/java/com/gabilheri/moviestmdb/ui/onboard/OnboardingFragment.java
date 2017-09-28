@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gabilheri.moviestmdb.R;
+
 /**
  * Created by CPU11112-local on 9/28/2017.
- *
+ * <a href="https://developer.android.com/reference/android/support/v17/leanback/app/OnboardingFragment.html"></a>
  * info Onboarding screen has three kinds of animations:
  * 1. Logo Splash Animation
  * 2. Page enter animation
@@ -27,7 +29,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        setLogoResourceId(android.support.v4.R.layout.);
+        setLogoResourceId(R.drawable.banner);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
