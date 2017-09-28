@@ -1,7 +1,9 @@
 package com.gabilheri.moviestmdb.ui.onboard;
 
 import android.animation.Animator;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,26 @@ import com.gabilheri.moviestmdb.R;
  * 3. Page change animation
  */
 public class OnboardingFragment extends android.support.v17.leanback.app.OnboardingFragment{
+    private static final String COMPLETED_ONBOARDING = "completed_onboarding";
+
+
+    private static final int[] pageTitles = {
+            R.string.onboarding_title_welcome,
+            R.string.onboarding_title_design,
+            R.string.onboarding_title_simple,
+            R.string.onboarding_title_project
+    };
+
+    private static final int[] pageDescriptions = {
+            R.string.onboarding_description_welcome,
+            R.string.onboarding_description_design,
+            R.string.onboarding_description_simple,
+            R.string.onboarding_description_project
+    };
+
+
+
+
     // step - 1. Logo Splash Animation: THE LOGO ANIMATION CAN NOT APPEARED IF WE DIDN'T SUPPLY setLogoResourceId OR onCreateLogoAnimation
     /**
      * In most cases, the logo animation needs to be customized because the logo images of applications are different from each other, or some applications may want to show their own animations.
@@ -80,7 +102,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
      */
     @Override
     protected int getPageCount() {
-        return 0;
+        return pageTitles.length;
     }
 
     /**
@@ -90,7 +112,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
      */
     @Override
     protected CharSequence getPageTitle(int pageIndex) {
-        return null;
+        return getString(pageTitles[pageIndex]);
     }
 
     /**
@@ -100,14 +122,16 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
      */
     @Override
     protected CharSequence getPageDescription(int pageIndex) {
-        return null;
+        return getString(pageDescriptions[pageIndex]);
     }
 
     /* to provide the background view. Background view has the same size as the screen and the lowest z-order. */
     @Nullable
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
-        return null;
+        View bgView = new View(getActivity());
+        bgView.setBackgroundColor(getResources().getColor(R.color.fastlane_background));
+        return bgView;
     }
 
     /* to provide the contents view. The content view is located in the content area at the center of the screen. */
@@ -138,5 +162,13 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Override
     protected void onFinishFragment() {
         super.onFinishFragment();
+        // Our onboarding is done
+        // Update the shared preferences
+        SharedPreferences.Editor sharedPreferencesEditor =
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
+        sharedPreferencesEditor.apply();
+        // Let's go back to the MainActivity
+        getActivity().finish();
     }
 }

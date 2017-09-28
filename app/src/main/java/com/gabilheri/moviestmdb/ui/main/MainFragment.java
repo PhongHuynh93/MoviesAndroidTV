@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.myapplication.Movie;
 import com.example.myapplication.MovieResponse;
-import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
@@ -293,10 +292,9 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     // when selected, load the image of that poster
     @Override
     public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+        ((BaseTvActivity) getActivity()).changeBackground(mBackgroundManager, item);
+
         if (item instanceof Movie) {
-            Movie movie = (Movie) item;
-            // load the movie background
-            mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
             // info - listen load more
             int index = rowsAdapter.indexOf(row);
             // get the adapter for the suitable row
