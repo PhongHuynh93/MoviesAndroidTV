@@ -42,6 +42,8 @@
         <activity android:name=".ui.detail.MovieDetailsActivity"/>
         <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>
+
+        <!--true - mean outside-->
         <activity
             android:name=".ui.onboard.OnboardingActivity"
             android:enabled="true"

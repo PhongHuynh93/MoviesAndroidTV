@@ -66,6 +66,16 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
     }
 
+    /* to provide the contents view. The content view is located in the content area at the center of the screen. */
+    @Nullable
+    @Override
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container) {
+        mContentView = new ImageView(getActivity());
+        mContentView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        mContentView.setPadding(0, 32, 0, 32);
+        return mContentView;
+    }
+
     // step - 1. Logo Splash Animation: THE LOGO ANIMATION CAN NOT APPEARED IF WE DIDN'T SUPPLY setLogoResourceId OR onCreateLogoAnimation
 
     /**
@@ -110,6 +120,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     protected Animator onCreateEnterAnimation() {
+        // step - add the animation list and start it
         mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
         ((AnimationDrawable) mContentView.getDrawable()).start();
         mContentAnimator = createFadeInAnimator(mContentView);
@@ -191,18 +202,8 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
         View bgView = new View(getActivity());
-        bgView.setBackgroundColor(getResources().getColor(R.color.fastlane_background));
+        bgView.setBackgroundColor(getResources().getColor(R.color.onboard_background));
         return bgView;
-    }
-
-    /* to provide the contents view. The content view is located in the content area at the center of the screen. */
-    @Nullable
-    @Override
-    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container) {
-        mContentView = new ImageView(getActivity());
-        mContentView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mContentView.setPadding(0, 32, 0, 32);
-        return mContentView;
     }
 
     /**
