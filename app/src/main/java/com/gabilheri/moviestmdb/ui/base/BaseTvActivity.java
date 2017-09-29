@@ -34,9 +34,7 @@ public abstract class BaseTvActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        if (canAddFragment()) {
-            addFrag();
-        }
+        addFrag();
 
     }
 
@@ -50,9 +48,6 @@ public abstract class BaseTvActivity extends Activity {
         addFragment(fragment);
     }
 
-    protected boolean canAddFragment() {
-        return true;
-    }
 
     public void addFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

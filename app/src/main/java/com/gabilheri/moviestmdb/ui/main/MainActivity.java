@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.gabilheri.moviestmdb.App;
-import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingFragment;
@@ -30,19 +29,11 @@ public class MainActivity extends BaseTvActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getApplication()).appComponent().inject(this);
-        setContentView(R.layout.activity_base);
-//
-        if(!mSharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
+
+        if (!mSharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
             // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
-        } else {
-            addFrag();
         }
-    }
-
-    @Override
-    protected boolean canAddFragment() {
-        return false;
     }
 
     @Override

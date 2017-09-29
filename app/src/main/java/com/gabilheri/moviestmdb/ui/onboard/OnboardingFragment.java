@@ -229,9 +229,9 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         super.onFinishFragment();
         // Our onboarding is done
         // Update the shared preferences
-        SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
-        sharedPreferencesEditor.apply();
+//        SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
+//        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
+//        sharedPreferencesEditor.apply();
         // Let's go back to the MainActivity
         getActivity().finish();
     }
