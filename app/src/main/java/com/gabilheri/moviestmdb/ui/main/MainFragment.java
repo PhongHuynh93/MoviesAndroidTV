@@ -13,6 +13,7 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.View;
@@ -318,6 +319,33 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
             if (adapter.get(adapter.size() - 1).equals(item) && adapter.shouldLoadNextPage()) {
                 loadData(Integer.valueOf(adapter.getAdapterOptions().get(KEY_TAG)), adapter);
+            }
+        } else if (item instanceof String) {
+            if (((String) item).contains(getString(R.string.grid_view))) {
+                Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
+                Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else if (((String) item).contains(getString(R.string.error_fragment))) {
+                BrowseErrorFragment errorFragment = new BrowseErrorFragment();
+                getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
+                        .addToBackStack(null).commit();
+            } else if(((String) item).contains(getString(R.string.personal_settings))) {
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else {
+                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
+                        .show();
             }
         }
 
