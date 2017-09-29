@@ -92,9 +92,12 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    // only do this if the icon is complex
     @Nullable
     @Override
     protected Animator onCreateLogoAnimation() {
+//        return AnimatorInflater.loadAnimator(getActivity(),
+//                R.animator.onboarding_logo_screen_animation);
         return super.onCreateLogoAnimation();
     }
 
@@ -117,9 +120,11 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     }
 
     //  By default we don't animate the custom views but users can provide animation by overriding onCreateEnterAnimation().
+    // step - note - only apply for the first page
     @Nullable
     @Override
     protected Animator onCreateEnterAnimation() {
+        // fixme - if not override this method, the first image is not shown?
         // step - add the animation list and start it
         mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
         ((AnimationDrawable) mContentView.getDrawable()).start();
@@ -145,6 +150,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         fadeOut.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                // when fade in done - change the image and start animation
                 mContentView.setImageDrawable(getResources().getDrawable(pageImages[newPage]));
                 ((AnimationDrawable) mContentView.getDrawable()).start();
             }
@@ -152,6 +158,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         animators.add(fadeOut);
         animators.add(createFadeInAnimator(mContentView));
         AnimatorSet set = new AnimatorSet();
+        // step - play the fade out first of this view - and then fade in this view
         set.playSequentially(animators);
         set.start();
         mContentAnimator = set;
@@ -216,6 +223,16 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     protected View onCreateForegroundView(LayoutInflater inflater, ViewGroup container) {
+//        View fgView = new View(getActivity());
+//        fgView.setBackgroundColor(getResources().getColor(R.color.onboard_foreground));
+//        return fgView;
+
+//        ImageView fgView = new ImageView(getActivity());
+//        fgView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//        fgView.setPadding(0, 32, 0, 32);
+//
+//        return fgView;
+
         return null;
     }
 
