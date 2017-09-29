@@ -70,10 +70,15 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     @Nullable
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container) {
+        return createNormalImageView();
+    }
+
+    private View createNormalImageView() {
         mContentView = new ImageView(getActivity());
         mContentView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         mContentView.setPadding(0, 32, 0, 32);
         return mContentView;
+
     }
 
     // step - 1. Logo Splash Animation: THE LOGO ANIMATION CAN NOT APPEARED IF WE DIDN'T SUPPLY setLogoResourceId OR onCreateLogoAnimation
@@ -128,6 +133,7 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         // step - add the animation list and start it
         mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
         ((AnimationDrawable) mContentView.getDrawable()).start();
+
         mContentAnimator = createFadeInAnimator(mContentView);
         return mContentAnimator;
     }

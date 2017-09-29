@@ -140,5 +140,5 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'   // add this in  dependencies
 
     // add animation for image
-    compile 'com.airbnb.android:lottie:2.2.5'
+//    compile ('com.airbnb.android:lottie:2.2.5') { exclude group: 'com.android.support' }
 }
