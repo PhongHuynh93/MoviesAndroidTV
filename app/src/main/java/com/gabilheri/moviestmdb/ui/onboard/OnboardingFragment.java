@@ -55,12 +55,12 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
 
     private final int[] pageImages = {
             R.drawable.avd_endless_pin_jump,
-            R.drawable.consolidated_animated_vector,
-            R.drawable.consolidated_animated_vector_reverse,
-            R.drawable.avd_endless_pin_jump
-//            R.drawable.tv_animation_a,
-//            R.drawable.tv_animation_b,
-//            R.drawable.tv_animation_c,
+//            R.drawable.consolidated_animated_vector,
+//            R.drawable.consolidated_animated_vector_reverse,
+//            R.drawable.avd_endless_pin_jump
+            R.drawable.tv_animation_a,
+            R.drawable.tv_animation_b,
+            R.drawable.tv_animation_c,
 //            R.drawable.tv_animation_d
     };
 
@@ -174,21 +174,21 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
             public void onAnimationEnd(Animator animation) {
                 // when fade in done - change the image and start animation
                 mContentView.setImageDrawable(ContextCompat.getDrawable(getActivity(), pageImages[newPage]));
-//                if (newPage == 0) {
-                // first page is AnimatedVectorDrawable
-                final AnimatedVectorDrawable avd = (AnimatedVectorDrawable) mContentView.getDrawable();
-                // make it loop, can make it in the thread for duration
-                // https://stackoverflow.com/questions/41767676/how-to-restart-android-animatedvectordrawables-animations
-                avd.registerAnimationCallback(new Animatable2.AnimationCallback() {
-                    @Override
-                    public void onAnimationEnd(Drawable drawable) {
-                        avd.start();
-                    }
-                });
-                avd.start();
-//                } else {
-//                    ((AnimationDrawable) mContentView.getDrawable()).start();
-//                }
+                if (newPage == 0) {
+                    // first page is AnimatedVectorDrawable
+                    final AnimatedVectorDrawable avd = (AnimatedVectorDrawable) mContentView.getDrawable();
+                    // make it loop, can make it in the thread for duration
+                    // https://stackoverflow.com/questions/41767676/how-to-restart-android-animatedvectordrawables-animations
+                    avd.registerAnimationCallback(new Animatable2.AnimationCallback() {
+                        @Override
+                        public void onAnimationEnd(Drawable drawable) {
+                            avd.start();
+                        }
+                    });
+                    avd.start();
+                } else {
+                    ((AnimationDrawable) mContentView.getDrawable()).start();
+                }
             }
         });
         animators.add(fadeOut);
@@ -282,9 +282,9 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
         super.onFinishFragment();
         // Our onboarding is done
         // Update the shared preferences
-//        SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-//        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
-//        sharedPreferencesEditor.apply();
+        SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
+        sharedPreferencesEditor.apply();
         // Let's go back to the MainActivity
         getActivity().finish();
     }

@@ -195,6 +195,17 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             loadData(row.getId(), (PostAdapter) row.getAdapter());
         }
 
+        // add row with special case
+        HeaderItem gridHeader = new HeaderItem(getString(R.string.browser_header_6));
+        GridItemPresenter gridPresenter = new GridItemPresenter();
+        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
+        gridRowAdapter.add(getString(R.string.grid_view));
+        gridRowAdapter.add(getString(R.string.guidedstep_first_title));
+        gridRowAdapter.add(getString(R.string.error_fragment));
+        gridRowAdapter.add(getString(R.string.personal_settings));
+        ListRow row = new ListRow(gridHeader, gridRowAdapter);
+        rowsAdapter.add(row);
+
         // Sets this fragments Adapter.
         // The setAdapter method is defined in the BrowseFragment of the Leanback Library
         setAdapter(rowsAdapter);
