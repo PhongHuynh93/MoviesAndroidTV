@@ -28,6 +28,9 @@ import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
+import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter;
+import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter2;
+import com.gabilheri.moviestmdb.ui.presenter.IconHeaderItemPresenter;
 import com.gabilheri.moviestmdb.ui.search.SearchActivity;
 
 import java.util.Map;
@@ -36,6 +39,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static com.example.myapplication.util.Constant.MORE_SAMPLE;
 import static com.example.myapplication.util.Constant.NOW_PLAYING;
 import static com.example.myapplication.util.Constant.POPULAR;
 import static com.example.myapplication.util.Constant.SETTING;
@@ -196,8 +200,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         }
 
         // add row with special case
-        HeaderItem gridHeader = new HeaderItem(getString(R.string.browser_header_6));
-        GridItemPresenter gridPresenter = new GridItemPresenter();
+        HeaderItem gridHeader = new HeaderItem(MORE_SAMPLE, getString(R.string.browser_header_6));
+        GridItemPresenter2 gridPresenter = new GridItemPresenter2();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
         gridRowAdapter.add(getString(R.string.grid_view));
         gridRowAdapter.add(getString(R.string.guidedstep_first_title));

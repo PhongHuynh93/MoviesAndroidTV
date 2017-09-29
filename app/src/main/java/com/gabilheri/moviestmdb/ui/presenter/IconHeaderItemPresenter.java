@@ -1,4 +1,4 @@
-package com.gabilheri.moviestmdb.ui.main;
+package com.gabilheri.moviestmdb.ui.presenter;
 
 import android.content.Context;
 import android.content.res.Resources;

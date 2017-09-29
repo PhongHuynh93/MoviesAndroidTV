@@ -1,31 +1,34 @@
-package com.gabilheri.moviestmdb.ui.main;
+package com.gabilheri.moviestmdb.ui.presenter;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v17.leanback.widget.Presenter;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gabilheri.moviestmdb.R;
 
-import static com.gabilheri.moviestmdb.util.Constant.GRID_ITEM_HEIGHT;
-
 /**
- * Created by user on 9/17/2017.
+ * Created by CPU11112-local on 9/29/2017.
  */
 
-public class GridItemPresenter extends Presenter {
-
-    private static final int GRID_ITEM_WIDTH = 200;
-
+public class GridItemPresenter2 extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         TextView view = new TextView(parent.getContext());
-        view.setLayoutParams(new ViewGroup.LayoutParams(GRID_ITEM_WIDTH, GRID_ITEM_HEIGHT));
+
+        Resources res = parent.getResources();
+        int width = res.getDimensionPixelSize(R.dimen.grid_item_width);
+        int height = res.getDimensionPixelSize(R.dimen.grid_item_height);
+
+        view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
-        view.setBackgroundColor(parent.getContext().getResources().getColor(R.color.accent_color));
-        view.setTextColor(Color.WHITE);
+        view.setBackgroundColor(ContextCompat.getColor(parent.getContext(),
+                R.color.yellow));
+        view.setTextColor(Color.BLACK);
         view.setGravity(Gravity.CENTER);
         return new ViewHolder(view);
     }
@@ -37,5 +40,6 @@ public class GridItemPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
+
     }
 }
