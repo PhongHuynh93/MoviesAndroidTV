@@ -49,6 +49,20 @@
             android:enabled="true"
             android:exported="true"
             android:theme="@style/Theme.Leanback.Onboarding"/>
+
+        <!--remember this style for verticalgrid activity-->
+        <activity
+            android:name=".ui.moresample.VerticalGridActivity"
+            android:exported="true"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.Leanback.VerticalGrid" />
+        <activity android:name=".ui.moresample.SettingsActivity"
+                  android:exported="true"
+                  android:theme="@style/LeanbackPreferences"/>
+        <activity
+            android:name=".ui.moresample.GuidedStepActivity"
+            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+
     </application>
 
 </manifest>
