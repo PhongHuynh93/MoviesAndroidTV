@@ -12,4 +12,12 @@
     <color name="white_87pc">#DDFFFFFF</color>
     <color name="onboard_background">@color/primary</color>
     <color name="onboard_foreground">@color/yellow</color>
+
+    <!-- colors -->
+    <color name="pin">#F83E3E</color>
+    <color name="dot">#E2E2E2</color>
+
+    <color name="android_green">#9FBF3B</color>
+    <color name="apple_black">#000000</color>
+    <color name="eye_white">#FFFFFF</color>
 </resources>

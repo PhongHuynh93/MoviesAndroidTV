@@ -5,9 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +54,14 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     };
 
     private final int[] pageImages = {
-            R.drawable.tv_animation_a,
-            R.drawable.tv_animation_b,
-            R.drawable.tv_animation_c,
-            R.drawable.tv_animation_d
+            R.drawable.avd_endless_pin_jump,
+            R.drawable.consolidated_animated_vector,
+            R.drawable.consolidated_animated_vector_reverse,
+            R.drawable.avd_endless_pin_jump
+//            R.drawable.tv_animation_a,
+//            R.drawable.tv_animation_b,
+//            R.drawable.tv_animation_c,
+//            R.drawable.tv_animation_d
     };
 
     private static final long ANIMATION_DURATION = 500;
@@ -131,9 +139,17 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
     protected Animator onCreateEnterAnimation() {
         // fixme - if not override this method, the first image is not shown?
         // step - add the animation list and start it
-        mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
-        ((AnimationDrawable) mContentView.getDrawable()).start();
-
+        mContentView.setImageDrawable(ContextCompat.getDrawable(getActivity(), pageImages[0]));
+//        ((AnimationDrawable) mContentView.getDrawable()).start();
+        final AnimatedVectorDrawable avd = (AnimatedVectorDrawable) mContentView.getDrawable();
+        // make it loop
+        avd.registerAnimationCallback(new Animatable2.AnimationCallback() {
+            @Override
+            public void onAnimationEnd(Drawable drawable) {
+                avd.start();
+            }
+        });
+        avd.start();
         mContentAnimator = createFadeInAnimator(mContentView);
         return mContentAnimator;
     }
@@ -157,8 +173,22 @@ public class OnboardingFragment extends android.support.v17.leanback.app.Onboard
             @Override
             public void onAnimationEnd(Animator animation) {
                 // when fade in done - change the image and start animation
-                mContentView.setImageDrawable(getResources().getDrawable(pageImages[newPage]));
-                ((AnimationDrawable) mContentView.getDrawable()).start();
+                mContentView.setImageDrawable(ContextCompat.getDrawable(getActivity(), pageImages[newPage]));
+//                if (newPage == 0) {
+                // first page is AnimatedVectorDrawable
+                final AnimatedVectorDrawable avd = (AnimatedVectorDrawable) mContentView.getDrawable();
+                // make it loop, can make it in the thread for duration
+                // https://stackoverflow.com/questions/41767676/how-to-restart-android-animatedvectordrawables-animations
+                avd.registerAnimationCallback(new Animatable2.AnimationCallback() {
+                    @Override
+                    public void onAnimationEnd(Drawable drawable) {
+                        avd.start();
+                    }
+                });
+                avd.start();
+//                } else {
+//                    ((AnimationDrawable) mContentView.getDrawable()).start();
+//                }
             }
         });
         animators.add(fadeOut);
