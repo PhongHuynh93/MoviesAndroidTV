@@ -92,6 +92,7 @@ dependencies {
     implementation supportDependencies.recyclerView
     implementation supportDependencies.customtabs
     implementation supportDependencies.leanback
+    implementation supportDependencies.leanbackPreference
 //    compile "com.android.support:support-v13:${supportDependencies.appCompat}"
 //    compile "com.android.support:support-v4:${supportDependencies.appCompat}"
 //    compile "com.android.support:palette-v7:${supportDependencies.appCompat}"

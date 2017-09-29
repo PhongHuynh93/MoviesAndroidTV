@@ -29,6 +29,10 @@ import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
+import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
+import com.gabilheri.moviestmdb.ui.moresample.GuidedStepActivity;
+import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
+import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter2;
 import com.gabilheri.moviestmdb.ui.presenter.IconHeaderItemPresenter;
@@ -335,7 +339,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
                 startActivity(intent, bundle);
             } else if (((String) item).contains(getString(R.string.error_fragment))) {
                 BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
+                getFragmentManager().beginTransaction().replace(R.id.tv_frame_content, errorFragment)
                         .addToBackStack(null).commit();
             } else if(((String) item).contains(getString(R.string.personal_settings))) {
                 Intent intent = new Intent(getActivity(), SettingsActivity.class);
