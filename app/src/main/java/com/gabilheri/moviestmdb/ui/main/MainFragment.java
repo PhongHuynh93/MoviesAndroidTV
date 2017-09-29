@@ -306,7 +306,36 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     // when clicked -> open another activity to load the picture
     @Override
     public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-        ((BaseTvActivity) getActivity()).goToDetailMovie(itemViewHolder, item);
+        if (item instanceof Movie) {
+            ((BaseTvActivity) getActivity()).goToDetailMovie(itemViewHolder, item);
+        } else if (item instanceof String) {
+            if (((String) item).contains(getString(R.string.grid_view))) {
+                Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
+                Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else if (((String) item).contains(getString(R.string.error_fragment))) {
+                BrowseErrorFragment errorFragment = new BrowseErrorFragment();
+                getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
+                        .addToBackStack(null).commit();
+            } else if(((String) item).contains(getString(R.string.personal_settings))) {
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                Bundle bundle =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                .toBundle();
+                startActivity(intent, bundle);
+            } else {
+                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
     }
 
     // when selected, load the image of that poster
@@ -324,34 +353,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             if (adapter.get(adapter.size() - 1).equals(item) && adapter.shouldLoadNextPage()) {
                 loadData(Integer.valueOf(adapter.getAdapterOptions().get(KEY_TAG)), adapter);
             }
-        } else if (item instanceof String) {
-            if (((String) item).contains(getString(R.string.grid_view))) {
-                Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
-            } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-                Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
-            } else if (((String) item).contains(getString(R.string.error_fragment))) {
-                BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                getFragmentManager().beginTransaction().replace(R.id.tv_frame_content, errorFragment)
-                        .addToBackStack(null).commit();
-            } else if(((String) item).contains(getString(R.string.personal_settings))) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
-            } else {
-                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
-                        .show();
-            }
         }
-
     }
 }
