@@ -25,5 +25,8 @@
     <!--guide fragment color-->
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>
+    <!--<color name="icon_alt_background">@color/yellow</color>-->
 
+    <color name="background_gradient_start">#000000</color>
+    <color name="background_gradient_end">#DDDDDD</color>
 </resources>

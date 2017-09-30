@@ -13,6 +13,7 @@ import static com.gabilheri.moviestmdb.util.Constant.OPTION_CHECK_SET_ID;
  */
 
 public abstract class BaseGuideStepFragment extends GuidedStepFragment {
+    // step - create button actions -for navigate to another step
     protected static void addAction(List<GuidedAction> actions, long id, String title, String desc) {
         actions.add(new GuidedAction.Builder()
                 .id(id)

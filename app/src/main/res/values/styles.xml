@@ -27,6 +27,10 @@
     <!--step style for all guide fragment-->
     <style name="Theme.Example.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="guidanceIconStyle">@style/Widget.Example.Leanback.GuidanceIconStyle</item>
+        <!--color bg for the left-->
+        <!--<item name="guidedStepBackground">@color/accent_color</item>-->
+        <!--color bg for the right-->
+        <!--<item name="guidedActionsBackground">@color/yellow</item>-->
     </style>
     <style name="Widget.Example.Leanback.GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:background">@color/icon_background</item>
@@ -37,6 +41,8 @@
         <item name="guidanceIconStyle">@style/Widget.Example.Leanback.FirstStepGuidanceIconStyle
         </item>
     </style>
+
+    <!--color bg for icon (small in the left) -->
     <style name="Widget.Example.Leanback.FirstStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:background">@color/icon_alt_background</item>
     </style>

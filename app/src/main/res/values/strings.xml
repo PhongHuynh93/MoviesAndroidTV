@@ -71,8 +71,8 @@
 
 
     <!-- Strings related to guided sequence activity -->
-    <string name="guidedstep_first_title">Guided Step First Page</string>
-    <string name="guidedstep_first_description">First step of guided sequence</string>
+    <string name="guidedstep_first_title">Guided step</string>
+    <string name="guidedstep_first_description">Huỳnh Đức Thanh Phong</string>
     <string name="guidedstep_first_breadcrumb">Guided Steps: 1</string>
     <string name="guidedstep_second_title">Guided Step Second Page</string>
     <string name="guidedstep_second_description">Showcasing different action configurations</string>

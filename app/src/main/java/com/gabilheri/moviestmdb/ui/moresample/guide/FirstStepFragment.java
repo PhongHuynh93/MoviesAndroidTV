@@ -44,8 +44,8 @@ public class FirstStepFragment extends BaseGuideStepFragment {
 //        Drawable icon = getActivity().getDrawable(R.drawable.guidedstep_main_icon_1);
 //        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
 
-        String title = getString(R.string.guidedstep_first_title);
         String breadcrumb = getString(R.string.guidedstep_first_breadcrumb);
+        String title = getString(R.string.guidedstep_first_title);
         String description = getString(R.string.guidedstep_first_description);
         Drawable icon = getActivity().getDrawable(R.drawable.ic_main_icon);
         return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
