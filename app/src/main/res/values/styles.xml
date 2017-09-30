@@ -40,4 +40,9 @@
     <style name="Widget.Example.Leanback.FirstStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:background">@color/icon_alt_background</item>
     </style>
+
+    <!--step - style for second guide-->
+    <style name="Widget.Example.Leanback.SecondStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+        <item name="android:padding">24dp</item>
+    </style>
 </resources>
