@@ -1,19 +1,31 @@
 package com.gabilheri.moviestmdb.ui.moresample.guide;
 
+import android.app.FragmentManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 
+import com.gabilheri.moviestmdb.R;
+
 import java.util.List;
+
+import static com.gabilheri.moviestmdb.util.Constant.BACK;
+import static com.gabilheri.moviestmdb.util.Constant.CONTINUE;
 
 /**
  * Created by user on 9/30/2017.
  * <a href="https://developer.android.com/training/tv/playback/guided-step.html"></a>
  */
 
-public class FirstStepFragment extends GuidedStepFragment {
+public class FirstStepFragment extends BaseGuideStepFragment {
+    @Override
+    public int onProvideTheme() {
+        return R.style.Theme_Example_Leanback_GuidedStep_First;
+    }
+
     @Override
     protected void onProvideFragmentTransitions() {
         super.onProvideFragmentTransitions();
@@ -23,7 +35,7 @@ public class FirstStepFragment extends GuidedStepFragment {
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return super.onCreateGuidance(savedInstanceState);
+//        return super.onCreateGuidance(savedInstanceState);
 
         // return a new GuidanceStylist.Guidance that contains context information, such as the step title, description, and icon.
 //        String title = getString(R.string.guidedstep_first_title);
@@ -31,12 +43,18 @@ public class FirstStepFragment extends GuidedStepFragment {
 //        String description = getString(R.string.guidedstep_first_description);
 //        Drawable icon = getActivity().getDrawable(R.drawable.guidedstep_main_icon_1);
 //        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
+
+        String title = getString(R.string.guidedstep_first_title);
+        String breadcrumb = getString(R.string.guidedstep_first_breadcrumb);
+        String description = getString(R.string.guidedstep_first_description);
+        Drawable icon = getActivity().getDrawable(R.drawable.ic_main_icon);
+        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
     }
 
     // step provide a set of GuidedActions the user can take
     @Override
     public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-        super.onCreateActions(actions, savedInstanceState);
+//        super.onCreateActions(actions, savedInstanceState);
 
         // step - add big action
         // add a new GuidedAction for each action item, and provide the action string, description, and ID.
@@ -65,6 +83,13 @@ public class FirstStepFragment extends GuidedStepFragment {
 //                .description(getString(R.string.guidedstep_subactions_desc))
 //                .subActions(subActions)
 //                .build());
+
+        addAction(actions, CONTINUE,
+                getResources().getString(R.string.guidedstep_continue),
+                getResources().getString(R.string.guidedstep_letsdoit));
+        addAction(actions, BACK,
+                getResources().getString(R.string.guidedstep_cancel),
+                getResources().getString(R.string.guidedstep_nevermind));
     }
 
     /**
@@ -95,7 +120,7 @@ public class FirstStepFragment extends GuidedStepFragment {
     // step to respond to those actions
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
-        super.onGuidedActionClicked(action);
+//        super.onGuidedActionClicked(action);
 
         // step - add the next step in the sequence to the fragment stack.
         // If the user presses the Back button on the TV remote, the device shows the previous GuidedStepFragment on the fragment stack.
@@ -103,5 +128,12 @@ public class FirstStepFragment extends GuidedStepFragment {
 //        if (action.getId() == CONTINUE) {
 //            GuidedStepFragment.add(fm, new SecondStepFragment());
 //        }
+
+        FragmentManager fm = getFragmentManager();
+        if (action.getId() == CONTINUE) {
+            GuidedStepFragment.add(fm, new SecondStepFragment());
+        } else {
+            getActivity().finishAfterTransition();
+        }
     }
 }

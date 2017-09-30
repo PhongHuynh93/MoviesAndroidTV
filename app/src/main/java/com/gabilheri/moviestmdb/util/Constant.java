@@ -1,6 +1,7 @@
 package com.gabilheri.moviestmdb.util;
 
 import com.example.myapplication.data.models.Tag;
+import com.gabilheri.moviestmdb.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +33,23 @@ public class Constant {
         list.add(new Tag(2, "Annabelle", 10));
         return list;
     }
+
+//    info guide fragment
+    public static final int CONTINUE = 0;
+    public static final int BACK = 1;
+    public static final int OPTION_CHECK_SET_ID = 10;
+    public static final String[] OPTION_NAMES = {
+            "Option A",
+            "Option B",
+            "Option C"
+    };
+    public static final String[] OPTION_DESCRIPTIONS = {
+            "Here's one thing you can do",
+            "Here's another thing you can do",
+            "Here's one more thing you can do"
+    };
+    public static final int[] OPTION_DRAWABLES = {R.drawable.ic_guidedstep_option_a,
+            R.drawable.ic_guidedstep_option_b, R.drawable.ic_guidedstep_option_c};
+    public static final boolean[] OPTION_CHECKED = {true, false, false};
+
 }
