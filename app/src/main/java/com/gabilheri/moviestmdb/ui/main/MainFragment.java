@@ -30,7 +30,7 @@ import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
-import com.gabilheri.moviestmdb.ui.moresample.GuidedStepActivity;
+import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepActivity;
 import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
 import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter;

@@ -60,7 +60,7 @@
                   android:exported="true"
                   android:theme="@style/LeanbackPreferences"/>
         <activity
-            android:name=".ui.moresample.GuidedStepActivity"
+            android:name=".ui.moresample.guide.GuidedStepActivity"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
 
     </application>

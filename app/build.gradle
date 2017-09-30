@@ -1,27 +1,9 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-//        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-//        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-//        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.1.1'
-//        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3'
-    }
-}
-
-repositories {
-    maven { url "https://jitpack.io" }
-    flatDir {
-        dirs 'libs'
-    }
-}
-
 apply plugin: 'com.android.application'
-//apply plugin: 'com.neenbedankt.android-apt'
-//apply plugin: 'com.getkeepsafe.dexcount'
-//apply plugin: 'com.android.application'
-//apply plugin: 'me.tatarka.retrolambda'
+
+// version information
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
 
 android {
     compileSdkVersion 26
@@ -30,8 +12,8 @@ android {
         applicationId "com.gabilheri.moviestmdb"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         multiDexEnabled true
     }
     buildTypes {
@@ -81,8 +63,6 @@ tasks.whenTaskAdded { task ->
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    String retrofitVersion = "2.1.0"
-    String okHttpVersion = "3.4.1"
     // Google Support Libraries
     implementation supportDependencies.appCompat
     implementation supportDependencies.cardView
@@ -93,30 +73,10 @@ dependencies {
     implementation supportDependencies.customtabs
     implementation supportDependencies.leanback
     implementation supportDependencies.leanbackPreference
-//    compile "com.android.support:support-v13:${supportDependencies.appCompat}"
-//    compile "com.android.support:support-v4:${supportDependencies.appCompat}"
-//    compile "com.android.support:palette-v7:${supportDependencies.appCompat}"
-//    compile "com.android.support:design:${supportDependencies.appCompat}"
-//    compile "com.android.support:recyclerview-v7:${supportDependencies.appCompat}"
-//    compile "com.android.support:customtabs:${supportDependencies.appCompat}"
-//    compile "com.android.support:leanback-v17:${supportDependencies.appCompat}"
-    // Base stuff
-//    compile 'io.reactivex:rxandroid:1.2.1'
-//    compile 'io.reactivex:rxjava:1.1.6'
-//    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
-    // Network
-//    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-//    compile "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
-//    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
-//    compile "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-//    compile "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // Logging
     compile 'com.jakewharton.timber:timber:4.3.0'
     // Dependency Injection
-//    annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
-//    compile 'com.google.dagger:dagger:2.4'
-//    provided 'javax.annotation:jsr250-api:1.0'
     annotationProcessor supportDependencies.daggercompiler
     implementation supportDependencies.dagger
     provided supportDependencies.javaxAnnotation
@@ -139,7 +99,4 @@ dependencies {
     implementation project(':domain')
 
     compile 'com.android.support:multidex:1.0.1'   // add this in  dependencies
-
-    // add animation for image
-//    compile ('com.airbnb.android:lottie:2.2.5') { exclude group: 'com.android.support' }
 }
