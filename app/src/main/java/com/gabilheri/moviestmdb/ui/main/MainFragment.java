@@ -13,7 +13,6 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.View;
@@ -28,11 +27,9 @@ import com.gabilheri.moviestmdb.presenter.ListMoviePresenter;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
+import com.gabilheri.moviestmdb.ui.base.ControlFragInterface;
 import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
-import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
-import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepActivity;
-import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
-import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
+import com.gabilheri.moviestmdb.ui.base.NavigationInterface;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter2;
 import com.gabilheri.moviestmdb.ui.presenter.IconHeaderItemPresenter;
@@ -69,6 +66,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     SparseArray<MovieRow> mRows;
     // big adapter
     private ArrayObjectAdapter rowsAdapter;
+    private NavigationInterface mNavigationInterface;
+    private ControlFragInterface mControlFragInterface;
 
     public static MainFragment newInstance() {
         Bundle args = new Bundle();
@@ -85,6 +84,9 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mNavigationInterface = (NavigationInterface) getActivity();
+        mControlFragInterface = (ControlFragInterface) getActivity();
         // inject dagger
         App.instance().appComponent().newSubFragmentComponent(new FragmentModule(this)).inject(this);
         mListMoviePresenter.attachView(this);
@@ -310,27 +312,13 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             ((BaseTvActivity) getActivity()).goToDetailMovie(itemViewHolder, item);
         } else if (item instanceof String) {
             if (((String) item).contains(getString(R.string.grid_view))) {
-                Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
+                mNavigationInterface.goToVerticalScreen();
             } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-                Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
+                mNavigationInterface.goToGuideScreen();
             } else if (((String) item).contains(getString(R.string.error_fragment))) {
-                BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
-                        .addToBackStack(null).commit();
+                mControlFragInterface.showErrorFrag();
             } else if(((String) item).contains(getString(R.string.personal_settings))) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                Bundle bundle =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                .toBundle();
-                startActivity(intent, bundle);
+                mNavigationInterface.goToSettingScreen();
             } else {
                 Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
                         .show();

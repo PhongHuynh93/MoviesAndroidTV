@@ -15,6 +15,11 @@ import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
+import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
+import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
+import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
+import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepActivity;
+import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 import com.gabilheri.moviestmdb.util.NetworkUtil;
 
@@ -27,7 +32,7 @@ import com.gabilheri.moviestmdb.util.NetworkUtil;
  * @since 10/8/16.
  */
 
-public abstract class BaseTvActivity extends Activity {
+public abstract class BaseTvActivity extends Activity implements ControlFragInterface, NavigationInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,13 @@ public abstract class BaseTvActivity extends Activity {
         return errorFragment;
     }
 
+    @Override
+    public void showErrorFrag() {
+        BrowseErrorFragment errorFragment = new BrowseErrorFragment();
+        getFragmentManager().beginTransaction().replace(R.id.tv_frame_content, errorFragment)
+                .addToBackStack(null).commit();
+    }
+
     public void goToDetailMovie(Presenter.ViewHolder itemViewHolder, Object item) {
         if (item instanceof Movie) {
             Movie movie = (Movie) item;
@@ -96,6 +108,37 @@ public abstract class BaseTvActivity extends Activity {
             // load the movie background
             mBackgroundManager.loadImage(HttpClientModule.BACKDROP_URL + movie.getBackdropPath());
         }
+    }
+
+    @Override
+    public void goToGuideScreen() {
+        Intent intent = new Intent(this, GuidedStepActivity.class);
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                        .toBundle();
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void goToSettingScreen() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        Bundle bundle =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                        .toBundle();
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void goToVerticalScreen() {
+        Intent intent = new Intent(this, VerticalGridActivity.class);
+        Bundle bundle =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                        .toBundle();
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void goToOnBoardScreen() {
+        startActivity(new Intent(this, OnboardingActivity.class));
     }
 
     public abstract Fragment getFragment();
