@@ -35,6 +35,7 @@ public class BrowseErrorFragment extends ErrorFragment {
         getFragmentManager().beginTransaction().add(R.id.tv_frame_content, mSpinnerFragment).commit();
     }
 
+    // step - show progress bar and then remove it after 2 secs
     @Override
     public void onStart() {
         super.onStart();
@@ -69,6 +70,7 @@ public class BrowseErrorFragment extends ErrorFragment {
         });
     }
 
+    // step 0 create spinner
     public static class SpinnerFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
