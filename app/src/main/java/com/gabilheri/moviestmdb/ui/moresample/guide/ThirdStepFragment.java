@@ -54,9 +54,9 @@ public class ThirdStepFragment extends BaseGuideStepFragment {
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (action.getId() == CONTINUE) {
-            getActivity().finishAfterTransition();
+            getOutStep();
         } else {
-            getFragmentManager().popBackStack();
+            returnPreviousStep();
         }
     }
 

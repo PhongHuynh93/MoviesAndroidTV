@@ -1,7 +1,9 @@
 package com.gabilheri.moviestmdb.ui.moresample;
 
 import android.app.Fragment;
+import android.os.Bundle;
 
+import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
 
 /**
@@ -12,5 +14,12 @@ public class VerticalGridActivity extends BaseTvActivity {
     @Override
     public Fragment getFragment() {
         return VerticalGridFragment.instance();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // step - we can set the background of grid here
+        getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
     }
 }

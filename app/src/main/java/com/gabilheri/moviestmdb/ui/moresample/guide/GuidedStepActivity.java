@@ -9,7 +9,6 @@ import android.support.v17.leanback.app.GuidedStepFragment;
  * Created by CPU11112-local on 9/29/2017.
  * <a href="https://developer.android.com/reference/android/support/v17/leanback/app/GuidedStepFragment.html"></a>
  */
-
 public class GuidedStepActivity extends Activity {
 
     /**
@@ -27,6 +26,4 @@ public class GuidedStepActivity extends Activity {
             GuidedStepFragment.addAsRoot(this, new FirstStepFragment(), android.R.id.content);
         }
     }
-
-
 }

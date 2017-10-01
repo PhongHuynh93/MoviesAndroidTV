@@ -1,7 +1,5 @@
 package com.gabilheri.moviestmdb.ui.moresample.guide;
 
-import android.app.FragmentManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v17.leanback.app.GuidedStepFragment;
@@ -14,6 +12,7 @@ import java.util.List;
 
 import static com.gabilheri.moviestmdb.util.Constant.BACK;
 import static com.gabilheri.moviestmdb.util.Constant.CONTINUE;
+import static com.gabilheri.moviestmdb.util.Constant.SHOW_MORE;
 
 /**
  * Created by user on 9/30/2017.
@@ -24,11 +23,6 @@ public class FirstStepFragment extends BaseGuideStepFragment {
     @Override
     public int onProvideTheme() {
         return R.style.Theme_Example_Leanback_GuidedStep_First;
-    }
-
-    @Override
-    protected void onProvideFragmentTransitions() {
-        super.onProvideFragmentTransitions();
     }
 
     // step to provide instructions to the user
@@ -44,11 +38,7 @@ public class FirstStepFragment extends BaseGuideStepFragment {
 //        Drawable icon = getActivity().getDrawable(R.drawable.guidedstep_main_icon_1);
 //        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
 
-        String breadcrumb = getString(R.string.guidedstep_first_breadcrumb);
-        String title = getString(R.string.guidedstep_first_title);
-        String description = getString(R.string.guidedstep_first_description);
-        Drawable icon = getActivity().getDrawable(R.drawable.ic_main_icon);
-        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
+        return createLeftGuidance(getActivity(), R.string.guidedstep_first_breadcrumb, R.string.guidedstep_first_title, R.string.guidedstep_first_description, R.drawable.ic_main_icon);
     }
 
     // step provide a set of GuidedActions the user can take
@@ -90,6 +80,12 @@ public class FirstStepFragment extends BaseGuideStepFragment {
         addAction(actions, BACK,
                 getResources().getString(R.string.guidedstep_cancel),
                 getResources().getString(R.string.guidedstep_nevermind));
+        addActionHasNext(getActivity(), actions, CONTINUE,
+        "Title has next",
+        "Description");
+        addActionSubAction(getActivity(), actions, SHOW_MORE, CONTINUE,
+                "Title has subaction",
+                "Press to show subaction");
     }
 
     /**
@@ -106,15 +102,14 @@ public class FirstStepFragment extends BaseGuideStepFragment {
     // step - if we have subaction, listen clicking
     @Override
     public boolean onSubGuidedActionClicked(GuidedAction action) {
-        return super.onSubGuidedActionClicked(action);
-
-//        // Check for which action was clicked, and handle as needed
-//        if (action.getId() == SUBACTION1) {
-//            // Subaction 1 selected
-//        }
-//        // Return true to collapse the subactions drop-down list, or
-//        // false to keep the drop-down list expanded.
-//        return true;
+        // Check for which action was clicked, and handle as needed
+        if (action.getId() == CONTINUE) {
+            // Subaction 1 selected
+            GuidedStepFragment.add(getFragmentManager(), new SecondStepFragment());
+        }
+        // Return true to collapse the subactions drop-down list, or
+        // false to keep the drop-down list expanded.
+        return true;
     }
 
     // step to respond to those actions
@@ -129,10 +124,9 @@ public class FirstStepFragment extends BaseGuideStepFragment {
 //            GuidedStepFragment.add(fm, new SecondStepFragment());
 //        }
 
-        FragmentManager fm = getFragmentManager();
         if (action.getId() == CONTINUE) {
-            GuidedStepFragment.add(fm, new SecondStepFragment());
-        } else {
+            addNextStep(new SecondStepFragment());
+        } else if (action.getId() == BACK) {
             getActivity().finishAfterTransition();
         }
     }

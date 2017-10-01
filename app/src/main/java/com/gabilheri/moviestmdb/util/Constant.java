@@ -37,6 +37,7 @@ public class Constant {
 //    info guide fragment
     public static final int CONTINUE = 0;
     public static final int BACK = 1;
+    public static final int SHOW_MORE = 3;
     public static final int OPTION_CHECK_SET_ID = 10;
     public static final String[] OPTION_NAMES = {
             "Option A",
