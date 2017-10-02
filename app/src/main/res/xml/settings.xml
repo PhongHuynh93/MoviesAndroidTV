@@ -19,53 +19,31 @@
 
         <CheckBoxPreference
             android:title="CheckBoxPreference"/>
+
+        <!--crash when only few info here in edittextpref-->
+        <!--<EditTextPreference-->
+        <!--android:title="EditTextPreference"/>-->
+
         <EditTextPreference
+            android:dialogTitle="dialogtitle"
+            android:key="edittext_preference_1"
+            android:summary="summary"
             android:title="EditTextPreference"/>
-        <!--<ListPreference-->
-        <!--android:title="ListPreference">-->
-        <!--<CheckBoxPreference-->
-        <!--android:title="CheckBoxPreference"/>-->
-        <!--<CheckBoxPreference-->
-        <!--android:title="CheckBoxPreference"/>-->
-        <!--</ListPreference>-->
-        <!--<MultiSelectListPreference>-->
-        <!--<Preference-->
-        <!--android:title="test"/>-->
-        <!--<Preference-->
-        <!--android:title="test"/>-->
-        <!--</MultiSelectListPreference>-->
-        <!--<RingtonePreference-->
-        <!--android:title="test"/>-->
     </PreferenceCategory>
-
-    <!--<ListPreference-->
-        <!--android:title="ListPreference">-->
-        <!--<CheckBoxPreference-->
-            <!--android:title="CheckBoxPreference"/>-->
-        <!--<CheckBoxPreference-->
-            <!--android:title="CheckBoxPreference"/>-->
-    <!--</ListPreference>-->
-    <!--<MultiSelectListPreference>-->
-    <!--<Preference-->
-    <!--android:title="test"/>-->
-    <!--<Preference-->
-    <!--android:title="test"/>-->
-    <!--</MultiSelectListPreference>-->
-
     <PreferenceCategory
         android:title="Group 2">
 
         <CheckBoxPreference
             android:key="checkbox_preference"
-            android:title="CheckBoxPreference"
-            android:summary="summary" />
+            android:summary="summary"
+            android:title="CheckBoxPreference"/>
 
         <DropDownPreference
-            android:key="dropdown_preference"
-            android:title="DropDownPreference"
-            android:summary="summary"
             android:entries="@array/categories"
-            android:entryValues="@array/categories" />
+            android:entryValues="@array/categories"
+            android:key="dropdown_preference"
+            android:summary="summary"
+            android:title="DropDownPreference"/>
 
     </PreferenceCategory>
 
@@ -73,26 +51,26 @@
         android:title="Group 3">
 
         <EditTextPreference
+            android:dialogTitle="dialogtitle"
             android:key="edittext_preference"
-            android:title="EditTextPreference"
             android:summary="summary"
-            android:dialogTitle="dialogtitle" />
+            android:title="EditTextPreference"/>
 
         <ListPreference
-            android:key="list_preference"
-            android:title="ListPreference"
-            android:summary="summary"
+            android:dialogTitle="dialogtitle"
             android:entries="@array/categories"
             android:entryValues="@array/categories"
-            android:dialogTitle="dialogtitle" />
+            android:key="list_preference"
+            android:summary="summary"
+            android:title="ListPreference"/>
 
         <MultiSelectListPreference
-            android:key="multi_select_list_preference"
-            android:title="MultiSelectListPreference"
-            android:summary="summary"
+            android:dialogTitle="dialogtitle"
             android:entries="@array/categories"
             android:entryValues="@array/categories"
-            android:dialogTitle="dialogtitle" />
+            android:key="multi_select_list_preference"
+            android:summary="summary"
+            android:title="MultiSelectListPreference"/>
 
     </PreferenceCategory>
 
@@ -105,21 +83,21 @@
         <!--step - if we dont want the checkbox appears here but want it to appear in the second page, put in PreferenceScreen-->
         <PreferenceScreen
             android:key="screen_preference"
-            android:title="PreferenceScreen"
-            android:summary="has checkbox">
+            android:summary="has checkbox"
+            android:title="PreferenceScreen">
 
             <!-- You can place more preferences here that will be shown on the next screen. -->
 
             <CheckBoxPreference
                 android:key="next_screen_checkbox_preference"
-                android:title="CheckBoxPreference"
-                android:summary="summary" />
+                android:summary="summary"
+                android:title="CheckBoxPreference"/>
 
         </PreferenceScreen>
 
         <PreferenceScreen
-            android:title="PreferenceScreen"
-            android:summary="has Intent">
+            android:summary="has Intent"
+            android:title="PreferenceScreen">
 
             <intent android:action="android.intent.action.VIEW"
                     android:data="http://www.android.com" />
@@ -133,17 +111,17 @@
 
         <CheckBoxPreference
             android:key="parent_checkbox_preference"
-            android:title="CheckBoxPreference"
-            android:summary="summary" />
+            android:summary="summary"
+            android:title="CheckBoxPreference"/>
 
         <!--step - this CheckBoxPreference is the child of other CheckBoxPreference, only if the parent checkbox is checked, the child can be checked-->
         <!-- The visual style of a child is defined by this styled theme attribute. -->
         <CheckBoxPreference
-            android:key="child_checkbox_preference"
             android:dependency="parent_checkbox_preference"
+            android:key="child_checkbox_preference"
             android:layout="?android:attr/preferenceLayoutChild"
-            android:title="CheckBoxPreference"
-            android:summary="summary" />
+            android:summary="summary"
+            android:title="CheckBoxPreference"/>
 
     </PreferenceCategory>
 
