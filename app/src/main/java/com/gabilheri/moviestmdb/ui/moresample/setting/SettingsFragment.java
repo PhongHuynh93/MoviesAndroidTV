@@ -15,6 +15,9 @@ import com.gabilheri.moviestmdb.R;
  */
 
 public class SettingsFragment extends LeanbackSettingsFragment implements DialogPreference.TargetFragment {
+    private final static String PREFERENCE_RESOURCE_ID = "preferenceResource";
+    private final static String PREFERENCE_ROOT = "root";
+
     private PreferenceFragment mPreferenceFragment;
 
     public static Fragment newInstance() {
@@ -34,12 +37,15 @@ public class SettingsFragment extends LeanbackSettingsFragment implements Dialog
 
     @Override
     public boolean onPreferenceStartScreen(PreferenceFragment caller, PreferenceScreen pref) {
-        return false;
+        PreferenceFragment frag = buildPreferenceFragment(R.xml.settings,
+                pref.getKey());
+        startPreferenceFragment(frag);
+        return true;
     }
 
     @Override
     public Preference findPreference(CharSequence key) {
-        return null;
+        return mPreferenceFragment.findPreference(key);
     }
 
     private PreferenceFragment buildPreferenceFragment(int preferenceResId, String root) {
