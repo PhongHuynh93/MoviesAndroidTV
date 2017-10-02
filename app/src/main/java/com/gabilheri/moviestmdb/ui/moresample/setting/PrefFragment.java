@@ -16,6 +16,11 @@ public class PrefFragment extends LeanbackPreferenceFragment {
     private final static String PREFERENCE_ROOT = "root";
     private NavigationInterface mNavigationInterface;
 
+    /**
+     * step - Load the preferences from an XML resource
+     * @param bundle
+     * @param s
+     */
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         mNavigationInterface = (NavigationInterface) getActivity();
@@ -28,8 +33,13 @@ public class PrefFragment extends LeanbackPreferenceFragment {
         }
     }
 
+    // step - when click on an preference
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
+        // get key can be null
+        if (preference.getKey() == null) {
+            return super.onPreferenceTreeClick(preference);
+        }
         if (preference.getKey().equals(getString(R.string.pref_key_login))) {
             // Open an AuthenticationActivity
             mNavigationInterface.goToAuthenticationScreen();
