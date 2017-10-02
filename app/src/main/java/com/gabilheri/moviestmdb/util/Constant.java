@@ -11,6 +11,8 @@ import java.util.List;
  */
 
 public class Constant {
+    public static final int ERROR_CODE = -1;
+
     public static final int BACKGROUND_UPDATE_DELAY = 300;
     public static final int GRID_ITEM_HEIGHT = 200;
 

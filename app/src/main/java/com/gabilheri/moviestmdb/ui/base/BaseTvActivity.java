@@ -18,6 +18,7 @@ import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
 import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
 import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
+import com.gabilheri.moviestmdb.ui.moresample.authen.AuthenticationActivity;
 import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepActivity;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
@@ -139,6 +140,11 @@ public abstract class BaseTvActivity extends Activity implements ControlFragInte
     @Override
     public void goToOnBoardScreen() {
         startActivity(new Intent(this, OnboardingActivity.class));
+    }
+
+    @Override
+    public void goToAuthenticationScreen() {
+        startActivity(new Intent(this, AuthenticationActivity.class));
     }
 
     public abstract Fragment getFragment();

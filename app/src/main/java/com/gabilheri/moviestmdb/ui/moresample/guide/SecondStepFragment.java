@@ -33,7 +33,7 @@ public class SecondStepFragment extends BaseGuideStepFragment {
     @NonNull
     @Override
     public GuidanceStylist.Guidance onCreateGuidance(Bundle savedInstanceState) {
-        return createLeftGuidance(getActivity(), R.string.guidedstep_second_breadcrumb, R.string.guidedstep_second_title, R.string.guidedstep_second_description, R.drawable.ic_main_icon);
+        return createLeftGuidance(R.string.guidedstep_second_breadcrumb, R.string.guidedstep_second_title, R.string.guidedstep_second_description, R.drawable.ic_main_icon);
     }
 
     @Override

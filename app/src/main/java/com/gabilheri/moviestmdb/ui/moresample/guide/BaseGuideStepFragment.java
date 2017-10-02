@@ -5,10 +5,15 @@ import android.support.v17.leanback.app.GuidedStepFragment;
 import android.support.v17.leanback.widget.GuidanceStylist;
 import android.support.v17.leanback.widget.GuidedAction;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
+
+import com.gabilheri.moviestmdb.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gabilheri.moviestmdb.util.Constant.CONTINUE;
+import static com.gabilheri.moviestmdb.util.Constant.ERROR_CODE;
 import static com.gabilheri.moviestmdb.util.Constant.OPTION_CHECK_SET_ID;
 
 /**
@@ -84,11 +89,31 @@ public abstract class BaseGuideStepFragment extends GuidedStepFragment {
         }
     }
 
-    protected GuidanceStylist.Guidance createLeftGuidance(Context context, int breadcrumb, int title, int description, int icon) {
+    protected void addEditableAction(List<GuidedAction> actions) {
+        GuidedAction enterUsername = new GuidedAction.Builder(getActivity())
+                .title(getString(R.string.pref_title_username))
+                .descriptionEditable(true)
+                .build();
+        GuidedAction enterPassword = new GuidedAction.Builder(getActivity())
+                .title(getString(R.string.pref_title_password))
+                .descriptionEditable(true)
+                .descriptionInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT)
+                .build();
+        GuidedAction login = new GuidedAction.Builder(getActivity())
+                .id(CONTINUE)
+                .title(getString(R.string.guidedstep_continue))
+                .build();
+        actions.add(enterUsername);
+        actions.add(enterPassword);
+        actions.add(login);
+    }
+
+    protected GuidanceStylist.Guidance createLeftGuidance(int breadcrumb, int title, int description, int icon) {
+        Context context = getActivity().getApplication();
         return new GuidanceStylist.Guidance(
-                context.getString(title),
-                context.getString(description),
-                context.getString(breadcrumb),
+                title == ERROR_CODE ? "" : context.getString(title),
+                description == ERROR_CODE ? "" : context.getString(description),
+                breadcrumb == ERROR_CODE ? "" : context.getString(breadcrumb),
                 ContextCompat.getDrawable(context, icon));
     }
 

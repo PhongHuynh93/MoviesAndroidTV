@@ -12,4 +12,6 @@ public interface NavigationInterface {
     void goToVerticalScreen();
 
     void goToOnBoardScreen();
+
+    void goToAuthenticationScreen();
 }

@@ -4,6 +4,7 @@ package com.gabilheri.moviestmdb.ui.moresample;
 import android.app.Fragment;
 
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
+import com.gabilheri.moviestmdb.ui.moresample.setting.SettingsFragment;
 
 /**
  * Created by CPU11112-local on 9/29/2017.

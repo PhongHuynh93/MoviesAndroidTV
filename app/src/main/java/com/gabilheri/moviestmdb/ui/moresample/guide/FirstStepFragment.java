@@ -38,7 +38,7 @@ public class FirstStepFragment extends BaseGuideStepFragment {
 //        Drawable icon = getActivity().getDrawable(R.drawable.guidedstep_main_icon_1);
 //        return new GuidanceStylist.Guidance(title, description, breadcrumb, icon);
 
-        return createLeftGuidance(getActivity(), R.string.guidedstep_first_breadcrumb, R.string.guidedstep_first_title, R.string.guidedstep_first_description, R.drawable.ic_main_icon);
+        return createLeftGuidance(R.string.guidedstep_first_breadcrumb, R.string.guidedstep_first_title, R.string.guidedstep_first_description, R.drawable.ic_main_icon);
     }
 
     // step provide a set of GuidedActions the user can take
