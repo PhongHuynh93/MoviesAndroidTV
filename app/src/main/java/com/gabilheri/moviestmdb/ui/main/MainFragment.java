@@ -60,10 +60,8 @@ import static com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter.KEY_TAG;
 public class MainFragment extends BrowseFragment implements OnItemViewSelectedListener, OnItemViewClickedListener, ListMovieView {
     @Inject
     ListMoviePresenter mListMoviePresenter;
-
-    private GlideBackgroundManager mBackgroundManager;
-
     SparseArray<MovieRow> mRows;
+    private GlideBackgroundManager mBackgroundManager;
     // big adapter
     private ArrayObjectAdapter rowsAdapter;
     private NavigationInterface mNavigationInterface;
@@ -171,22 +169,22 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         mRows.put(NOW_PLAYING, new MovieRow()
                 .setId(NOW_PLAYING)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
-                .setPage(1)
+//                .setPage(1)
         );
         mRows.put(TOP_RATED, new MovieRow()
                 .setId(TOP_RATED)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(TOP_RATED)))
-                .setPage(1)
+//                .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
                 .setId(POPULAR)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(POPULAR)))
-                .setPage(1)
+//                .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
                 .setId(UPCOMING)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(UPCOMING)))
-                .setPage(1)
+//                .setPage(1)
         );
     }
 
@@ -252,7 +250,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             adapter.addAllItems(response.getResults());
         }
 
-        bindMovieResponse(response, tag);
+//        bindMovieResponse(response, tag);
         startEntranceTransition();
     }
 
@@ -290,20 +288,17 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
 
     /**
      * Binds a movie response to it's adapter
-     *
-     * @param response The response from TMDB API
-     * @param id       The ID / position of the row
      */
-    private void bindMovieResponse(MovieResponse response, int id) {
-        MovieRow row = mRows.get(id);
-        row.setPage(row.getPage() + 1);
-        for (Movie m : response.getResults()) {
-            if (m.getPosterPath() != null) { // Avoid showing movie without posters
-                // info - get adapter of eachrow and add this poster
-                row.getAdapter().add(m);
-            }
-        }
-    }
+//    private void bindMovieResponse(MovieResponse response, int id) {
+//        MovieRow row = mRows.get(id);
+//        row.setPage(row.getPage() + 1);
+//        for (Movie m : response.getResults()) {
+//            if (m.getPosterPath() != null) { // Avoid showing movie without posters
+//                // info - get adapter of eachrow and add this poster
+//                row.getAdapter().add(m);
+//            }
+//        }
+//    }
 
     // when clicked -> open another activity to load the picture
     @Override

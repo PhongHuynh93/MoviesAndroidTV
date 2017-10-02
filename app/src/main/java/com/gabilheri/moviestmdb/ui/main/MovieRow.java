@@ -12,7 +12,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 
 public class MovieRow {
 
-    private int page;
+    //    private int page;
     private int id;
     private ArrayObjectAdapter adapter;
 //    private String title;
@@ -20,14 +20,14 @@ public class MovieRow {
     public MovieRow() {
     }
 
-    public int getPage() {
-        return page;
-    }
-
-    public MovieRow setPage(int page) {
-        this.page = page;
-        return this;
-    }
+//    public int getPage() {
+//        return page;
+//    }
+//
+//    public MovieRow setPage(int page) {
+//        this.page = page;
+//        return this;
+//    }
 
     public int getId() {
         return id;
