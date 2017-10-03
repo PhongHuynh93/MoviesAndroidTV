@@ -15,6 +15,9 @@
  */
 package com.example.myapplication.interactor;
 
+import android.support.annotation.MainThread;
+import android.support.annotation.WorkerThread;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -44,12 +47,26 @@ public abstract class UseCase<Q extends UseCase.RequestValues, P extends UseCase
     protected abstract Observable<P> buildUseCaseObservable(Q params);
 
     /**
-     * Executes the current use case.
+     * Executes the current use case and populate the result into the main thread
      */
+    @MainThread
     public void execute(DisposableObserver<P> observer, Q requestValues) {
         final Observable<P> observable = this.buildUseCaseObservable(requestValues)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+        addDisposable(observable.subscribeWith(observer));
+    }
+
+    /**
+     * not change the thread to the mainthread
+     *
+     * @param observer
+     * @param requestValues
+     */
+    @WorkerThread
+    public void executeWorkerThread(DisposableObserver<P> observer, Q requestValues) {
+        final Observable<P> observable = this.buildUseCaseObservable(requestValues)
+                .subscribeOn(Schedulers.io());
         addDisposable(observable.subscribeWith(observer));
     }
 

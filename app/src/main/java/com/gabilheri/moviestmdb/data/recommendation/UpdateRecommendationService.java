@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.app.recommendation.ContentRecommendation;
 import android.support.v4.content.ContextCompat;
 
@@ -19,6 +20,7 @@ import com.example.myapplication.module.HttpClientModule;
 import com.example.myapplication.util.Constant;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -56,7 +58,8 @@ public class UpdateRecommendationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.e("Retrieving popular posts for recommendations...");
-        mGetMovieList.execute(new MovieListObserver(Constant.NOW_PLAYING), new GetMovieList.RequestValues(Constant.NOW_PLAYING, "1"));
+        // step - service not need mainthread so use this method.
+        mGetMovieList.executeWorkerThread(new MovieListObserver(Constant.NOW_PLAYING), new GetMovieList.RequestValues(Constant.NOW_PLAYING, "1"));
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
@@ -70,6 +73,7 @@ public class UpdateRecommendationService extends Service {
         }
 
         @Override
+        @UiThread
         public void onNext(@io.reactivex.annotations.NonNull GetMovieList.ResponseValue responseValue) {
             handleRecommendations(responseValue.getMovieResponse().getResults());
         }
@@ -110,6 +114,7 @@ public class UpdateRecommendationService extends Service {
                                 buildPendingIntent(movieList, post), 0, null);
 
                 try {
+                    // use this method in the background thread
                     Bitmap bitmap = Glide.with(getApplication())
                             .load(HttpClientModule.BACKDROP_URL + post.getBackdropPath())
                             .asBitmap()
@@ -138,13 +143,11 @@ public class UpdateRecommendationService extends Service {
 
         // todo - when click - navigate to playback activity
         private Intent buildPendingIntent(List<Movie> recommendations, Movie post) {
-//            Intent detailsIntent = new Intent(this, PlaybackActivity.class);
+            Intent detailsIntent = new Intent(UpdateRecommendationService.this, PlaybackOverlayActivity.class);
 //            detailsIntent.putExtra(PlaybackActivity.POST, post);
 //            detailsIntent.putParcelableArrayListExtra(PlaybackActivity.POST_LIST, recommendations);
 //            detailsIntent.setAction(post.postId);
-//
-//            return detailsIntent;
-            return null;
+            return detailsIntent;
         }
 
         @Override
