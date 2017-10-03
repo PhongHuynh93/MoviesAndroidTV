@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
-import com.gabilheri.moviestmdb.ui.base.NavigationInterface;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingFragment;
 
 import javax.inject.Inject;
@@ -28,10 +27,9 @@ public class MainActivity extends BaseTvActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getApplication()).appComponent().inject(this);
-        NavigationInterface navigationInterface = (NavigationInterface) getParent();
         if (!mSharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
             // This is the first time running the app, let's go to onboarding
-            navigationInterface.goToOnBoardScreen();
+            goToOnBoardScreen();
         }
     }
 
