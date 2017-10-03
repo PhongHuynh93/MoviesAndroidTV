@@ -291,7 +291,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
      */
 //    private void bindMovieResponse(MovieResponse response, int id) {
 //        MovieRow row = mRows.get(id);
-//        row.setPage(row.getPage() + 1);
+////        row.setPage(row.getPage() + 1);
 //        for (Movie m : response.getResults()) {
 //            if (m.getPosterPath() != null) { // Avoid showing movie without posters
 //                // info - get adapter of eachrow and add this poster
