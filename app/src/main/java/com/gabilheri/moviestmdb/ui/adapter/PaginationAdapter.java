@@ -6,8 +6,8 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 
-import com.gabilheri.moviestmdb.R;
 import com.example.myapplication.data.models.Option;
+import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.presenter.IconItemPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.LoadingPresenter;
 import com.gabilheri.moviestmdb.ui.widget.LoadingCardView;
@@ -43,6 +43,11 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
     private String mAnchor;
     private int mLoadingIndicatorPosition;
 
+    /**
+     * @param context
+     * @param presenter is the MoviePresenter
+     * @param tag
+     */
     public PaginationAdapter(Context context, Presenter presenter, String tag) {
         mContext = context;
         mPresenter = presenter;
@@ -58,14 +63,15 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
         mRowTag = tag;
     }
 
-    public void setNextPage(int page) {
-        mNextPage = page;
-    }
-
     public int getNextPage() {
         return mNextPage;
     }
 
+    public void setNextPage(int page) {
+        mNextPage = page;
+    }
+
+    // step - we can add multiple view into one adapter, this adapter use this method setPresenterSelector() from the super class to suitable instant the presenter
     public void setPresenterSelector() {
         setPresenterSelector(new PresenterSelector() {
             @Override
@@ -75,6 +81,7 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
                 } else if (item instanceof Option) {
                     return mIconItemPresenter;
                 }
+                // is the MoviePresenter
                 return mPresenter;
             }
         });
@@ -88,6 +95,7 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
         return mLoadingIndicatorPosition == -1;
     }
 
+    // step - add the loading indicator when firstime load the datas
     public void showLoadingIndicator() {
         new Handler().post(new Runnable() {
             @Override
@@ -99,6 +107,7 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
         });
     }
 
+    // step - remove the loading indicator
     public void removeLoadingIndicator() {
         removeItems(mLoadingIndicatorPosition, 1);
         notifyItemRangeRemoved(mLoadingIndicatorPosition, 1);

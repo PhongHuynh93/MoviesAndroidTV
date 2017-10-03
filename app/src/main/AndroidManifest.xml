@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -55,16 +56,29 @@
             android:name=".ui.moresample.VerticalGridActivity"
             android:exported="true"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/Theme.Leanback.VerticalGrid" />
+            android:theme="@style/Theme.Leanback.VerticalGrid"/>
         <activity android:name=".ui.moresample.SettingsActivity"
                   android:exported="true"
                   android:theme="@style/LeanbackPreferences"/>
         <activity
             android:name=".ui.moresample.guide.GuidedStepActivity"
-            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+            android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
         <activity
             android:name=".ui.moresample.authen.AuthenticationActivity"
-            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+            android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
+
+        <!--// have recommendation if user reboot device-->
+        <receiver android:name=".data.recommendation.RecommendationReceiver"
+                  android:enabled="true"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.actionBOOT_COMPLETED."/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".data.recommendation.UpdateRecommendationService"
+                 android:enabled="true"/>
+
     </application>
 
 </manifest>
