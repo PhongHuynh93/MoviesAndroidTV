@@ -72,6 +72,7 @@ dependencies {
     implementation supportDependencies.recyclerView
     implementation supportDependencies.customtabs
     implementation supportDependencies.leanback
+    implementation supportDependencies.recommendation
     implementation supportDependencies.leanbackPreference
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // Logging

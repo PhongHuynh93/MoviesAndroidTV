@@ -18,6 +18,7 @@ ext {
             palette:         "com.android.support:palette-v7:${supportLibrary}",
             customtabs:         "com.android.support:customtabs:${supportLibrary}",
             leanback:         "com.android.support:leanback-v17:${supportLibrary}",
+            recommendation:         "com.android.support:recommendation:$supportLibrary",
             leanbackPreference:         "com.android.support:preference-leanback-v17:${supportLibrary}",
 
             retrofit:         "com.squareup.retrofit2:retrofit:${retrofitVersion}",

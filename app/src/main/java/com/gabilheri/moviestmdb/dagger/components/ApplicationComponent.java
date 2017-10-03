@@ -7,6 +7,7 @@ import com.gabilheri.moviestmdb.dagger.AppScope;
 import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.dagger.modules.RepositionModule;
+import com.gabilheri.moviestmdb.data.recommendation.UpdateRecommendationService;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.main.MainActivity;
 import com.gabilheri.moviestmdb.ui.main.MainFragment;
@@ -36,4 +37,6 @@ public interface ApplicationComponent {
     void inject(MainFragment mainFragment);
     void inject(MovieDetailsFragment fragment);
     void inject(MainActivity fragment);
+
+    void inject(UpdateRecommendationService fragment);
 }

@@ -1,22 +1,160 @@
 package com.gabilheri.moviestmdb.data.recommendation;
 
-import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.app.recommendation.ContentRecommendation;
+import android.support.v4.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
+import com.example.myapplication.Movie;
+import com.example.myapplication.interactor.GetMovieList;
+import com.example.myapplication.module.HttpClientModule;
+import com.example.myapplication.util.Constant;
+import com.gabilheri.moviestmdb.App;
+import com.gabilheri.moviestmdb.R;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import javax.inject.Inject;
+
+import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 /**
  * Created by CPU11112-local on 10/3/2017.
  */
 
-public class UpdateRecommendationService extends IntentService {
-    private static final String TAG = UpdateRecommendationService.class.getSimpleName();
+public class UpdateRecommendationService extends Service {
+    private static final int MAX_RECOMMENDATIONS = 3;
 
-    public UpdateRecommendationService() {
-        super(TAG);
+    @Inject
+    GetMovieList mGetMovieList;
+
+    @Inject
+    NotificationManager mNotificationManager;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        App.instance().appComponent().inject(this);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Timber.e("Retrieving popular posts for recommendations...");
+        mGetMovieList.execute(new MovieListObserver(Constant.NOW_PLAYING), new GetMovieList.RequestValues(Constant.NOW_PLAYING, "1"));
 
+        // If we get killed, after returning from here, restart
+        return START_STICKY;
+    }
+
+    private final class MovieListObserver extends DisposableObserver<GetMovieList.ResponseValue> {
+        private final int id;
+
+        public MovieListObserver(int id) {
+            this.id = id;
+        }
+
+        @Override
+        public void onNext(@io.reactivex.annotations.NonNull GetMovieList.ResponseValue responseValue) {
+            handleRecommendations(responseValue.getMovieResponse().getResults());
+        }
+
+        // step - when we dont in download the video data
+        private void handleRecommendations(List<Movie> movieList) {
+            Timber.i("Building recommendations...");
+            Resources res = getResources();
+            int cardWidth = res.getDimensionPixelSize(R.dimen.card_width);
+            int cardHeight = res.getDimensionPixelSize(R.dimen.card_height);
+
+            if (movieList == null || movieList.size() == 0) return;
+
+            if (mNotificationManager == null) {
+                mNotificationManager = (NotificationManager) getApplicationContext()
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            // This will be used to build up an object for your content recommendation that will be
+            // shown on the TV home page along with other provider's recommendations.
+            final ContentRecommendation.Builder builder = new ContentRecommendation.Builder()
+                    .setBadgeIcon(R.mipmap.ic_launcher);
+
+            for (int i = 0; i < movieList.size() && i < MAX_RECOMMENDATIONS; i++) {
+                Movie post = movieList.get(i);
+                builder.setIdTag("Post" + i + 1)
+                        .setTitle(post.getTitle())
+                        .setProgress(100, 0)
+                        .setSortKey("1.0")
+                        .setAutoDismiss(true)
+                        .setColor(ContextCompat.getColor(getApplicationContext(), R.color.primary))
+                        .setBackgroundImageUri(HttpClientModule.BACKDROP_URL + post.getBackdropPath())
+                        .setGroup("Trending")
+                        .setStatus(ContentRecommendation.CONTENT_STATUS_READY)
+                        .setContentTypes(new String[]{ContentRecommendation.CONTENT_TYPE_VIDEO})
+                        .setText(getString(R.string.browser_header_3))
+                        .setContentIntentData(ContentRecommendation.INTENT_TYPE_ACTIVITY,
+                                buildPendingIntent(movieList, post), 0, null);
+
+                try {
+                    Bitmap bitmap = Glide.with(getApplication())
+                            .load(HttpClientModule.BACKDROP_URL + post.getBackdropPath())
+                            .asBitmap()
+                            .into(cardWidth, cardHeight) // Only use for synchronous .get()
+                            .get();
+                    builder.setContentImage(bitmap);
+
+                    // Create an object holding all the information used to recommend the content.
+                    ContentRecommendation rec = builder.build();
+                    Notification notification = rec.getNotificationObject(getApplicationContext());
+
+                    // Recommend the content by publishing the notification.
+                    mNotificationManager.notify(i + 1, notification);
+                } catch (InterruptedException | ExecutionException e) {
+                    Timber.e("Could not create recommendation: %s", e.getMessage());
+                }
+
+                // Create an object holding all the information used to recommend the content.
+                ContentRecommendation rec = builder.build();
+                Notification notification = rec.getNotificationObject(getApplicationContext());
+
+                // Recommend the content by publishing the notification.
+                mNotificationManager.notify(i + 1, notification);
+            }
+        }
+
+        // todo - when click - navigate to playback activity
+        private Intent buildPendingIntent(List<Movie> recommendations, Movie post) {
+//            Intent detailsIntent = new Intent(this, PlaybackActivity.class);
+//            detailsIntent.putExtra(PlaybackActivity.POST, post);
+//            detailsIntent.putParcelableArrayListExtra(PlaybackActivity.POST_LIST, recommendations);
+//            detailsIntent.setAction(post.postId);
+//
+//            return detailsIntent;
+            return null;
+        }
+
+        @Override
+        public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
     }
 }

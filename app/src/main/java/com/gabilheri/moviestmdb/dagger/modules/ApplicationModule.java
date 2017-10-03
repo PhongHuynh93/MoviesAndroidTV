@@ -1,6 +1,7 @@
 package com.gabilheri.moviestmdb.dagger.modules;
 
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
 
 import javax.inject.Singleton;
@@ -35,4 +36,12 @@ public class ApplicationModule {
     Context providesApplicationContext() {
         return mApplication.getApplicationContext();
     }
+
+    @Singleton
+    @Provides
+    NotificationManager providesNotificationManager(Context context) {
+        return (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
 }
