@@ -7,7 +7,7 @@ def versionPatch = 0
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.gabilheri.moviestmdb"
         minSdkVersion 21
@@ -74,6 +74,10 @@ dependencies {
     implementation supportDependencies.leanback
     implementation supportDependencies.recommendation
     implementation supportDependencies.leanbackPreference
+
+    implementation supportDependencies.lifeCycleExtension
+    annotationProcessor supportDependencies.lifeCycleCompiler // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
+
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // Logging
     compile 'com.jakewharton.timber:timber:4.3.0'
@@ -100,4 +104,16 @@ dependencies {
     implementation project(':domain')
 
     compile 'com.android.support:multidex:1.0.1'   // add this in  dependencies
+}
+
+// force to use this version, because there are conflicts in leanback library and life architecture
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion rootProject.ext.supportLibrary
+            }
+        }
+    }
 }

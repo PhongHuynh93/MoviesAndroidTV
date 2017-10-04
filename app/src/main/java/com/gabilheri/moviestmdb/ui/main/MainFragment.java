@@ -99,7 +99,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     @Override
     public void onDestroy() {
         mListMoviePresenter.detachView();
-        mBackgroundManager = null;
         super.onDestroy();
     }
 
