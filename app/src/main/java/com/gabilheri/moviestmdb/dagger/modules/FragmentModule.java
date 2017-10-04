@@ -20,6 +20,11 @@ public class FragmentModule {
 
     @Provides
     RequestManager providesGlide() {
-        return Glide.with(mFragment.getContext());
+        return Glide.with(mFragment.getActivity());
+    }
+
+    @Provides
+    Fragment providesFragment() {
+        return mFragment;
     }
 }

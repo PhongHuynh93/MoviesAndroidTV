@@ -51,11 +51,9 @@ import static com.gabilheri.moviestmdb.util.Constant.ACTION_WATCH_TRAILER;
  */
 
 public class MovieDetailsFragment extends DetailsFragment implements Palette.PaletteAsyncListener, MovieDetailView {
+    public static String TRANSITION_NAME = "poster_transition";
     @Inject
     DetailMoviePresenter mDetailMoviePresenter;
-
-    public static String TRANSITION_NAME = "poster_transition";
-
     // Add the adapter and use the newly created Presenter to define how to render the objects
     // TODO: 9/16/2017 remember adapter + presenter to know about the how to show and bind datas.
     ArrayObjectAdapter mCastAdapter = new ArrayObjectAdapter(new PersonPresenter());
@@ -70,6 +68,12 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     private ArrayObjectAdapter mAdapter;
     private CustomMovieDetailPresenter mFullWidthMovieDetailsPresenter;
     private DetailsOverviewRow mDetailsOverviewRow;
+    private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
+        @Override
+        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+            mDetailsOverviewRow.setImageDrawable(resource);
+        }
+    };
 
     /**
      * Creates a new instance of a MovieDetailsFragment
@@ -84,6 +88,13 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         fragment.setArguments(args);
         return fragment;
     }
+
+
+//    @Override
+//    public void onDestroy() {
+//        mDetailMoviePresenter.detachView();
+//        super.onDestroy();
+//    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -104,13 +115,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         // Adds the adapter and fetches the data
         setupCastMembers();
         setupRecommendationsRow();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        mDetailMoviePresenter.detachView();
-        super.onDestroy();
     }
 
     private void setupCastMembers() {
@@ -198,14 +202,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
             }
         });
     }
-
-
-    private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
-        @Override
-        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-            mDetailsOverviewRow.setImageDrawable(resource);
-        }
-    };
 
     /**
      * Loads the poster image into the DetailsOverviewRow

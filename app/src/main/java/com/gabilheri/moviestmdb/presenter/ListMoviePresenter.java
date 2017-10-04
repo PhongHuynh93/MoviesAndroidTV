@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.presenter;
 
+import android.app.Fragment;
 import android.support.annotation.NonNull;
 
 import com.example.myapplication.interactor.GetMovieList;
@@ -17,8 +18,9 @@ public class ListMoviePresenter extends BasePresenter<ListMovieView> {
     private final GetMovieList mGetMovieList;
 
     @Inject
-    public ListMoviePresenter(@NonNull GetMovieList getMovieList) {
+    public ListMoviePresenter(@NonNull Fragment fragment, @NonNull GetMovieList getMovieList) {
 //                              @NonNull ClearCompleteTasks clearCompleteTasks) {
+        super(fragment);
         this.mGetMovieList = getMovieList;
     }
 

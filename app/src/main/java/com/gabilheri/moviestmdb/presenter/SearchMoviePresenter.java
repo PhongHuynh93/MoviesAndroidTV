@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.presenter;
 
+import android.app.Fragment;
 import android.support.annotation.NonNull;
 
 import com.example.myapplication.interactor.SearchMovieUsecase;
@@ -17,8 +18,9 @@ public class SearchMoviePresenter extends BasePresenter<SearchView> {
     private final SearchMovieUsecase mSearchMovieUsecase;
 
     @Inject
-    public SearchMoviePresenter(@NonNull SearchMovieUsecase searchMovieUsecase) {
-//                              @NonNull ClearCompleteTasks clearCompleteTasks) {
+    public SearchMoviePresenter(
+            @NonNull Fragment fragment, @NonNull SearchMovieUsecase searchMovieUsecase) {
+        super(fragment);
         this.mSearchMovieUsecase = searchMovieUsecase;
     }
 

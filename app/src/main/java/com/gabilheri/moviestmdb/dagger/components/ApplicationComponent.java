@@ -8,9 +8,7 @@ import com.gabilheri.moviestmdb.dagger.modules.ApplicationModule;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.dagger.modules.RepositionModule;
 import com.gabilheri.moviestmdb.data.recommendation.UpdateRecommendationService;
-import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.main.MainActivity;
-import com.gabilheri.moviestmdb.ui.main.MainFragment;
 
 import javax.inject.Singleton;
 
@@ -34,8 +32,9 @@ public interface ApplicationComponent {
     FragmentComponent newSubFragmentComponent(FragmentModule fragmentModule);
 
     void inject(App app);
-    void inject(MainFragment mainFragment);
-    void inject(MovieDetailsFragment fragment);
+
+    //    void inject(MainFragment mainFragment);
+//    void inject(MovieDetailsFragment fragment);
     void inject(MainActivity fragment);
 
     void inject(UpdateRecommendationService fragment);

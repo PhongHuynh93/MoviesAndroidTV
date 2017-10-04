@@ -96,11 +96,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     }
 
 
-    @Override
-    public void onDestroy() {
-        mListMoviePresenter.detachView();
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        mListMoviePresenter.detachView();
+//        super.onDestroy();
+//    }
 
     private void loadRows() {
         // FIXME: 9/14/2017 this is related to database, so put it in another file, not put in view

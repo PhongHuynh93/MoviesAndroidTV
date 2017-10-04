@@ -60,11 +60,9 @@ import static com.example.myapplication.util.Constant.NOW_PLAYING;
 public class SearchFragment extends android.support.v17.leanback.app.SearchFragment implements android.support.v17.leanback.app.SearchFragment.SearchResultProvider, OnItemViewSelectedListener,
         OnItemViewClickedListener,
         SearchView {
+    private static final int REQUEST_SPEECH = 0x00000010;
     @Inject
     SearchMoviePresenter mPresenter;
-
-    private static final int REQUEST_SPEECH = 0x00000010;
-
     // big adapter
     private ArrayObjectAdapter mRowsAdapter;
     // tag adapter
@@ -105,11 +103,11 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         setupEventListeners();
     }
 
-    @Override
-    public void onDestroy() {
-        mPresenter.detachView();
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        mPresenter.detachView();
+//        super.onDestroy();
+//    }
 
     private void setupEventListeners() {
         // when click a movie,

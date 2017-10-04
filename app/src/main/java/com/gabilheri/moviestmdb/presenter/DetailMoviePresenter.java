@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.presenter;
 
+import android.app.Fragment;
 import android.support.annotation.NonNull;
 
 import com.example.myapplication.interactor.GetCastMembers;
@@ -21,9 +22,12 @@ public class DetailMoviePresenter extends BasePresenter<MovieDetailView> {
     private final GetRecommendations getRecommendations;
 
     @Inject
-    public DetailMoviePresenter(@NonNull GetCastMembers getCastMembers,
-                                @NonNull GetMovieDetail getMovieDetail,
-                                @NonNull GetRecommendations getRecommendations) {
+    public DetailMoviePresenter(
+            @NonNull Fragment fragment,
+            @NonNull GetCastMembers getCastMembers,
+            @NonNull GetMovieDetail getMovieDetail,
+            @NonNull GetRecommendations getRecommendations) {
+        super(fragment);
         this.getCastMembers = getCastMembers;
         this.getMovieDetail = getMovieDetail;
         this.getRecommendations = getRecommendations;
