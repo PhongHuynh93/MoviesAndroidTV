@@ -152,7 +152,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         // set search icon color
         setSearchAffordanceColor(getResources().getColor(R.color.accent_color));
 
-        // set icon with header
+        // fixme - set icon with header, has bugs here
 //        setHeaderPresenterSelector(new PresenterSelector() {
 //            @Override
 //            public Presenter getPresenter(Object o) {

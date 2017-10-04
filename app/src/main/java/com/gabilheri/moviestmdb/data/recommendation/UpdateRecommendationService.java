@@ -117,7 +117,7 @@ public class UpdateRecommendationService extends Service {
                         .setStatus(ContentRecommendation.CONTENT_STATUS_READY)
                         .setContentTypes(new String[]{ContentRecommendation.CONTENT_TYPE_VIDEO})
                         .setContentIntentData(ContentRecommendation.INTENT_TYPE_ACTIVITY,
-                                buildPendingIntent(movieList, post), 0, null);
+                                PlaybackOverlayActivity.buildIntent(UpdateRecommendationService.this, post), 0, null);
 
                 try {
                     // use this method in the background thread
@@ -151,13 +151,13 @@ public class UpdateRecommendationService extends Service {
         }
 
         // todo - when click - navigate to playback activity
-        private Intent buildPendingIntent(List<Movie> recommendations, Movie post) {
-            Intent detailsIntent = new Intent(UpdateRecommendationService.this, PlaybackOverlayActivity.class);
+//        private Intent buildPendingIntent(List<Movie> recommendations, Movie post) {
+//            Intent detailsIntent = new Intent(UpdateRecommendationService.this, PlaybackOverlayActivity.class);
 //            detailsIntent.putExtra(PlaybackActivity.POST, post);
 //            detailsIntent.putParcelableArrayListExtra(PlaybackActivity.POST_LIST, recommendations);
 //            detailsIntent.setAction(post.postId);
-            return detailsIntent;
-        }
+//            return detailsIntent;
+//        }
 
         @Override
         public void onError(@io.reactivex.annotations.NonNull Throwable e) {

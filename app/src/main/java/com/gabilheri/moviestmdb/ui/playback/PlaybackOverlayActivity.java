@@ -1,6 +1,8 @@
 package com.gabilheri.moviestmdb.ui.playback;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -20,6 +22,12 @@ public class PlaybackOverlayActivity extends Activity implements PlaybackOverlay
     private MediaSession mSession;
     private VideoView mVideoView;
     private LeanbackPlaybackState mPlaybackState = LeanbackPlaybackState.IDLE;
+
+    public static Intent buildIntent(Context context, Movie movie) {
+        Intent detailsIntent = new Intent(context, PlaybackOverlayActivity.class);
+        detailsIntent.putExtra(Movie.class.getSimpleName(), movie);
+        return detailsIntent;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -183,13 +191,13 @@ public class PlaybackOverlayActivity extends Activity implements PlaybackOverlay
     }
 
 
-    private class MediaSessionCallback extends MediaSession.Callback {
-    }
-
     /*
      * List of various states that we can be in
      */
     public enum LeanbackPlaybackState {
         PLAYING, PAUSED, BUFFERING, IDLE
+    }
+
+    private class MediaSessionCallback extends MediaSession.Callback {
     }
 }
