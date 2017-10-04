@@ -91,10 +91,10 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         prepareBackgroundManager();
         setupUIElements();
         setupEventListeners();
+        prepareEntranceTransition();
 
         loadRows();
-
-        prepareEntranceTransition();
+        updateRecommendations();
     }
 
 
@@ -113,6 +113,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         createTabLayout();
         createRows();
+    }
+
+    // step - run the service that get the recommendations
+    private void updateRecommendations() {
+        mNavigationInterface.runRecommandationService();
     }
 
     /**

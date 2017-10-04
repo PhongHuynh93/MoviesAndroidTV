@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.myapplication.Movie;
 import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.data.recommendation.UpdateRecommendationService;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
 import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
@@ -145,6 +146,12 @@ public abstract class BaseTvActivity extends Activity implements ControlFragInte
     @Override
     public void goToAuthenticationScreen() {
         startActivity(new Intent(this, AuthenticationActivity.class));
+    }
+
+    @Override
+    public void runRecommandationService() {
+        Intent recommendationIntent = new Intent(this, UpdateRecommendationService.class);
+        startService(recommendationIntent);
     }
 
     public abstract Fragment getFragment();

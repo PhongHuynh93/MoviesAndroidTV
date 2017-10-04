@@ -14,4 +14,6 @@ public interface NavigationInterface {
     void goToOnBoardScreen();
 
     void goToAuthenticationScreen();
+
+    void runRecommandationService();
 }
