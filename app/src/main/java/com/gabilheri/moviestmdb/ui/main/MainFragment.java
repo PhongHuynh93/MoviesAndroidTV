@@ -10,7 +10,6 @@ import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.content.ContextCompat;
@@ -32,7 +31,6 @@ import com.gabilheri.moviestmdb.ui.base.GlideBackgroundManager;
 import com.gabilheri.moviestmdb.ui.base.NavigationInterface;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter;
 import com.gabilheri.moviestmdb.ui.presenter.GridItemPresenter2;
-import com.gabilheri.moviestmdb.ui.presenter.IconHeaderItemPresenter;
 import com.gabilheri.moviestmdb.ui.search.SearchActivity;
 
 import java.util.Map;
@@ -155,12 +153,12 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         setSearchAffordanceColor(getResources().getColor(R.color.accent_color));
 
         // set icon with header
-        setHeaderPresenterSelector(new PresenterSelector() {
-            @Override
-            public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter();
-            }
-        });
+//        setHeaderPresenterSelector(new PresenterSelector() {
+//            @Override
+//            public Presenter getPresenter(Object o) {
+//                return new IconHeaderItemPresenter();
+//            }
+//        });
     }
 
     /**
