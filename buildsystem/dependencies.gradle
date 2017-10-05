@@ -38,6 +38,8 @@ ext {
 
             daggercompiler:        "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger:         "com.google.dagger:dagger:${daggerVersion}",
-            javaxAnnotation:         "javax.annotation:jsr250-api:1.0"
+            javaxAnnotation:         "javax.annotation:jsr250-api:1.0",
+
+            lombok: "org.projectlombok:lombok:1.16.18"
     ]
 }

@@ -1,15 +1,13 @@
 package com.gabilheri.moviestmdb.ui.base;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.ErrorFragment;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.example.myapplication.Movie;
@@ -36,14 +34,7 @@ import com.gabilheri.moviestmdb.util.NetworkUtil;
  * @since 10/8/16.
  */
 // this activity cannot extend Appcompath activity because if extend, we have to supply it with appcompath theme
-public abstract class BaseTvActivity extends Activity implements ControlFragInterface, NavigationInterface, LifecycleRegistryOwner {
-    private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
-
+public abstract class BaseTvActivity extends FragmentActivity implements ControlFragInterface, NavigationInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

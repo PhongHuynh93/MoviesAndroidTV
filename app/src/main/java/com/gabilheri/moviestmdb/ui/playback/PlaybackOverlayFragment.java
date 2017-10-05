@@ -1,6 +1,6 @@
 package com.gabilheri.moviestmdb.ui.playback;
 
-import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.widget.Action;
@@ -18,6 +18,7 @@ import android.support.v17.leanback.widget.PlaybackControlsRowPresenter;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private static final int PRIMARY_CONTROLS = 5;
     private Movie mSelectedMovie;
     private Handler mHandler;
-    private OnPlayPauseClickedListener mCallback;
+    //    private OnPlayPauseClickedListener mCallback;
     private ArrayObjectAdapter mRowsAdapter;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
@@ -58,29 +59,32 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
     private PlaybackControlsRow.ShuffleAction mShuffleAction;
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity context) {
-        super.onAttach(context);
-        if (context instanceof OnPlayPauseClickedListener) {
-            mCallback = (OnPlayPauseClickedListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnPlayPauseClickedListener");
-        }
-    }
+    private SharePlaybackViewModel mSharePlaybackViewModel;
 
-    @Override
-    public void onDetach() {
-        mCallback = null;
-        super.onDetach();
-    }
+//    @SuppressWarnings("deprecation")
+//    @Override
+//    public void onAttach(Activity context) {
+//        super.onAttach(context);
+//        if (context instanceof OnPlayPauseClickedListener) {
+//            mCallback = (OnPlayPauseClickedListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnPlayPauseClickedListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        mCallback = null;
+//        super.onDetach();
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mSelectedMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(Movie.class.getSimpleName());
+        mSharePlaybackViewModel = ViewModelProviders.of((FragmentActivity) getActivity()).get(SharePlaybackViewModel.class);
 
         mHandler = new Handler();
 
@@ -242,14 +246,16 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         if (playPause) {
             startProgressAutomation();
             setFadingEnabled(true);
-            mCallback.onFragmentPlayPause(mSelectedMovie,
-                    mPlaybackControlsRow.getCurrentTime(), true);
+            mSharePlaybackViewModel.select(new SharePlaybackViewModel.SharePlaybackModel(mSelectedMovie, mPlaybackControlsRow.getCurrentTime(), true));
+//            mCallback.onFragmentPlayPause(mSelectedMovie,
+//                    mPlaybackControlsRow.getCurrentTime(), true);
             mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlaybackControlsRow.PlayPauseAction.PAUSE));
         } else {
             stopProgressAutomation();
             setFadingEnabled(false);
-            mCallback.onFragmentPlayPause(mSelectedMovie,
-                    mPlaybackControlsRow.getCurrentTime(), false);
+            mSharePlaybackViewModel.select(new SharePlaybackViewModel.SharePlaybackModel(mSelectedMovie, mPlaybackControlsRow.getCurrentTime(), false));
+//            mCallback.onFragmentPlayPause(mSelectedMovie,
+//                    mPlaybackControlsRow.getCurrentTime(), false);
             mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlaybackControlsRow.PlayPauseAction.PLAY));
         }
         notifyChanged(mPlayPauseAction);
@@ -263,7 +269,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-    public interface OnPlayPauseClickedListener {
-        void onFragmentPlayPause(Movie movie, int position, Boolean playPause);
-    }
+//    public interface OnPlayPauseClickedListener {
+//        void onFragmentPlayPause(Movie movie, int position, Boolean playPause);
+//    }
 }

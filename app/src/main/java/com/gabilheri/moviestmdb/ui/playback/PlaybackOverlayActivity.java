@@ -1,6 +1,6 @@
 package com.gabilheri.moviestmdb.ui.playback;
 
-import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -8,6 +8,7 @@ import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.widget.VideoView;
 
@@ -18,7 +19,7 @@ import com.gabilheri.moviestmdb.R;
  * Created by CPU11112-local on 9/18/2017.
  */
 
-public class PlaybackOverlayActivity extends Activity implements PlaybackOverlayFragment.OnPlayPauseClickedListener {
+public class PlaybackOverlayActivity extends FragmentActivity {
     private MediaSession mSession;
     private VideoView mVideoView;
     private LeanbackPlaybackState mPlaybackState = LeanbackPlaybackState.IDLE;
@@ -41,6 +42,11 @@ public class PlaybackOverlayActivity extends Activity implements PlaybackOverlay
                 MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         mSession.setActive(true);
+
+        SharePlaybackViewModel model = ViewModelProviders.of(this).get(SharePlaybackViewModel.class);
+        model.getSelected().observe(this, sharePlaybackModel -> {
+            onFragmentPlayPause(sharePlaybackModel.getMovie(), sharePlaybackModel.getPosition(), sharePlaybackModel.isPlayPause());
+        });
     }
 
     @Override
@@ -113,8 +119,7 @@ public class PlaybackOverlayActivity extends Activity implements PlaybackOverlay
         });
     }
 
-    @Override
-    public void onFragmentPlayPause(Movie movie, int position, Boolean playPause) {
+    private void onFragmentPlayPause(Movie movie, int position, Boolean playPause) {
         // TODO: 9/18/2017 make the youtube trailer
         // test the template for video url
         String testVideoUrl = "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4";

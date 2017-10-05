@@ -104,6 +104,7 @@ dependencies {
     implementation project(':domain')
 
     compile 'com.android.support:multidex:1.0.1'   // add this in  dependencies
+//    implementation supportDependencies.lombok
 }
 
 // force to use this version, because there are conflicts in leanback library and life architecture
