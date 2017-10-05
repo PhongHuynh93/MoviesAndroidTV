@@ -94,6 +94,7 @@ public class UpdateRecommendationService extends Service {
                         .getSystemService(Context.NOTIFICATION_SERVICE);
             }
 
+//            step - the recommendations in the launcher is actually the notification -> so we use the notification builder to make it
             // This will be used to build up an object for your content recommendation that will be
             // shown on the TV home page along with other provider's recommendations.
             final ContentRecommendation.Builder builder = new ContentRecommendation.Builder()
@@ -141,23 +142,15 @@ public class UpdateRecommendationService extends Service {
                     Timber.e("Could not create recommendation: %s", e.getMessage());
                 }
 
-                // Create an object holding all the information used to recommend the content.
-                ContentRecommendation rec = builder.build();
-                Notification notification = rec.getNotificationObject(getApplicationContext());
-
-                // Recommend the content by publishing the notification.
-                mNotificationManager.notify(i + 1, notification);
+                // info: 10/5/2017 - remove these because we already define above
+//                // Create an object holding all the information used to recommend the content.
+//                ContentRecommendation rec = builder.build();
+//                Notification notification = rec.getNotificationObject(getApplicationContext());
+//
+//                // Recommend the content by publishing the notification.
+//                mNotificationManager.notify(i + 1, notification);
             }
         }
-
-        // todo - when click - navigate to playback activity
-//        private Intent buildPendingIntent(List<Movie> recommendations, Movie post) {
-//            Intent detailsIntent = new Intent(UpdateRecommendationService.this, PlaybackOverlayActivity.class);
-//            detailsIntent.putExtra(PlaybackActivity.POST, post);
-//            detailsIntent.putParcelableArrayListExtra(PlaybackActivity.POST_LIST, recommendations);
-//            detailsIntent.setAction(post.postId);
-//            return detailsIntent;
-//        }
 
         @Override
         public void onError(@io.reactivex.annotations.NonNull Throwable e) {
