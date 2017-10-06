@@ -17,25 +17,13 @@ public class Constant {
     public static final int GRID_ITEM_HEIGHT = 200;
 
     // action in detailsfragment
-    public static final long ACTION_WATCH_TRAILER = 1;
+    public static final int ACTION_WATCH_TRAILER = 1;
+    public static final int ACTION_BUY = 2;
 
     // movie reposition
     public static final String MOVIE_REPOSITION = "MOVIE_REPOSITION";
     public static final String MOVIE_LOCAL = "MOVIE_LOCAL";
     public static final String MOVIE_REMOTE = "MOVIE_REMOTE";
-
-
-    // info - list of movies is on the right of the header
-    public static List<Tag> list;
-    public static List<Tag> setupTags() {
-        list = new ArrayList<Tag>();
-
-        list.add(new Tag(0, "It", 10));
-        list.add(new Tag(1, "The Dark Tower", 10));
-        list.add(new Tag(2, "Annabelle", 10));
-        return list;
-    }
-
 //    info guide fragment
     public static final int CONTINUE = 0;
     public static final int BACK = 1;
@@ -54,5 +42,16 @@ public class Constant {
     public static final int[] OPTION_DRAWABLES = {R.drawable.ic_guidedstep_option_a,
             R.drawable.ic_guidedstep_option_b, R.drawable.ic_guidedstep_option_c};
     public static final boolean[] OPTION_CHECKED = {true, false, false};
+    // info - list of movies is on the right of the header
+    public static List<Tag> list;
+
+    public static List<Tag> setupTags() {
+        list = new ArrayList<Tag>();
+
+        list.add(new Tag(0, "It", 10));
+        list.add(new Tag(1, "The Dark Tower", 10));
+        list.add(new Tag(2, "Annabelle", 10));
+        return list;
+    }
 
 }

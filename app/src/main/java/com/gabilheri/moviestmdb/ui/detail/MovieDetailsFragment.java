@@ -15,6 +15,7 @@ import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
+import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.support.v7.graphics.Palette;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,7 @@ import com.gabilheri.moviestmdb.util.PersonPresenter;
 
 import javax.inject.Inject;
 
+import static com.gabilheri.moviestmdb.util.Constant.ACTION_BUY;
 import static com.gabilheri.moviestmdb.util.Constant.ACTION_WATCH_TRAILER;
 
 /**
@@ -130,12 +132,34 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         mAdapter.add(mDetailsOverviewRow);
         loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
         mDetailMoviePresenter.fetchMovieDetails(movie.getId());
-        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
+//        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
+//                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
+//        List<Action> mList = new ArrayList<>();
+//        mList.add(new Action(ACTION_WATCH_TRAILER, getResources().getString(
+//                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
+//        ObjectAdapter listAction = new ObjectAdapter() {
+//
+//            @Override
+//            public int size() {
+//                return mList.size();
+//            }
+//
+//            @Override
+//            public Object get(int position) {
+//                return mList.get(position);
+//            }
+//        };
+
+        SparseArrayObjectAdapter listActionNew = new SparseArrayObjectAdapter();
+        listActionNew.set(ACTION_WATCH_TRAILER, new Action(ACTION_WATCH_TRAILER, getResources().getString(
                 R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
+        listActionNew.set(ACTION_BUY, new Action(ACTION_BUY, "BUY", "$100"));
+        mDetailsOverviewRow.setActionsAdapter(listActionNew);
     }
 
     private void setupRecommendationsRow() {
-        mAdapter.add(new ListRow(new HeaderItem(2, "Recommendations"), mRecommendationsAdapter));
+        // step - this listrow doesn have the header
+        mAdapter.add(new ListRow(mRecommendationsAdapter));
         mDetailMoviePresenter.fetchRecommendations(movie.getId());
     }
 

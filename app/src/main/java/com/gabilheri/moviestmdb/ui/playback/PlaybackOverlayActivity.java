@@ -3,6 +3,9 @@ package com.gabilheri.moviestmdb.ui.playback;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -12,14 +15,23 @@ import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.myapplication.Movie;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
+import com.gabilheri.moviestmdb.databinding.PlaybackControlsBinding;
+
+import timber.log.Timber;
 
 /**
  * Created by CPU11112-local on 9/18/2017.
+ * read this artical to understand the playback
+ * <a href="http://corochann.com/android-tv-application-hands-on-tutorial-7-159.html"></a>
  */
-
 public class PlaybackOverlayActivity extends FragmentActivity {
+    PlaybackControlsBinding mBinding;
     private MediaSession mSession;
     private VideoView mVideoView;
     private LeanbackPlaybackState mPlaybackState = LeanbackPlaybackState.IDLE;
@@ -33,9 +45,10 @@ public class PlaybackOverlayActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playback_controls);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.playback_controls);
         loadViews();
         setupCallbacks();
+        // TODO: 10/5/2017 what is mediasession
         mSession = new MediaSession(this, "LeanbackSampleApp");
         mSession.setCallback(new MediaSessionCallback());
         mSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -45,6 +58,7 @@ public class PlaybackOverlayActivity extends FragmentActivity {
 
         SharePlaybackViewModel model = ViewModelProviders.of(this).get(SharePlaybackViewModel.class);
         model.getSelected().observe(this, sharePlaybackModel -> {
+            // step - when we press the play/pause button or select other video...
             onFragmentPlayPause(sharePlaybackModel.getMovie(), sharePlaybackModel.getPosition(), sharePlaybackModel.isPlayPause());
         });
     }
@@ -56,6 +70,7 @@ public class PlaybackOverlayActivity extends FragmentActivity {
     }
 
     // when press the keyboard on the remote
+    // step - activity already implemented this interface, called only when we have hardware keyboard attached, and we press the play/pause on the remote
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         PlaybackOverlayFragment playbackOverlayFragment = (PlaybackOverlayFragment) getFragmentManager().findFragmentById(R.id.playback_controls_fragment);
@@ -75,11 +90,12 @@ public class PlaybackOverlayActivity extends FragmentActivity {
                 return true;
             default:
                 return super.onKeyUp(keyCode, event);
-        }    }
+        }
+    }
 
     // load video, the playback is focus not this
     private void loadViews() {
-        mVideoView = (VideoView) findViewById(R.id.videoView);
+        mVideoView = mBinding.videoView;
         mVideoView.setFocusable(false);
         mVideoView.setFocusableInTouchMode(false);
     }
@@ -96,29 +112,29 @@ public class PlaybackOverlayActivity extends FragmentActivity {
                 } else {
                     msg = getString(R.string.video_error_unknown_error);
                 }
+                Timber.e("Error in videoview %s", msg);
                 mVideoView.stopPlayback();
                 mPlaybackState = LeanbackPlaybackState.IDLE;
                 return false;
             }
         });
 
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if (mPlaybackState == LeanbackPlaybackState.PLAYING) {
-                    mVideoView.start();
-                }
+        mVideoView.setOnPreparedListener(mp -> {
+            if (mPlaybackState == LeanbackPlaybackState.PLAYING) {
+                mVideoView.start();
             }
         });
 
-        mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mPlaybackState = LeanbackPlaybackState.IDLE;
-            }
-        });
+        mVideoView.setOnCompletionListener(mp -> mPlaybackState = LeanbackPlaybackState.IDLE);
     }
 
+    /**
+     * when we press the play/pause button or select other video...
+     *
+     * @param movie
+     * @param position
+     * @param playPause
+     */
     private void onFragmentPlayPause(Movie movie, int position, Boolean playPause) {
         // TODO: 9/18/2017 make the youtube trailer
         // test the template for video url
@@ -167,32 +183,32 @@ public class PlaybackOverlayActivity extends FragmentActivity {
         return actions;
     }
 
-
+    // TODO: 10/5/2017 why mediasession need to update the metadata
     private void updateMetadata(final Movie movie) {
-//        final MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-//
-//        String title = movie.getTitle().replace("_", " -");
-//
-//        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, title);
-//        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE,
-//                movie.getDescription());
-//        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI,
-//                movie.getCardImageUrl());
-//
-//        // And at minimum the title and artist for legacy support
-//        metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, title);
-//        metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, movie.getStudio());
-//
-//        Glide.with(this)
-//                .load(Uri.parse(movie.getCardImageUrl()))
-//                .asBitmap()
-//                .into(new SimpleTarget<Bitmap>(500, 500) {
-//                    @Override
-//                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-//                        metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ART, bitmap);
-//                        mSession.setMetadata(metadataBuilder.build());
-//                    }
-//                });
+        final MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+
+        String title = movie.getTitle().replace("_", " -");
+
+        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE, title);
+        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE,
+                movie.getPosterPath());
+        metadataBuilder.putString(MediaMetadata.METADATA_KEY_DISPLAY_ICON_URI,
+                HttpClientModule.POSTER_URL + movie.getPosterPath());
+
+        // And at minimum the title and artist for legacy support
+        metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, title);
+        metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, movie.getOriginalLanguage());
+
+        Glide.with(this)
+                .load(HttpClientModule.POSTER_URL + movie.getPosterPath())
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>(500, 500) {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ART, bitmap);
+                        mSession.setMetadata(metadataBuilder.build());
+                    }
+                });
     }
 
 

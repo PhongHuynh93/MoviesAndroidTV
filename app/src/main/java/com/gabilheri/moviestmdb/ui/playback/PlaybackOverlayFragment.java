@@ -61,24 +61,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     private SharePlaybackViewModel mSharePlaybackViewModel;
 
-//    @SuppressWarnings("deprecation")
-//    @Override
-//    public void onAttach(Activity context) {
-//        super.onAttach(context);
-//        if (context instanceof OnPlayPauseClickedListener) {
-//            mCallback = (OnPlayPauseClickedListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnPlayPauseClickedListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        mCallback = null;
-//        super.onDetach();
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,15 +229,11 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
             startProgressAutomation();
             setFadingEnabled(true);
             mSharePlaybackViewModel.select(new SharePlaybackViewModel.SharePlaybackModel(mSelectedMovie, mPlaybackControlsRow.getCurrentTime(), true));
-//            mCallback.onFragmentPlayPause(mSelectedMovie,
-//                    mPlaybackControlsRow.getCurrentTime(), true);
             mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlaybackControlsRow.PlayPauseAction.PAUSE));
         } else {
             stopProgressAutomation();
             setFadingEnabled(false);
             mSharePlaybackViewModel.select(new SharePlaybackViewModel.SharePlaybackModel(mSelectedMovie, mPlaybackControlsRow.getCurrentTime(), false));
-//            mCallback.onFragmentPlayPause(mSelectedMovie,
-//                    mPlaybackControlsRow.getCurrentTime(), false);
             mPlayPauseAction.setIcon(mPlayPauseAction.getDrawable(PlaybackControlsRow.PlayPauseAction.PLAY));
         }
         notifyChanged(mPlayPauseAction);
@@ -269,7 +247,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
 
     }
 
-//    public interface OnPlayPauseClickedListener {
-//        void onFragmentPlayPause(Movie movie, int position, Boolean playPause);
-//    }
+    public interface OnPlayPauseClickedListener {
+        void onFragmentPlayPause(Movie movie, int position, Boolean playPause);
+    }
 }

@@ -16,6 +16,11 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         multiDexEnabled true
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
