@@ -14,7 +14,6 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.myapplication.Movie;
@@ -95,18 +94,16 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         updateRecommendations();
     }
 
-
-//    @Override
-//    public void onDestroy() {
-//        mListMoviePresenter.detachView();
-//        super.onDestroy();
-//    }
-
     private void loadRows() {
         // FIXME: 9/14/2017 this is related to database, so put it in another file, not put in view
         createDataRows();
         // Creates the RowsAdapter for the Fragment
         // The ListRowPresenter tells to render ListRow objects
+        // step - notice BrowserFragment, ArrayObjectAdapter needs ListRowPresenter
+        /**
+         * {@link com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment}, ArrayObjectAdapter needs ListRowPresenter
+         * step - notice BrowserFragment, ArrayObjectAdapter needs ClassPresenterSelector
+         */
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         createTabLayout();
         createRows();
@@ -121,12 +118,9 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
      * show the search icon
      */
     private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
+        setOnSearchClickedListener(view -> {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
         });
         // set the click listener
         setOnItemViewClickedListener(this);
@@ -171,22 +165,18 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         mRows.put(NOW_PLAYING, new MovieRow()
                 .setId(NOW_PLAYING)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(NOW_PLAYING)))
-//                .setPage(1)
         );
         mRows.put(TOP_RATED, new MovieRow()
                 .setId(TOP_RATED)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(TOP_RATED)))
-//                .setPage(1)
         );
         mRows.put(POPULAR, new MovieRow()
                 .setId(POPULAR)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(POPULAR)))
-//                .setPage(1)
         );
         mRows.put(UPCOMING, new MovieRow()
                 .setId(UPCOMING)
                 .setAdapter(new PostAdapter(getActivity(), String.valueOf(UPCOMING)))
-//                .setPage(1)
         );
     }
 
@@ -251,8 +241,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             adapter.setNextPage(adapter.getNextPage() + 1);
             adapter.addAllItems(response.getResults());
         }
-
-//        bindMovieResponse(response, tag);
         startEntranceTransition();
     }
 
@@ -287,20 +275,6 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         MovieRow row = mRows.get(tag);
         return (PostAdapter) row.getAdapter();
     }
-
-    /**
-     * Binds a movie response to it's adapter
-     */
-//    private void bindMovieResponse(MovieResponse response, int id) {
-//        MovieRow row = mRows.get(id);
-////        row.setPage(row.getPage() + 1);
-//        for (Movie m : response.getResults()) {
-//            if (m.getPosterPath() != null) { // Avoid showing movie without posters
-//                // info - get adapter of eachrow and add this poster
-//                row.getAdapter().add(m);
-//            }
-//        }
-//    }
 
     // when clicked -> open another activity to load the picture
     @Override

@@ -11,10 +11,8 @@ import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewLogoPresenter;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElementHelper;
-import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.support.v7.graphics.Palette;
 
@@ -57,19 +55,17 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     @Inject
     DetailMoviePresenter mDetailMoviePresenter;
     // Add the adapter and use the newly created Presenter to define how to render the objects
-    // TODO: 9/16/2017 remember adapter + presenter to know about the how to show and bind datas.
-    ArrayObjectAdapter mCastAdapter = new ArrayObjectAdapter(new PersonPresenter());
-    ArrayObjectAdapter mRecommendationsAdapter = new ArrayObjectAdapter(new MoviePresenter());
-
+    // : 9/16/2017 remember adapter + presenter to know about the how to show and bind datas.
+    ArrayObjectAdapter mCastAdapter;
+    ArrayObjectAdapter mRecommendationsAdapter;
     // Injects the API using Dagger
     @Inject
     TheMovieDbAPI mDbAPI;
-
+    private DetailsOverviewRow mDetailsOverviewRow;
     private Movie movie;
     private MovieDetails movieDetails;
     private ArrayObjectAdapter mAdapter;
     private CustomMovieDetailPresenter mFullWidthMovieDetailsPresenter;
-    private DetailsOverviewRow mDetailsOverviewRow;
     private SimpleTarget<GlideDrawable> mGlideDrawableSimpleTarget = new SimpleTarget<GlideDrawable>() {
         @Override
         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -91,13 +87,6 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         return fragment;
     }
 
-
-//    @Override
-//    public void onDestroy() {
-//        mDetailMoviePresenter.detachView();
-//        super.onDestroy();
-//    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -112,7 +101,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         // Retrieves the movie from the arguments
         movie = getArguments().getParcelable(Movie.class.getSimpleName());
         setUpAdapter();
-        setUpDetailsOverviewRow();
+        mDetailMoviePresenter.fetchMovieDetails(movie.getId());
 
         // Adds the adapter and fetches the data
         setupCastMembers();
@@ -120,46 +109,10 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     }
 
     private void setupCastMembers() {
-        mAdapter.add(new ListRow(new HeaderItem(0, "Cast"), mCastAdapter));
         mDetailMoviePresenter.fetchCastMembers(movie.getId());
     }
 
-    /**
-     * Sets up the details overview rows
-     */
-    private void setUpDetailsOverviewRow() {
-        mDetailsOverviewRow = new DetailsOverviewRow(new MovieDetails());
-        mAdapter.add(mDetailsOverviewRow);
-        loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
-        mDetailMoviePresenter.fetchMovieDetails(movie.getId());
-//        mDetailsOverviewRow.addAction(new Action(ACTION_WATCH_TRAILER, getResources().getString(
-//                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
-//        List<Action> mList = new ArrayList<>();
-//        mList.add(new Action(ACTION_WATCH_TRAILER, getResources().getString(
-//                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
-//        ObjectAdapter listAction = new ObjectAdapter() {
-//
-//            @Override
-//            public int size() {
-//                return mList.size();
-//            }
-//
-//            @Override
-//            public Object get(int position) {
-//                return mList.get(position);
-//            }
-//        };
-
-        SparseArrayObjectAdapter listActionNew = new SparseArrayObjectAdapter();
-        listActionNew.set(ACTION_WATCH_TRAILER, new Action(ACTION_WATCH_TRAILER, getResources().getString(
-                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
-        listActionNew.set(ACTION_BUY, new Action(ACTION_BUY, "BUY", "$100"));
-        mDetailsOverviewRow.setActionsAdapter(listActionNew);
-    }
-
     private void setupRecommendationsRow() {
-        // step - this listrow doesn have the header
-        mAdapter.add(new ListRow(mRecommendationsAdapter));
         mDetailMoviePresenter.fetchRecommendations(movie.getId());
     }
 
@@ -188,12 +141,11 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
      * info - DetailsOverviewLogoPresenter: Handles the presentation of the poster of a movie. The good part of using this is that along the FullWidthDetailsOverviewSharedElementHelper it will automatically handle the transition of the movie poster from the MainFragment into MovieDetailsFragment.
      */
     private void setUpAdapter() {
-        // Create the FullWidthPresenter
+        // info - detail movie, MovieDetailsDescriptionPresenter: how to show the detail movie -> make custom class here
+        // info - DetailsOverviewLogoPresenter - how to show the logo picture
         mFullWidthMovieDetailsPresenter = new CustomMovieDetailPresenter(new MovieDetailsDescriptionPresenter(),
                 new DetailsOverviewLogoPresenter());
-
-        // info - FullWidthMovieDetailsPresenter has the method to change the background but happen in compile time not at runtime
-
+        // - FullWidthMovieDetailsPresenter has the method to change the background but happen in compile time not at runtime
         // Handle the transition, the Helper is mainly used because the ActivityTransition is being passed from
         // The Activity into the Fragment
         FullWidthDetailsOverviewSharedElementHelper helper = new FullWidthDetailsOverviewSharedElementHelper();
@@ -202,29 +154,43 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
         // Define if this element is participating in the transition or not
         mFullWidthMovieDetailsPresenter.setParticipatingEntranceTransition(false);
 
+        mFullWidthMovieDetailsPresenter.setOnActionClickedListener(action -> {
+            long id = action.getId();
+            if (id == ACTION_WATCH_TRAILER) {
+                Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
+                intent.putExtra(MovieDetailsActivity.MOVIE, movie);
+                startActivity(intent);
+            }
+        });
+
         // info - the big adapter need the big presenter with 2 screen
-        // info - why we have ClassPresenterSelector, because in this screen, we have 2 levels of screen, not like in MovieFragment
-        // Class presenter selector allows the Adapter to render Rows and the details
-        // It can be used in any of the Adapters by the Leanback library
+        // info - why we have ClassPresenterSelector, because in this screen, we have 2 levels of screen, not like in MovieFragment (always contains list)
         ClassPresenterSelector classPresenterSelector = new ClassPresenterSelector();
         classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, mFullWidthMovieDetailsPresenter);
         classPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+
         // info - the big adapter for screen
         mAdapter = new ArrayObjectAdapter(classPresenterSelector);
+
+        // info - detail overview
+        mDetailsOverviewRow = new DetailsOverviewRow(new MovieDetails());
+        mCastAdapter = new ArrayObjectAdapter(new PersonPresenter());
+        mRecommendationsAdapter = new ArrayObjectAdapter(new MoviePresenter());
+
+        mAdapter.add(mDetailsOverviewRow);
+        // not need headeritem here
+        mAdapter.add(new ListRow(mCastAdapter));
+        mAdapter.add(new ListRow(mRecommendationsAdapter));
+
+        loadImage(HttpClientModule.POSTER_URL + movie.getPosterPath());
+        SparseArrayObjectAdapter listActionNew = new SparseArrayObjectAdapter();
+        listActionNew.set(ACTION_WATCH_TRAILER, new Action(ACTION_WATCH_TRAILER, getResources().getString(
+                R.string.watch_trailer_1), getResources().getString(R.string.watch_trailer_2)));
+        listActionNew.set(ACTION_BUY, new Action(ACTION_BUY, "BUY", "$100"));
+        mDetailsOverviewRow.setActionsAdapter(listActionNew);
+
         // Sets the adapter to the fragment
         setAdapter(mAdapter);
-
-        mFullWidthMovieDetailsPresenter.setOnActionClickedListener(new OnActionClickedListener() {
-            @Override
-            public void onActionClicked(Action action) {
-                long id = action.getId();
-                if (id == ACTION_WATCH_TRAILER) {
-                    Intent intent = new Intent(getActivity(), PlaybackOverlayActivity.class);
-                    intent.putExtra(MovieDetailsActivity.MOVIE, movie);
-                    startActivity(intent);
-                }
-            }
-        });
     }
 
     /**
@@ -285,6 +251,7 @@ public class MovieDetailsFragment extends DetailsFragment implements Palette.Pal
     // info - remember it is jsut adapter, so need to notify the color again
     private void notifyDetailsChanged() {
         mDetailsOverviewRow.setItem(this.movieDetails);
+        // only notify the detail row (not the list under)
         int index = mAdapter.indexOf(mDetailsOverviewRow);
         mAdapter.notifyArrayItemRangeChanged(index, 1);
     }
