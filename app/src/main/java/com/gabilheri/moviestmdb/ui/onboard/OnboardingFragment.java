@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
+import com.gabilheri.moviestmdb.util.AccountUtils;
 
 import java.util.ArrayList;
 

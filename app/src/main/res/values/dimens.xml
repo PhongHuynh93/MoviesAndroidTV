@@ -18,4 +18,6 @@
     <dimen name="card_width">156dp</dimen>
     <dimen name="card_height">88dp</dimen>
 
+    <dimen name="text_large_body">18sp</dimen>
+
 </resources>

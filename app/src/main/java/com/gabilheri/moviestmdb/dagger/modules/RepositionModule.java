@@ -13,6 +13,7 @@ import com.example.myapplication.interactor.GetMovieList;
 import com.example.myapplication.interactor.GetRecommendations;
 import com.example.myapplication.interactor.SearchMovieUsecase;
 import com.example.myapplication.reposition.MovieDataSource;
+import com.gabilheri.moviestmdb.util.AccountUtils;
 import com.gabilheri.moviestmdb.util.Constant;
 
 import javax.inject.Named;
@@ -30,6 +31,12 @@ public class RepositionModule {
     @Singleton
     SharedPreferences getSharePreference(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    AccountUtils getAccountHelper(SharedPreferences sharedPreferences) {
+        return new AccountUtils(sharedPreferences);
     }
 
     @Provides

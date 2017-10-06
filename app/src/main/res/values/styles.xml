@@ -51,4 +51,15 @@
     <style name="Widget.Example.Leanback.SecondStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
         <item name="android:padding">24dp</item>
     </style>
+
+    <style name="SignInButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_large_body</item>
+        <item name="android:padding">16dp</item>
+        <item name="colorButtonNormal">@android:color/transparent</item>
+    </style>
+
 </resources>

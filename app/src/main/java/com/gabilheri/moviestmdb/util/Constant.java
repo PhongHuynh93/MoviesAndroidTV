@@ -54,4 +54,10 @@ public class Constant {
         return list;
     }
 
+    public static final String PREF_FILE_NAME = "vineyard_pref_file";
+    public static final String PREF_KEY_ACCESS_TOKEN = "PREF_KEY_ACCESS_TOKEN";
+    public static final String PREF_KEY_USER_NAME = "PREF_KEY_USER_NAME";
+    public static final String PREF_KEY_USER_ID = "PREF_KEY_USER_ID";
+    public static final String PREF_KEY_AUTO_LOOP_VIDEOS = "PREF_KEY_AUTO_LOOP_VIDEOS";
+
 }

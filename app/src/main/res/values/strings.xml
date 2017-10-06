@@ -104,4 +104,9 @@
     <string name="pref_title_password">Password</string>
     <string name="pref_key_login">pref_login</string>
     <string name="pref_title_login">Login</string>
+
+    <!-- Connect Activity -->
+    <string name="text_hint_username">Username</string>
+    <string name="text_hint_password">Password</string>
+
 </resources>

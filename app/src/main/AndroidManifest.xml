@@ -23,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback">
 
-
         <!-- Add this to the activity tag -->
         <activity
             android:name=".ui.main.MainActivity"
@@ -43,6 +42,7 @@
         <activity android:name=".ui.detail.MovieDetailsActivity"/>
         <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>
+        <activity android:name=".ui.login.ConnectActivity"/>
 
         <!--true - mean outside-->
         <activity
