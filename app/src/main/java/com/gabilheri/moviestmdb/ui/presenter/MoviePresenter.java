@@ -8,13 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.example.myapplication.Movie;
-import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.main.MainActivity;
 import com.gabilheri.moviestmdb.ui.widget.videoloop.VideoCardView;
-import com.gabilheri.moviestmdb.util.Constant;
 
 
 /**
@@ -117,19 +114,20 @@ public class MoviePresenter extends Presenter {
         if (item instanceof Movie) {
             Movie post = (Movie) item;
 
-            final VideoCardView cardView = (VideoCardView) viewHolder.view;
-            if (post.getPosterPath() != null) {
-                cardView.setTitleText(post.getTitle());
-                cardView.setContentText(post.getOverview());
-                cardView.setMainContainerDimensions(CARD_WIDTH, CARD_HEIGHT);
-                cardView.setVideoUrl(Constant.testVideoUrl);
-
-                Glide.with(cardView.getContext())
-                        .load(HttpClientModule.POSTER_URL + post.getPosterPath())
-                        .centerCrop()
-                        .error(mDefaultCardImage)
-                        .into(cardView.getMainImageView());
-            }
+//            final VideoCardView cardView = (VideoCardView) viewHolder.view;
+            ((VideoCardView) viewHolder.view).bind((Movie) item);
+//            if (post.getPosterPath() != null) {
+//                cardView.setTitleText(post.getTitle());
+//                cardView.setContentText(post.getOverview());
+//                cardView.setMainContainerDimensions(CARD_WIDTH, CARD_HEIGHT);
+//                cardView.setVideoUrl(Constant.testVideoUrl);
+//
+//                Glide.with(cardView.getContext())
+//                        .load(HttpClientModule.POSTER_URL + post.getPosterPath())
+//                        .centerCrop()
+//                        .error(mDefaultCardImage)
+//                        .into(cardView.getMainImageView());
+//            }
         }
     }
 

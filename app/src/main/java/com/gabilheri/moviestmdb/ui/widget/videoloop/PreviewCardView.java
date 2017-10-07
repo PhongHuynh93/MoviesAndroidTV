@@ -20,6 +20,7 @@ public class PreviewCardView extends FrameLayout {
     @BindView(R.id.main_container)
     FrameLayout mMainContainer;
 
+    // TODO: 10/7/2017 we need to calculate the dimension of video view again
     @BindView(R.id.main_video)
     LoopingVideoView mVideoView;
 

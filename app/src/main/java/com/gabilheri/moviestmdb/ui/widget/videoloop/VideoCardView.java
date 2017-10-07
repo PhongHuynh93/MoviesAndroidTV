@@ -8,9 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.myapplication.Movie;
+import com.example.myapplication.module.HttpClientModule;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.ui.widget.BaseCustomCardView;
+import com.gabilheri.moviestmdb.util.Constant;
 import com.gabilheri.moviestmdb.util.NetworkUtil;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -19,18 +26,22 @@ import butterknife.BindView;
  */
 
 public class VideoCardView extends BaseCustomCardView {
-    public static final int CARD_TYPE_FLAG_IMAGE_ONLY = 0;
-    public static final int CARD_TYPE_FLAG_TITLE = 1;
-    public static final int CARD_TYPE_FLAG_CONTENT = 2;
+//    public static final int CARD_TYPE_FLAG_IMAGE_ONLY = 0;
+//    public static final int CARD_TYPE_FLAG_TITLE = 1;
+//    public static final int CARD_TYPE_FLAG_CONTENT = 2;
 
     @BindView(R.id.layout_preview_card)
     PreviewCardView mPreviewCard;
 
-    @BindView(R.id.info_field)
-    ViewGroup mInfoArea;
+//    @BindView(R.id.info_field)
+//    ViewGroup mInfoArea;
+//    @BindView(R.id.poster_iv)
+//    ImageView mPosterIV;
 
-    private TextView mTitleView;
-    private TextView mContentView;
+    @BindView(R.id.popularity)
+    TextView mVoteAverageTV;
+//    private TextView mTitleView;
+//    private TextView mContentView;
     private boolean mAttachedToWindow;
 
     public VideoCardView(Context context) {
@@ -53,27 +64,27 @@ public class VideoCardView extends BaseCustomCardView {
     @Override
     protected void getCardAttrs(LayoutInflater inflater, TypedArray cardAttrs) {
         super.getCardAttrs(inflater, cardAttrs);
-        int cardType = cardAttrs.getInt(R.styleable.lbImageCardView_lbImageCardViewType, CARD_TYPE_FLAG_IMAGE_ONLY);
-        boolean hasImageOnly = cardType == CARD_TYPE_FLAG_IMAGE_ONLY;
-        boolean hasTitle = (cardType & CARD_TYPE_FLAG_TITLE) == CARD_TYPE_FLAG_TITLE;
-        boolean hasContent = (cardType & CARD_TYPE_FLAG_CONTENT) == CARD_TYPE_FLAG_CONTENT;
+//        int cardType = cardAttrs.getInt(R.styleable.lbImageCardView_lbImageCardViewType, CARD_TYPE_FLAG_IMAGE_ONLY);
+//        boolean hasImageOnly = cardType == CARD_TYPE_FLAG_IMAGE_ONLY;
+//        boolean hasTitle = (cardType & CARD_TYPE_FLAG_TITLE) == CARD_TYPE_FLAG_TITLE;
+//        boolean hasContent = (cardType & CARD_TYPE_FLAG_CONTENT) == CARD_TYPE_FLAG_CONTENT;
 
-        if (hasImageOnly) {
-            removeView(mInfoArea);
-            cardAttrs.recycle();
-            return;
-        }
+//        if (hasImageOnly) {
+//            removeView(mInfoArea);
+//            cardAttrs.recycle();
+//            return;
+//        }
 
         // Create children
-        if (hasTitle) {
-            mTitleView = (TextView) inflater.inflate(R.layout.lb_image_card_view_themed_title, mInfoArea, false);
-            mInfoArea.addView(mTitleView);
-        }
+//        if (hasTitle) {
+//            mTitleView = (TextView) inflater.inflate(R.layout.lb_image_card_view_themed_title, mInfoArea, false);
+//            mInfoArea.addView(mTitleView);
+//        }
 
-        if (hasContent) {
-            mContentView = (TextView) inflater.inflate(R.layout.lb_image_card_view_themed_content, mInfoArea, false);
-            mInfoArea.addView(mContentView);
-        }
+//        if (hasContent) {
+//            mContentView = (TextView) inflater.inflate(R.layout.lb_image_card_view_themed_content, mInfoArea, false);
+//            mInfoArea.addView(mContentView);
+//        }
 
         // Backward compatibility: Newly created ImageCardViews should change
         // the InfoArea's background color in XML using the corresponding style.
@@ -83,18 +94,18 @@ public class VideoCardView extends BaseCustomCardView {
         // In this case, we do want to override the value set in the style.
         Drawable background = cardAttrs.getDrawable(R.styleable.lbImageCardView_infoAreaBackground);
         if (null != background) {
-            setInfoAreaBackground(background);
+//            setInfoAreaBackground(background);
         }
     }
 
     /**
      * Sets the info area background drawable.
      */
-    public void setInfoAreaBackground(Drawable drawable) {
-        if (mInfoArea != null) {
-            mInfoArea.setBackground(drawable);
-        }
-    }
+//    public void setInfoAreaBackground(Drawable drawable) {
+//        if (mInfoArea != null) {
+//            mInfoArea.setBackground(drawable);
+//        }
+//    }
 
     private void fadeIn() {
         ImageView mImageView = mPreviewCard.getImageView();
@@ -138,24 +149,26 @@ public class VideoCardView extends BaseCustomCardView {
         mPreviewCard.setFinished();
     }
 
-    /**
-     * Sets the title text.
-     */
-    public void setTitleText(CharSequence text) {
-        if (mTitleView == null) {
-            return;
-        }
-        mTitleView.setText(text);
-    }
+//    public void setTitleText(CharSequence text) {
+//        if (mTitleView == null) {
+//            return;
+//        }
+//        mTitleView.setText(text);
+//    }
+//
+//    public void setContentText(CharSequence text) {
+//        if (mContentView == null) {
+//            return;
+//        }
+//        mContentView.setText(text);
+//    }
 
-    /**
-     * Sets the content text.
-     */
-    public void setContentText(CharSequence text) {
-        if (mContentView == null) {
-            return;
-        }
-        mContentView.setText(text);
+    public void bind(Movie data) {
+        Glide.with(getContext())
+                .load(HttpClientModule.POSTER_URL + data.getPosterPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mPreviewCard.getImageView());
+        setVideoUrl(Constant.testVideoUrl);
+        mVoteAverageTV.setText(String.format(Locale.getDefault(), "%.2f", data.getVoteAverage()));
     }
-
 }
