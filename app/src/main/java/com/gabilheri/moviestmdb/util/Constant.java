@@ -11,6 +11,8 @@ import java.util.List;
  */
 
 public class Constant {
+    // test the template for video url
+    public static String testVideoUrl = "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4";
     public static final int ERROR_CODE = -1;
 
     public static final int BACKGROUND_UPDATE_DELAY = 300;

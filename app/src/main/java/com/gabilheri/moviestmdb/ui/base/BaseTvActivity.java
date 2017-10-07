@@ -1,7 +1,12 @@
 package com.gabilheri.moviestmdb.ui.base;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.ErrorFragment;
@@ -16,6 +21,7 @@ import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.data.recommendation.UpdateRecommendationService;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
+import com.gabilheri.moviestmdb.ui.main.MainFragment;
 import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
 import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
 import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
@@ -35,23 +41,33 @@ import com.gabilheri.moviestmdb.util.NetworkUtil;
  */
 // this activity cannot extend Appcompath activity because if extend, we have to supply it with appcompath theme
 public abstract class BaseTvActivity extends FragmentActivity implements ControlFragInterface, NavigationInterface {
+    Fragment fragment;
+    private LifeCycleState mLifeCycleState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
         addFrag();
-
+        mLifeCycleState = new LifeCycleState(this);
     }
 
     protected void addFrag() {
-        Fragment fragment;
         if (NetworkUtil.isNetworkConnected(this)) {
             fragment = getFragment();
         } else {
             fragment = buildErrorFragment();
         }
         addFragment(fragment);
+    }
+
+    public boolean isFragmentActive() {
+        return fragment instanceof MainFragment &&
+                fragment.isAdded() &&
+                !fragment.isDetached() &&
+                !fragment.isRemoving() &&
+                !mLifeCycleState.isStopping();
     }
 
 
@@ -154,4 +170,28 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
     }
 
     public abstract Fragment getFragment();
+
+    public static final class LifeCycleState implements LifecycleObserver {
+        private boolean mIsStopping;
+
+        public LifeCycleState(Activity activity) {
+            if (activity instanceof LifecycleOwner) {
+                ((LifecycleOwner) activity).getLifecycle().addObserver(LifeCycleState.this);
+            }
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        public void onStart() {
+            mIsStopping = false;
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+        public void onStop() {
+            mIsStopping = true;
+        }
+
+        public boolean isStopping() {
+            return mIsStopping;
+        }
+    }
 }

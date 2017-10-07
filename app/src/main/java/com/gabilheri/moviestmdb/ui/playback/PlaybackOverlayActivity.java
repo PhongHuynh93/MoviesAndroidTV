@@ -25,6 +25,8 @@ import com.gabilheri.moviestmdb.databinding.PlaybackControlsBinding;
 
 import timber.log.Timber;
 
+import static com.gabilheri.moviestmdb.util.Constant.testVideoUrl;
+
 /**
  * Created by CPU11112-local on 9/18/2017.
  * read this artical to understand the playback
@@ -137,8 +139,7 @@ public class PlaybackOverlayActivity extends FragmentActivity {
      */
     private void onFragmentPlayPause(Movie movie, int position, Boolean playPause) {
         // TODO: 9/18/2017 make the youtube trailer
-        // test the template for video url
-        String testVideoUrl = "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4";
+
         mVideoView.setVideoPath(testVideoUrl);
 
         if (position == 0 || mPlaybackState == LeanbackPlaybackState.IDLE) {
