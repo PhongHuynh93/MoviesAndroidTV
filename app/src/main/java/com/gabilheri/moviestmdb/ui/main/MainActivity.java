@@ -11,9 +11,9 @@ import com.gabilheri.moviestmdb.ui.login.ConnectFragment;
 import com.gabilheri.moviestmdb.ui.login.OnClickViewModel;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingFragment;
 import com.gabilheri.moviestmdb.util.AccountUtils;
+import com.gabilheri.moviestmdb.util.KeyboardUtils;
 
 import javax.inject.Inject;
-
 
 /**
  * Created by <a href="mailto:marcus@gabilheri.com">Marcus Gabilheri</a>
@@ -42,6 +42,8 @@ public class MainActivity extends BaseTvActivity {
         OnClickViewModel model = ViewModelProviders.of(this).get(OnClickViewModel.class);
         model.getSelected().observe(this, isClicked -> {
             if (isClicked) {
+                // close the keyboard
+                KeyboardUtils.hideSoftInput(this);
                 addFragment(MainFragment.newInstance());
             }
         });

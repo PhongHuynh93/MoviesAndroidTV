@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import com.example.myapplication.Movie;
 import com.example.myapplication.MovieResponse;
+import com.example.myapplication.data.models.Option;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.presenter.ListMoviePresenter;
+import com.gabilheri.moviestmdb.ui.adapter.OptionsAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PaginationAdapter;
 import com.gabilheri.moviestmdb.ui.adapter.PostAdapter;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
@@ -40,6 +42,7 @@ import timber.log.Timber;
 
 import static com.example.myapplication.util.Constant.MORE_SAMPLE;
 import static com.example.myapplication.util.Constant.NOW_PLAYING;
+import static com.example.myapplication.util.Constant.OPTION;
 import static com.example.myapplication.util.Constant.POPULAR;
 import static com.example.myapplication.util.Constant.SETTING;
 import static com.example.myapplication.util.Constant.TOP_RATED;
@@ -206,6 +209,15 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         gridRowAdapter.add(getString(R.string.personal_settings));
         ListRow row = new ListRow(gridHeader, gridRowAdapter);
         rowsAdapter.add(row);
+
+        HeaderItem optionHeader = new HeaderItem(OPTION, "Options");
+        OptionsAdapter optionsAdapter = new OptionsAdapter(getActivity());
+        optionsAdapter.addOption(new Option(
+                "Auto_loop",
+                "Enabled",
+                R.drawable.lopp
+        ));
+        rowsAdapter.add(new ListRow(optionHeader, optionsAdapter));
 
         // Sets this fragments Adapter.
         // The setAdapter method is defined in the BrowseFragment of the Leanback Library
