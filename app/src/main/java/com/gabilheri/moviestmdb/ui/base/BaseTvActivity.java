@@ -41,6 +41,7 @@ import com.gabilheri.moviestmdb.util.NetworkUtil;
  */
 // this activity cannot extend Appcompath activity because if extend, we have to supply it with appcompath theme
 public abstract class BaseTvActivity extends FragmentActivity implements ControlFragInterface, NavigationInterface {
+    // current fragment
     Fragment fragment;
     private LifeCycleState mLifeCycleState;
 
@@ -72,6 +73,7 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
 
 
     public void addFragment(Fragment fragment) {
+        this.fragment = fragment;
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.tv_frame_content, fragment);
         fragmentTransaction.commit();
