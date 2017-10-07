@@ -36,11 +36,4 @@ public class TagCardView extends BaseCustomCardView {
     public void setCardIcon(int resource) {
         mResultImage.setImageDrawable(ContextCompat.getDrawable(getContext(), resource));
     }
-
-    // increase the performance
-    @Override
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
 }

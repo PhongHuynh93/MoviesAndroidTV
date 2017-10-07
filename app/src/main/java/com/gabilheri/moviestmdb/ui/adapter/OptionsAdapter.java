@@ -10,6 +10,7 @@ import com.gabilheri.moviestmdb.ui.presenter.IconItemPresenter;
 
 /**
  * Created by user on 10/7/2017.
+ * step - we can add the presenter here when create the custom to simply the mainfragment
  */
 
 public class OptionsAdapter extends ArrayObjectAdapter {

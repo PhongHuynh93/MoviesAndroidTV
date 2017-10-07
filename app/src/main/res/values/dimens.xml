@@ -19,5 +19,6 @@
     <dimen name="card_height">88dp</dimen>
 
     <dimen name="text_large_body">18sp</dimen>
+    <dimen name="lb_basic_card_info_padding">6dp</dimen>
 
 </resources>

@@ -40,6 +40,11 @@ public abstract class BaseCustomCardView extends BaseCardView {
         return new ContextThemeWrapper(context, style);
     }
 
+    @Override
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
     public static int getImageCardViewStyle(Context context, AttributeSet attrs, int defStyleAttr) {
         // Read style attribute defined in XML layout.
         int style = null == attrs ? 0 : attrs.getStyleAttribute();
@@ -67,7 +72,12 @@ public abstract class BaseCustomCardView extends BaseCardView {
         TypedArray cardAttrs =
                 getContext().obtainStyledAttributes(
                         styleResId, android.support.v17.leanback.R.styleable.lbImageCardView);
+        getCardAttrs(inflater, cardAttrs);
         cardAttrs.recycle();
+    }
+
+    protected void getCardAttrs(LayoutInflater inflater, TypedArray cardAttrs) {
+
     }
 
     protected abstract int getCardLayout();
