@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.ui.base.BaseTvActivity;
-import com.gabilheri.moviestmdb.ui.login.ConnectFragment;
 import com.gabilheri.moviestmdb.ui.login.OnClickViewModel;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingFragment;
 import com.gabilheri.moviestmdb.util.AccountUtils;
@@ -51,10 +50,10 @@ public class MainActivity extends BaseTvActivity {
 
     @Override
     public Fragment getFragment() {
-        if (mAccountUtils.isUserAuthenticated()) {
+//        if (mAccountUtils.isUserAuthenticated()) {
             return MainFragment.newInstance();
-        } else {
-            return ConnectFragment.newInstance();
-        }
+//        } else {
+//            return ConnectFragment.newInstance();
+//        }
     }
 }

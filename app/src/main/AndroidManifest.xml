@@ -64,6 +64,9 @@
             android:name=".ui.moresample.guide.GuidedStepActivity"
             android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
         <activity
+            android:name=".ui.login.LoginGuidedStepActivity"
+            android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
+        <activity
             android:name=".ui.moresample.authen.AuthenticationActivity"
             android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
 

@@ -16,4 +16,8 @@ public interface NavigationInterface {
     void goToAuthenticationScreen();
 
     void runRecommandationService();
+
+    void goToMainScreen();
+
+    void goToMainScreenMusic();
 }

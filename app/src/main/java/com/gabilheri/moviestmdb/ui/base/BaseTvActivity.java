@@ -21,6 +21,7 @@ import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.data.recommendation.UpdateRecommendationService;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsActivity;
 import com.gabilheri.moviestmdb.ui.detail.MovieDetailsFragment;
+import com.gabilheri.moviestmdb.ui.main.MainActivity;
 import com.gabilheri.moviestmdb.ui.main.MainFragment;
 import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
 import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
@@ -135,6 +136,19 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
         Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
                         .toBundle();
         startActivity(intent, bundle);
+    }
+
+    @Override
+    public void goToMainScreen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                .toBundle();
+        startActivity(intent, bundle);
+    }
+
+    @Override
+    public void goToMainScreenMusic() {
+//         make login via spotify
     }
 
     @Override
