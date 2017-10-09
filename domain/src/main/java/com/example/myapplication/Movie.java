@@ -16,42 +16,60 @@ import java.util.List;
  */
 
 public class Movie implements Parcelable {
-    private String id;
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
 
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+    public static final String POSTER_URL = "http://image.tmdb.org/t/p/w600/";
+    public static String testVideoUrl = "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4";
+    private String id;
     @Json(name = "poster_path")
     private String posterPath;
-
     private boolean adult;
     private String overview;
-
     @Json(name = "release_date")
     private String releaseDate;
-
     @Json(name = "genre_ids")
     private List<String> genreIds;
-
     @Json(name = "original_title")
     private String originalTitle;
-
     @Json(name = "original_language")
     private String originalLanguage;
-
     private String title;
-
     @Json(name = "backdrop_path")
     private String backdropPath;
-
     private float popularity;
-
     @Json(name = "vote_count")
     private int voteCount;
-
     private boolean video;
-
     @Json(name = "vote_average")
     private float voteAverage;
 
     public Movie() {
+    }
+
+    protected Movie(Parcel in) {
+        this.id = in.readString();
+        this.posterPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        this.releaseDate = in.readString();
+        this.genreIds = in.createStringArrayList();
+        this.originalTitle = in.readString();
+        this.originalLanguage = in.readString();
+        this.title = in.readString();
+        this.backdropPath = in.readString();
+        this.popularity = in.readFloat();
+        this.voteCount = in.readInt();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readFloat();
     }
 
     public String getId() {
@@ -203,32 +221,23 @@ public class Movie implements Parcelable {
         dest.writeFloat(this.voteAverage);
     }
 
-    protected Movie(Parcel in) {
-        this.id = in.readString();
-        this.posterPath = in.readString();
-        this.adult = in.readByte() != 0;
-        this.overview = in.readString();
-        this.releaseDate = in.readString();
-        this.genreIds = in.createStringArrayList();
-        this.originalTitle = in.readString();
-        this.originalLanguage = in.readString();
-        this.title = in.readString();
-        this.backdropPath = in.readString();
-        this.popularity = in.readFloat();
-        this.voteCount = in.readInt();
-        this.video = in.readByte() != 0;
-        this.voteAverage = in.readFloat();
+    public String getVideoUrl() {
+        return testVideoUrl;
     }
 
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
-        }
+    public String getCardImageUrl() {
+        return POSTER_URL + getPosterPath();
+    }
 
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
+    public String getStudio() {
+        return "Phong studio";
+    }
+
+    public void setStudio(String studio) {
+
+    }
+
+    public String getCategory() {
+        return "Hot 100";
+    }
 }

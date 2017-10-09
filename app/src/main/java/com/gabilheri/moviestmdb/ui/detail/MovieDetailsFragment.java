@@ -35,7 +35,7 @@ import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
 import com.gabilheri.moviestmdb.dagger.modules.FragmentModule;
 import com.gabilheri.moviestmdb.presenter.DetailMoviePresenter;
-import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
+import com.gabilheri.moviestmdb.ui.playbackWithMediaSession.PlaybackOverlayActivity;
 import com.gabilheri.moviestmdb.ui.presenter.MoviePresenter;
 import com.gabilheri.moviestmdb.util.CustomMovieDetailPresenter;
 import com.gabilheri.moviestmdb.util.PaletteUtils;

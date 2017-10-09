@@ -17,7 +17,7 @@ import com.gabilheri.moviestmdb.R;
 /**
  * Created by CPU11112-local on 9/29/2017.
  */
-
+// step - build a simple error fragment that des
 public class BrowseErrorFragment extends ErrorFragment {
     private static final boolean TRANSLUCENT = true;
     private static final int TIMER_DELAY = 1000;

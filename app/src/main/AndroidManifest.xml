@@ -41,6 +41,7 @@
 
         <activity android:name=".ui.detail.MovieDetailsActivity"/>
         <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
+        <activity android:name=".ui.playbackWithMediaSession.PlaybackOverlayActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>
         <activity android:name=".ui.login.ConnectActivity"/>
 

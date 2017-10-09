@@ -21,7 +21,7 @@ import com.example.myapplication.module.HttpClientModule;
 import com.example.myapplication.util.Constant;
 import com.gabilheri.moviestmdb.App;
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.ui.playback.PlaybackOverlayActivity;
+import com.gabilheri.moviestmdb.ui.playbackWithMediaSession.PlaybackOverlayActivity;
 import com.gabilheri.moviestmdb.util.PaletteUtils;
 
 import java.util.List;

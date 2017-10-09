@@ -23,11 +23,11 @@ import com.gabilheri.moviestmdb.ui.widget.videoloop.VideoCardView;
  */
 
 public class MoviePresenter extends Presenter {
-    private Context mContext;
-    private static final int CARD_WIDTH = 300;
-    private static final int CARD_HEIGHT = 300;
+    public static final int CARD_WIDTH = 300;
+    public static final int CARD_HEIGHT = 300;
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
+    private Context mContext;
     private Drawable mDefaultCardImage;
 
     public MoviePresenter() {
@@ -35,6 +35,14 @@ public class MoviePresenter extends Presenter {
 
     public MoviePresenter(Context context) {
         mContext = context;
+    }
+
+    private static void updateCardBackgroundColor(VideoCardView view, boolean selected) {
+        int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
+        // Both background colors should be set because the view's background is temporarily visible
+        // during animations.
+        view.setBackgroundColor(color);
+        view.findViewById(R.id.info_field).setBackgroundColor(color);
     }
 
     @Override
@@ -96,15 +104,6 @@ public class MoviePresenter extends Presenter {
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
-
-    private static void updateCardBackgroundColor(VideoCardView view, boolean selected) {
-        int color = selected ? sSelectedBackgroundColor : sDefaultBackgroundColor;
-        // Both background colors should be set because the view's background is temporarily visible
-        // during animations.
-        view.setBackgroundColor(color);
-        view.findViewById(R.id.info_field).setBackgroundColor(color);
-    }
-
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
