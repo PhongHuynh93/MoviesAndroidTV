@@ -29,8 +29,10 @@ import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
 import com.gabilheri.moviestmdb.ui.moresample.authen.AuthenticationActivity;
 import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepNewActivity;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
-import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
+import com.gabilheri.moviestmdb.ui.widget.videoloop.VideoCardView;
 import com.gabilheri.moviestmdb.util.NetworkUtil;
+
+import timber.log.Timber;
 
 
 /**
@@ -109,14 +111,16 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
             // Pass the movie to the activity
             i.putExtra(Movie.class.getSimpleName(), movie);
 
-            if (itemViewHolder.view instanceof MovieCardView) {
+            if (itemViewHolder.view instanceof VideoCardView) {
+                Timber.e("instance of videocardview");
                 // Pass the ImageView to allow a nice transition
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
-                        ((MovieCardView) itemViewHolder.view).getPosterIV(),
+                        ((VideoCardView) itemViewHolder.view).getPreviewCard(),
                         MovieDetailsFragment.TRANSITION_NAME).toBundle();
                 startActivity(i, bundle);
             } else {
+                Timber.e("not instance of videocardview");
                 startActivity(i);
             }
         }

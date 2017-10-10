@@ -171,4 +171,8 @@ public class VideoCardView extends BaseCustomCardView {
         setVideoUrl(Constant.testVideoUrl);
         mVoteAverageTV.setText(String.format(Locale.getDefault(), "%.2f", data.getVoteAverage()));
     }
+
+    public PreviewCardView getPreviewCard() {
+        return mPreviewCard;
+    }
 }
