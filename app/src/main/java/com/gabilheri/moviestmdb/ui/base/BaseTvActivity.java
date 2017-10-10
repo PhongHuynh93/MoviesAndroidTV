@@ -112,7 +112,6 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
             i.putExtra(Movie.class.getSimpleName(), movie);
 
             if (itemViewHolder.view instanceof VideoCardView) {
-                Timber.e("instance of videocardview");
                 // Pass the ImageView to allow a nice transition
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
@@ -120,7 +119,6 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
                         MovieDetailsFragment.TRANSITION_NAME).toBundle();
                 startActivity(i, bundle);
             } else {
-                Timber.e("not instance of videocardview");
                 startActivity(i);
             }
         }

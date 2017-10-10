@@ -126,6 +126,7 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             startActivity(intent);
         });
         // set the click listener
+        // // FIXME: 10/10/2017 we uncomment this because in MoviePresenter, we have the method setOnClickListener to release the video resource when click
         setOnItemViewClickedListener(this);
         setOnItemViewSelectedListener(this);
     }
