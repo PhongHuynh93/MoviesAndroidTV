@@ -1,6 +1,10 @@
 package com.gabilheri.moviestmdb.ui.playbackWithMediaSession;
 
 import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
@@ -33,13 +37,13 @@ import java.util.ArrayList;
  * <p>
  * <p>
  * missing this method
- * step - When the user selects the Now Playing card, the system opens the app that owns the session. If your app provides a PendingIntent to setSessionActivity(), the system launches the activity you specify, as demonstrated below. If not, the default system intent opens. The activity you specify must provide playback controls that allow users to pause or stop playback.
+ * info - When the user selects the Now Playing card, the system opens the app that owns the session. If your app provides a PendingIntent to setSessionActivity(), the system launches the activity you specify, as demonstrated below. If not, the default system intent opens. The activity you specify must provide playback controls that allow users to pause or stop playback.
  * Intent intent = new Intent(mContext, MyActivity.class);
  * PendingIntent pi = PendingIntent.getActivity(context, 99,
  * intent, PendingIntent.FLAG_UPDATE_CURRENT);
  * mSession.setSessionActivity(pi);
  */
-public class PlaybackController {
+public class PlaybackController implements LifecycleObserver {
 
     public static final int MSG_STOP = 0;
     public static final int MSG_PAUSE = 1;
@@ -72,16 +76,32 @@ public class PlaybackController {
 
     public PlaybackController(Activity activity) {
         mActivity = activity;
-        // mVideoView = (VideoView) activity.findViewById(VIDEO_VIEW_RESOURCE_ID);
-
         createMediaSession(mActivity);
+
+        if (activity instanceof LifecycleOwner) {
+            ((LifecycleOwner) activity).getLifecycle().addObserver(this);
+        }
     }
 
     public PlaybackController(Activity activity, int currentItemIndex, ArrayList<Movie> items) {
         mActivity = activity;
-        // mVideoView = (VideoView) activity.findViewById(VIDEO_VIEW_RESOURCE_ID);
         this.setPlaylist(currentItemIndex, items);
         createMediaSession(mActivity);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onPause() {
+        // step - If this call is successful then the activity will remain visible after onPause() is called, and is allowed to continue playing media in the background.
+        // step - After this implementation, when you play video contents in your application and press “Home” key to go back LeanbackLauncher, the video is remain playing in background. .
+        if (!mActivity.requestVisibleBehind(true)) {
+            // Try to play behind launcher, but if it fails, stop playback.
+            playPause(false);
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void onDestroy() {
+        finishPlayback();
     }
 
     public int getCurrentPlaybackState() {

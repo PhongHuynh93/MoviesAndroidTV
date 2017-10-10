@@ -27,7 +27,7 @@ import com.gabilheri.moviestmdb.ui.moresample.BrowseErrorFragment;
 import com.gabilheri.moviestmdb.ui.moresample.SettingsActivity;
 import com.gabilheri.moviestmdb.ui.moresample.VerticalGridActivity;
 import com.gabilheri.moviestmdb.ui.moresample.authen.AuthenticationActivity;
-import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepActivity;
+import com.gabilheri.moviestmdb.ui.moresample.guide.GuidedStepNewActivity;
 import com.gabilheri.moviestmdb.ui.onboard.OnboardingActivity;
 import com.gabilheri.moviestmdb.ui.widget.MovieCardView;
 import com.gabilheri.moviestmdb.util.NetworkUtil;
@@ -132,7 +132,7 @@ public abstract class BaseTvActivity extends FragmentActivity implements Control
 
     @Override
     public void goToGuideScreen() {
-        Intent intent = new Intent(this, GuidedStepActivity.class);
+        Intent intent = new Intent(this, GuidedStepNewActivity.class);
         Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
                         .toBundle();
         startActivity(intent, bundle);

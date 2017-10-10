@@ -1,7 +1,6 @@
 package com.gabilheri.moviestmdb.ui.playbackWithMediaSession;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -50,14 +49,14 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private static final int UPDATE_PERIOD = 16;
     private static final int VIDEO_PLAY_FINISHED_MARGIN = 100; // used to check video playback has finished or not.
     private static final boolean SHOW_IMAGE = true;
-    private static Context sContext;
-    String mCategoryName;
-    private PlaybackOverlayActivity activity;
+    //    private static Context sContext;
+//    private PlaybackOverlayActivity activity;
     //private Movie mSelectedMovie;
     private PlaybackController mPlaybackController;
     private PlaybackControlsRow mPlaybackControlsRow;
     private ArrayObjectAdapter mPrimaryActionsAdapter;
     private ArrayObjectAdapter mSecondaryActionsAdapter;
+    // info - handle and runnable to run the music when we select it
     private Handler mHandler;
     private Runnable mRunnable;
     private ArrayList<Movie> mItems = new ArrayList<>();
@@ -75,8 +74,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     private PlaybackControlsRow.HighQualityAction mHighQualityAction;
     private PlaybackControlsRow.ClosedCaptioningAction mClosedCaptioningAction;
     private PlaybackControlsRow.MoreActions mMoreActions;
-    //private int mCurrentItem;
-//    private PicassoPlaybackControlsRowTarget mPlaybackControlsRowTarget;
 
     private MediaController mMediaController;
     private MediaController.Callback mMediaControllerCallback = new MediaControllerCallback();
@@ -88,9 +85,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sContext = getActivity();
-        activity = (PlaybackOverlayActivity) getActivity();
         mHandler = new Handler();
 
         mSelectedMovie = (Movie) getActivity().getIntent().getExtras().getParcelable(Movie.class.getSimpleName());
@@ -98,13 +92,12 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         // TODO: temporal workaround, each category has separated by 100 for now.
 //        int currentItemIndex = (int) mSelectedMovie.getId() % 100;
         int currentItemIndex = 1;
-        mCategoryName = mSelectedMovie.getCategory();
         mItems = new ArrayList<>();
         mItems.add(mSelectedMovie);
         mItems.add(mSelectedMovie);
         mItems.add(mSelectedMovie);
 
-        mPlaybackController = activity.getPlaybackController();
+        mPlaybackController = ((PlaybackOverlayActivity) getActivity()).getPlaybackController();
         mPlaybackController.setPlaylist(currentItemIndex, mItems);
         Log.i(TAG, "currentItemIndex: " + currentItemIndex);
 
@@ -135,14 +128,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
             Log.e(TAG, "mMediaController is null");
         }
         mMediaController.registerCallback(mMediaControllerCallback);
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(TAG, "onActivityCreated");
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -166,11 +151,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     public void onStop() {
         mRowsAdapter = null;
         super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -206,9 +186,9 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
             public void onActionClicked(Action action) {
                 if (action.getId() == mPlayPauseAction.getId()) {
                     /* PlayPause action */
-                    if (mPlayPauseAction.getIndex() == PlaybackControlsRow.PlayPauseAction.PLAY) {
+                    if (mPlayPauseAction.getIndex() == PlaybackControlsRow.PlayPauseAction.INDEX_PLAY) {
                         mMediaController.getTransportControls().play();
-                    } else if (mPlayPauseAction.getIndex() == PlaybackControlsRow.PlayPauseAction.PAUSE) {
+                    } else if (mPlayPauseAction.getIndex() == PlaybackControlsRow.PlayPauseAction.INDEX_PAUSE) {
                         mMediaController.getTransportControls().pause();
                     }
                 } else if (action.getId() == mSkipNextAction.getId()) {
@@ -242,6 +222,7 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
                             action instanceof PlaybackControlsRow.ShuffleAction ||
                             action instanceof PlaybackControlsRow.HighQualityAction ||
                             action instanceof PlaybackControlsRow.ClosedCaptioningAction) {
+                        // TODO: 10/10/2017 what to do in this
                         ((PlaybackControlsRow.MultiAction) action).nextIndex();
                     }
                     /* Note: notifyChanged must be called after action.nextIndex has been called */
@@ -290,13 +271,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
                     mPlaybackControlsRow.setBufferedProgress(mPlaybackController.calcBufferedTime(currentTime));
 
                     //mPlaybackControlsRow.setBufferedProgress(currentTime + SIMULATED_BUFFERED_TIME);
-                    //Log.v(TAG, "currenttime " + currentTime);
-                    //Log.v(TAG, "totalTime " + totalTime);
-                    //Log.v(TAG, "updatePeriod " + updatePeriod);
-                    //Log.v(TAG, "BufferPercentage " + mPlaybackController.getBufferPercentage());
-                    //Log.v(TAG, "duration: " + mPlaybackController.getDuration());
-                    //Log.v(TAG, "bufferedtime " + mPlaybackController.calcBufferedTime(currentTime));
-
                     if (totalTime > 0 && totalTime <= currentTime + VIDEO_PLAY_FINISHED_MARGIN) {
                         // stopProgressAutomation();
                         mMediaController.getTransportControls().skipToNext();
@@ -424,32 +398,6 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
         }
     }
 
-    /* For cardImage loading to playbackRow */
-//    public class PicassoPlaybackControlsRowTarget implements Target {
-//        PlaybackControlsRow mPlaybackControlsRow;
-//
-//        public PicassoPlaybackControlsRowTarget(PlaybackControlsRow playbackControlsRow) {
-//            mPlaybackControlsRow = playbackControlsRow;
-//        }
-//
-//        @Override
-//        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-//            Drawable bitmapDrawable = new BitmapDrawable(sContext.getResources(), bitmap);
-//            mPlaybackControlsRow.setImageDrawable(bitmapDrawable);
-//            mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
-//        }
-//
-//        @Override
-//        public void onBitmapFailed(Drawable drawable) {
-//            mPlaybackControlsRow.setImageDrawable(drawable);
-//        }
-//
-//        @Override
-//        public void onPrepareLoad(Drawable drawable) {
-//            // Do nothing, default_background manager has its own transitions
-//        }
-//    }
-
     protected void updateVideoImage(String url) {
         try {
             URI uri = new URI(url);
@@ -460,20 +408,13 @@ public class PlaybackOverlayFragment extends android.support.v17.leanback.app.Pl
     }
 
     protected void updateVideoImage(URI uri) {
-
-//        Picasso.with(sContext)
-//                .load(uri.toString())
-//                .resize(Utils.convertDpToPixel(sContext, CARD_WIDTH),
-//                        Utils.convertDpToPixel(sContext, CARD_HEIGHT))
-//                .into(mPlaybackControlsRowTarget);
-
         Glide.with(getActivity())
                 .load(uri)
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>(MoviePresenter.CARD_WIDTH, MoviePresenter.CARD_HEIGHT) {
                     @Override
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                        Drawable bitmapDrawable = new BitmapDrawable(sContext.getResources(), bitmap);
+                        Drawable bitmapDrawable = new BitmapDrawable(getActivity().getResources(), bitmap);
                         mPlaybackControlsRow.setImageDrawable(bitmapDrawable);
                         mRowsAdapter.notifyArrayItemRangeChanged(0, mRowsAdapter.size());
                     }
