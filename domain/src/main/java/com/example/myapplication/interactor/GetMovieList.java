@@ -17,7 +17,7 @@ public class GetMovieList extends UseCase<GetMovieList.RequestValues, GetMovieLi
         this.movieReposition = movieReposition;
     }
 
-
+    // step - we use the transform here
     @Override
     protected Observable<ResponseValue> buildUseCaseObservable(RequestValues requestValues) {
         return movieReposition.getListMovies(requestValues.getTag(), requestValues.getPage())

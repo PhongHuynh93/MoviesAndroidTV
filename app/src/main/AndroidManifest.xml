@@ -30,7 +30,8 @@
             android:icon="@drawable/banner"
             android:label="@string/app_name"
             android:logo="@drawable/banner"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:theme="@style/BrowserFragTheme">
 
             <!-- Add this INSIDE the application tag -->
             <intent-filter>

@@ -10,6 +10,16 @@
         <item name="imageCardViewImageStyle">@style/PersonCardViewStyle</item>
     </style>
 
+    <!--step style for browsefragment-->
+    <style name="BrowserFragTheme" parent="Theme.Leanback.Browse">
+        <!--make padding in the browsefragment-->
+        <!--<item name="browseRowsMarginTop">275dp</item>-->
+        <!--<item name="browsePaddingStart">56dp</item>-->
+
+        <!--make custom textview for the icon -> but set it we dont have the animation to auto hide and close the title when scroll-->
+        <!--<item name="browseTitleViewLayout">@layout/custom_layout_browse_frag_header</item>-->
+    </style>
+
     <style name="PersonCardViewStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
         <item name="android:layout_width">180dp</item>
         <item name="android:layout_height">250dp</item>

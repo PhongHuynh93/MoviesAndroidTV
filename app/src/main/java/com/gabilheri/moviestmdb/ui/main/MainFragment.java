@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.DividerRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
@@ -12,6 +13,7 @@ import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
+import android.support.v17.leanback.widget.SectionRow;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -91,7 +93,11 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
         prepareBackgroundManager();
         setupUIElements();
         setupEventListeners();
-        prepareEntranceTransition();
+
+        // we want to call it in the first time app create this screen.
+        if (savedInstanceState == null) {
+            prepareEntranceTransition();
+        }
 
         loadRows();
         updateRecommendations();
@@ -108,6 +114,8 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
          * step - notice BrowserFragment, ArrayObjectAdapter needs ClassPresenterSelector
          */
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+
+        rowsAdapter.add(new SectionRow("Hot Music"));
         createTabLayout();
         createRows();
     }
@@ -139,7 +147,9 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
     private void setupUIElements() {
         // The brand color will be used as the background for the Headers fragment
         setBrandColor(ContextCompat.getColor(getActivity(), R.color.primary_transparent));
-        setHeadersState(HEADERS_ENABLED);
+//        setHeadersState(BrowseFragment.HEADERS_ENABLED);
+//        setHeadersState(BrowseFragment.HEADERS_DISABLED);
+        setHeadersState(BrowseFragment.HEADERS_HIDDEN);
         setHeadersTransitionOnBackEnabled(true);
 
         // The TMDB logo on the right corner. It is necessary to show based on their API usage policy
@@ -198,6 +208,9 @@ public class MainFragment extends BrowseFragment implements OnItemViewSelectedLi
             rowsAdapter.add(listRow);
             loadData(row.getId(), (PostAdapter) row.getAdapter());
         }
+
+        rowsAdapter.add(new DividerRow());
+        rowsAdapter.add(new SectionRow("Setting"));
 
         // add row with special case
         HeaderItem gridHeader = new HeaderItem(MORE_SAMPLE, getString(R.string.browser_header_6));
