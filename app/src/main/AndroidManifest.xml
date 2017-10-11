@@ -40,7 +40,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.detail.MovieDetailsActivity"/>
+        <!--info - present this screen from create too many instance-->
+        <activity android:name=".ui.detail.MovieDetailsActivity"
+                  android:launchMode="singleTop"/>
         <activity android:name=".ui.playback.PlaybackOverlayActivity"/>
         <activity android:name=".ui.playbackWithMediaSession.PlaybackOverlayActivity"/>
         <activity android:name=".ui.search.SearchActivity"/>

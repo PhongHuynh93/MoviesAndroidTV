@@ -40,13 +40,14 @@ public class VideoCardView extends BaseCustomCardView {
 
     @BindView(R.id.popularity)
     TextView mVoteAverageTV;
-//    private TextView mTitleView;
+    //    private TextView mTitleView;
 //    private TextView mContentView;
     private boolean mAttachedToWindow;
 
     public VideoCardView(Context context) {
         super(context);
     }
+
 
     @Override
     protected void onAttachedToWindow() {
@@ -106,7 +107,6 @@ public class VideoCardView extends BaseCustomCardView {
 //            mInfoArea.setBackground(drawable);
 //        }
 //    }
-
     private void fadeIn() {
         ImageView mImageView = mPreviewCard.getImageView();
         mImageView.setAlpha(0f);
@@ -170,5 +170,9 @@ public class VideoCardView extends BaseCustomCardView {
                 .into(mPreviewCard.getImageView());
         setVideoUrl(Constant.testVideoUrl);
         mVoteAverageTV.setText(String.format(Locale.getDefault(), "%.2f", data.getVoteAverage()));
+    }
+
+    public PreviewCardView getPreviewCard() {
+        return mPreviewCard;
     }
 }

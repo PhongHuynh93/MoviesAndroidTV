@@ -5,12 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.Movie;
 import com.gabilheri.moviestmdb.R;
-import com.gabilheri.moviestmdb.ui.main.MainActivity;
 import com.gabilheri.moviestmdb.ui.widget.videoloop.VideoCardView;
 
 
@@ -62,42 +60,45 @@ public class MoviePresenter extends Presenter {
             }
         };
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cardView.stopVideo();
-            }
-        });
+        // // FIXME: 10/10/2017 cannot call this method because we have the method setonclick each card in mainfragment
+//        cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Timber.e("Release the video");
+//                cardView.stopVideo();
+//
+//            }
+//        });
 
-        cardView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // step - when focus - start playing the video
-                    cardView.startVideo();
-                } else {
-                    // step - when not focus -stop the video
-                    if (mContext instanceof MainActivity) {
-                        if (((MainActivity) mContext).isFragmentActive()) {
-                            cardView.stopVideo();
-                        }
-                    }
-                    // step - add more fragment that make the video auto loop
-//                    else if (mContext instanceof SearchActivity) {
-//                        if (((SearchActivity) mContext).isFragmentActive()) {
-//                            cardView.stopVideo();
-//                        }
-//                    } else if (mContext instanceof MainActivity) {
+//        cardView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    // step - when focus - start playing the video
+//                    cardView.startVideo();
+//                } else {
+//                    // step - when not focus -stop the video
+//                    if (mContext instanceof MainActivity) {
 //                        if (((MainActivity) mContext).isFragmentActive()) {
 //                            cardView.stopVideo();
 //                        }
 //                    }
-                    else {
-                        cardView.stopVideo();
-                    }
-                }
-            }
-        });
+//                    // step - add more fragment that make the video auto loop
+////                    else if (mContext instanceof SearchActivity) {
+////                        if (((SearchActivity) mContext).isFragmentActive()) {
+////                            cardView.stopVideo();
+////                        }
+////                    } else if (mContext instanceof MainActivity) {
+////                        if (((MainActivity) mContext).isFragmentActive()) {
+////                            cardView.stopVideo();
+////                        }
+////                    }
+//                    else {
+//                        cardView.stopVideo();
+//                    }
+//                }
+//            }
+//        });
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);

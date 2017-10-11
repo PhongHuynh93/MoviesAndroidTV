@@ -1,5 +1,6 @@
 package com.gabilheri.moviestmdb.ui.adapter;
 
+import android.arch.lifecycle.LifecycleObserver;
 import android.content.Context;
 
 import com.example.myapplication.Movie;
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by user on 9/17/2017.
  */
 
-public class PostAdapter  extends PaginationAdapter implements BrowserAdapterListener {
+public class PostAdapter  extends PaginationAdapter implements BrowserAdapterListener, LifecycleObserver {
     public PostAdapter(Context context, String tag) {
         super(context, new MoviePresenter(context), tag);
     }
