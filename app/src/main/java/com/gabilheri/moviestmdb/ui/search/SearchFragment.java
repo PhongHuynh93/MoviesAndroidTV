@@ -122,7 +122,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
                     try {
                         startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
                     } catch (ActivityNotFoundException e) {
-                        Timber.e("Cannot find activity for speech recognizer", e);
+                        Timber.e("Cannot find activity for speech recognizer %s", e.getMessage());
                     }
                 }
             });
@@ -155,6 +155,7 @@ public class SearchFragment extends android.support.v17.leanback.app.SearchFragm
         }
     }
 
+    // return the adapter that show the search result
     @Override
     public ObjectAdapter getResultsAdapter() {
         return mRowsAdapter;
