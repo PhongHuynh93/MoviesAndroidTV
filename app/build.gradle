@@ -82,9 +82,6 @@ dependencies {
 
     implementation supportDependencies.lifeCycleExtension
     annotationProcessor supportDependencies.lifeCycleCompiler // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
-    // content provider with room
-    implementation supportDependencies.room
-    annotationProcessor supportDependencies.roomCompiler
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // Logging

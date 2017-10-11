@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.example.myapplication.data.MovieReposition;
 import com.example.myapplication.data.local.TheMovieDbAPI;
+import com.example.myapplication.data.local.contentProvider.SampleDatabase;
 import com.example.myapplication.data.remote.MovieRemoteDataSource;
 import com.example.myapplication.interactor.GetCastMembers;
 import com.example.myapplication.interactor.GetMovieDetail;
@@ -90,6 +91,12 @@ public class RepositionModule {
         return new MovieRemoteDataSource(movieRetrofitEndpoint);
     }
 
+    // step - content provider
+    @Provides
+    @Singleton
+    SampleDatabase getSampleContentProvider(Context context) {
+        return SampleDatabase.getSampleDatabase(context);
+    }
 //    @Provides
 //    @Singleton
 //    AppLocalDatabase getAppLocalDatabase(Context context) {

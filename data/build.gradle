@@ -33,6 +33,9 @@ dependencies {
     implementation supportDependencies.retrofitmoshi
     implementation supportDependencies.retrofitrx
     implementation supportDependencies.palette
+    // content provider with room
+    implementation supportDependencies.room
+    annotationProcessor supportDependencies.roomCompiler
 
     implementation supportDependencies.rxAndroid
     implementation supportDependencies.rxJava
