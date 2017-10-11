@@ -25,6 +25,8 @@ ext {
             // life cycle architecture component
             lifeCycleExtension:         "android.arch.lifecycle:extensions:${architectureComponent}",
             lifeCycleCompiler:         "android.arch.lifecycle:compiler:${architectureComponent}",
+            room:         "android.arch.persistence.room:runtime:${architectureComponent}",
+            roomCompiler:         "android.arch.persistence.room:compiler:${architectureComponent}",
 
             retrofit:         "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             retrofitmoshi:         "com.squareup.retrofit2:converter-moshi:${retrofitVersion}",
