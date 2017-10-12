@@ -15,6 +15,8 @@
         android:name="android.software.leanback"
         android:required="true"/>
 
+    <permission android:name="com.gabilheri.moviestmdb.data.contentprovider.READ_WRITE"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -88,6 +90,12 @@
 
         <service android:name=".data.recommendation.UpdateRecommendationService"
                  android:enabled="true"/>
+
+        <provider
+            android:name=".data.contentprovider.SampleContentProvider"
+            android:authorities="com.gabilheri.moviestmdb.data.contentprovider"
+            android:exported="true"
+            android:permission="com.gabilheri.moviestmdb.data.contentprovider.READ_WRITE"/>
 
     </application>
 

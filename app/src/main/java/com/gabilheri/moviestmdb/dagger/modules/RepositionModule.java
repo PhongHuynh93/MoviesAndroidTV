@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.example.myapplication.data.MovieReposition;
 import com.example.myapplication.data.local.TheMovieDbAPI;
+import com.example.myapplication.data.local.contentProvider.CheeseDao;
 import com.example.myapplication.data.local.contentProvider.SampleDatabase;
 import com.example.myapplication.data.remote.MovieRemoteDataSource;
 import com.example.myapplication.interactor.GetCastMembers;
@@ -94,8 +95,14 @@ public class RepositionModule {
     // step - content provider
     @Provides
     @Singleton
-    SampleDatabase getSampleContentProvider(Context context) {
+    SampleDatabase getSampleDatabase(Context context) {
         return SampleDatabase.getSampleDatabase(context);
+    }
+
+    @Provides
+    @Singleton
+    CheeseDao getSampleDatabase(SampleDatabase sampleDatabase) {
+        return sampleDatabase.cheese();
     }
 //    @Provides
 //    @Singleton
